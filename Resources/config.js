@@ -7,5 +7,5 @@
 // Set this to the base path of your rest server (add trailing slash)
 //~var REST_PATH = 'http://192.168.0.178/crowdinn/docroot/rest/';
 //~var SITE_PATH = 'http://192.168.0.178/crowdinn/docroot/';
-var REST_PATH = 'http://projects.innoveto.com/rest/';
-var SITE_PATH = 'http://projects.innoveto.com/';
+var REST_PATH = 'http://timetracking.innoveto.com/rest/';
+var SITE_PATH = 'http://timetracking.innoveto.com/';
