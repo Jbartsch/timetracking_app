@@ -85,7 +85,9 @@ else if (Titanium.Platform.osname == 'iphone' || Titanium.Platform.osname == 'ip
     borderWidth:2,
     borderColor:'#bbb',
     borderRadius:5,
-    autocapitalization:Titanium.UI.TEXT_AUTOCAPITALIZATION_NONE
+    autocapitalization:Titanium.UI.TEXT_AUTOCAPITALIZATION_NONE,
+    paddingLeft: 5,
+    paddingRight: 5,
   });
 
   // Create the label for the password
@@ -111,7 +113,9 @@ else if (Titanium.Platform.osname == 'iphone' || Titanium.Platform.osname == 'ip
     // This is very important. Don't auto capitalize the first letter of the password
     autocapitalization:Titanium.UI.TEXT_AUTOCAPITALIZATION_NONE,
     // Mask the password so nobody sees it
-    passwordMask:true
+    passwordMask:true,
+    paddingLeft: 5,
+    paddingRight: 5,
   });
 
   // Create the login button
