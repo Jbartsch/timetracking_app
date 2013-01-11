@@ -16,6 +16,9 @@ var user = {
   name: Titanium.App.Properties.getString("userName"),
 }
 
+
+Ti.UI.loginCount = 0;
+
 // Create the login window
 var loginWin = Titanium.UI.createWindow({
   // Set the title for the window
@@ -31,28 +34,28 @@ var loginWin = Titanium.UI.createWindow({
 Ti.App.loginWin = loginWin;
 
 // Create the home window
-var homeWin = Titanium.UI.createWindow({
-  // Set the title for the window
-    title:'Projects',
-
-    // Set the background color for the window
-    backgroundColor:'#fff',
-
-    // The actual window data will be in this file, not here
-    url: 'home.js'
-});
+// var homeWin = Titanium.UI.createWindow({
+  // // Set the title for the window
+    // title:'Projects',
+// 
+    // // Set the background color for the window
+    // backgroundColor:'#fff',
+// 
+    // // The actual window data will be in this file, not here
+    // url: 'home.js'
+// });
 
 // Create the home tab
-var homeTab = Titanium.UI.createTab({
-  // Set the icon for the button
-    icon:'icons/53-house.png',
-
-    // Set the title for the tab
-    title:'Projects',
-
-    // Relate the tab to a window so the app knows what window to open.
-    window:homeWin
-});
+// var homeTab = Titanium.UI.createTab({
+  // // Set the icon for the button
+    // icon:'icons/53-house.png',
+// 
+    // // Set the title for the tab
+    // title:'Projects',
+// 
+    // // Relate the tab to a window so the app knows what window to open.
+    // window:homeWin
+// });
 
 // Create the project window
 // var projectWin = Ti.UI.createWindow({
@@ -69,18 +72,18 @@ var homeTab = Titanium.UI.createTab({
 // });
 
 // Create the timetracking window
-// var timeWin = Ti.UI.createWindow({
-  // title: 'Add Timetracking',
-  // backgroundColor: '#fff',
-  // url: 'includes/add-timetracking.js'
-// });
-// 
-// // Create the timetracking tab
-// var timeTab = Ti.UI.createTab({
-  // icon: "icons/11-clock.png",
-  // title:'Add Timetracking',
-  // window: timeWin
-// });
+var timeWin = Ti.UI.createWindow({
+  title: 'Add Timetracking',
+  backgroundColor: '#fff',
+  url: 'includes/add-timetracking.js'
+});
+
+// Create the timetracking tab
+var timeTab = Ti.UI.createTab({
+  icon: "icons/11-clock.png",
+  title:'Add Timetracking',
+  window: timeWin
+});
 
 // Create a new window here to show the form
 // var settingsWin = Ti.UI.createWindow({
@@ -102,10 +105,10 @@ Ti.App.logoutWin = logoutWin;
 Ti.App.tabGroup = tabGroup;
 
 // Add the home tab to the tab group
-Ti.App.tabGroup.addTab(homeTab);
+// Ti.App.tabGroup.addTab(homeTab);
 
 // Add the timetracking tab to the tab group
-// Ti.App.tabGroup.addTab(timeTab);
+Ti.App.tabGroup.addTab(timeTab);
 // 
 // // Add the user tab to the tab group
 // Ti.App.tabGroup.addTab(projectTab);

@@ -4,6 +4,13 @@ Ti.include('../config.js');
 // Define the variable win to contain the current window
 var win = Ti.UI.currentWindow;
 
+var loginView = Titanium.UI.createView({
+   width: "100%",
+   height: "100%"
+});
+
+win.add(loginView);
+
 if (Titanium.Platform.osname == 'android') {
 
   // Create the labelfor the username
@@ -78,7 +85,9 @@ else if (Titanium.Platform.osname == 'iphone' || Titanium.Platform.osname == 'ip
     borderWidth:2,
     borderColor:'#bbb',
     borderRadius:5,
-    autocapitalization:Titanium.UI.TEXT_AUTOCAPITALIZATION_NONE
+    autocapitalization:Titanium.UI.TEXT_AUTOCAPITALIZATION_NONE,
+    paddingLeft: 5,
+    paddingRight: 5,
   });
 
   // Create the label for the password
@@ -104,7 +113,9 @@ else if (Titanium.Platform.osname == 'iphone' || Titanium.Platform.osname == 'ip
     // This is very important. Don't auto capitalize the first letter of the password
     autocapitalization:Titanium.UI.TEXT_AUTOCAPITALIZATION_NONE,
     // Mask the password so nobody sees it
-    passwordMask:true
+    passwordMask:true,
+    paddingLeft: 5,
+    paddingRight: 5,
   });
 
   // Create the login button
@@ -117,19 +128,19 @@ else if (Titanium.Platform.osname == 'iphone' || Titanium.Platform.osname == 'ip
 }
 
 // Add the label to the view
-win.add(usernameLabel);
+loginView.add(usernameLabel);
 
 // Add the textfield to the view
-win.add(usernameTextfield);
+loginView.add(usernameTextfield);
 
 // Add the label to the view
-win.add(passwordLabel);
+loginView.add(passwordLabel);
 
 // Add the textarea to the view
-win.add(passwordTextfield);
+loginView.add(passwordTextfield);
 
 // Add the button to the view
-win.add(loginButton);
+loginView.add(loginButton);
 
 // Add the event listener for when the button is created
 loginButton.addEventListener('click', function() {
@@ -152,7 +163,7 @@ loginButton.addEventListener('click', function() {
   var xhr = Titanium.Network.createHTTPClient();
 
   // Open the connection using POST
-  xhr.open("POST",url);
+  xhr.open("POST", url);
 
   xhr.setRequestHeader('Content-Type','application/json; charset=utf-8');
 
@@ -196,6 +207,8 @@ loginButton.addEventListener('click', function() {
           // Set the user.userName to the logged in user name
           Titanium.App.Properties.setString("userName", user.name);
           Ti.App.tabGroup.open();
+          Ti.UI.loginCount = Ti.UI.loginCount + 1;
+          win.remove(loginView);
           win.close();
         }
       }

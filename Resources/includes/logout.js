@@ -17,7 +17,7 @@ win.add(logoutMessage);
 
 // Define the url which contains the full url
 // in this case, we'll connecting to http://example.com/api/rest/user/logout
-var logoutUrl = REST_PATH + 'user/logout';
+var logoutUrl = REST_PATH + 'user/logout.json';
 
 // Create a connection
 var xhr3 = Titanium.Network.createHTTPClient();
@@ -48,6 +48,7 @@ xhr3.onload = function() {
   // Save the status of the connection in a variable
   // this will be used to see if we have a connection (200) or not
   var statusCodeLogout = xhr3.status;
+ 
   // Check if we have a connection
   if(statusCodeLogout == 200) {
     Titanium.App.Properties.removeProperty("userUid");

@@ -30,6 +30,79 @@ if(Titanium.App.Properties.getInt("userUid")) {
 
   // Add the view to the window
   win.add(view);
+  
+  var url = REST_PATH + 'organizations.json';
+
+  // Create a connection inside the variable xhr
+  var xhr = Titanium.Network.createHTTPClient();
+  
+  // Open the xhr
+  xhr.open("GET", url);
+  
+  var sessName = Titanium.App.Properties.getString("userSessionName");
+  var sessId = Titanium.App.Properties.getString("userSessionId");
+  xhr.setRequestHeader('Cookie', sessName+'='+sessId);
+  
+  // Send the xhr
+  xhr.send();
+ 
+  // When the xhr loads we do:
+  xhr.onload = function() {
+    // Save the status of the xhr in a variable
+    // this will be used to see if we have a xhr (200) or not
+    var statusCode = xhr.status;
+    Ti.API.info('blargh2');
+    // Check if we have a xhr
+    if(statusCode == 200) {
+  
+      // Save the responseText from the xhr in the response variable
+      var response = xhr.responseText;
+  
+      // Parse (build data structure) the JSON response into an object (data)
+      var result = JSON.parse(response);
+  
+      var results = new Array();
+  
+      // Start loop
+      var i = 0;
+      for(var key in result) {
+        // Create the data variable and hold every result
+        var data = result[key];
+  
+        results[i] = Ti.UI.createPickerRow({title: data.title, nid:data.nid});
+        
+        i = i + 1;
+        // results[key] = {title: data.title, nid:data.nid};
+      }
+      
+      var picker = Ti.UI.createPicker({
+        top:200,
+        selectionIndicator:true,
+      });
+  
+      picker.add(results);
+  
+      // add our table to the view
+      // win.add(picker);
+  
+    }
+    else {
+      // Create a label for the node title
+      var errorMessage = Ti.UI.createLabel({
+        // The text of the label will be the node title (data.title)
+        text: "Please check your internet xhr.",
+        color:'#000',
+        textAlign:'left',
+        font:{fontSize:24, fontWeight:'bold'},
+        top:25,
+        left:15,
+        height:18
+      });
+  
+      // Add the error message to the window
+      win.add(errorMessage);
+    }
+  }
 
   // Create the label for the node title
   var nodeTitleLabel = Titanium.UI.createLabel({
@@ -45,10 +118,16 @@ if(Titanium.App.Properties.getInt("userUid")) {
 
   // Create the textfield to hold the node title
   var nodeTitleTextfield = Titanium.UI.createTextField({
-    height:60,
-    top:50,
+    height:35,
+    top:40,
     left:10,
-    right:10,
+    width:300,
+    font:{fontSize:16},
+    borderWidth:2,
+    borderColor:'#bbb',
+    borderRadius:5,
+    paddingLeft: 5,
+    paddingRight: 5,
   });
 
   // Add the textfield to the window
@@ -59,7 +138,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
   var dateLabel = Titanium.UI.createLabel({
     text:'Date',
     left:10,
-    top:115,
+    top:80,
     right:10,
     height:40,
   });
@@ -81,33 +160,44 @@ if(Titanium.App.Properties.getInt("userUid")) {
   // Create the textarea to hold the body
   var dateText = Titanium.UI.createTextField({
     value:year+'-'+month+'-'+day,
-    height:60,
+    height:35,
+    top:115,
     left:10,
-    right:10,
-    top:160,
+    width:300,
+    font:{fontSize:16},
+    borderWidth:2,
+    borderColor:'#bbb',
+    borderRadius:5,
+    paddingLeft: 5,
+    paddingRight: 5,
   });
 
   // Add the textarea to the window
   view.add(dateText);
 
-  // Create the label for the date
   var beginLabel = Titanium.UI.createLabel({
-    text:'Time begin',
+    text:'From',
     left:10,
-    top:225,
-    right:10,
+    top:166,
+    width:50,
     height:40,
   });
-
-  // Add the label to the window
+  
   view.add(beginLabel);
 
   // Create the textarea to hold the body
   var beginText = Titanium.UI.createTextField({
-    height:60,
-    left:10,
     right:10,
-    top:270,
+    top:160,
+    height:35,
+    left:65,
+    width:60,
+    font:{fontSize:16},
+    borderWidth:2,
+    borderColor:'#bbb',
+    borderRadius:5,
+    paddingLeft: 5,
+    paddingRight: 5,
   });
 
   // Add the textarea to the window
@@ -115,11 +205,11 @@ if(Titanium.App.Properties.getInt("userUid")) {
 
   // Create the label for the date
   var endLabel = Titanium.UI.createLabel({
-    text:'Time end',
-    left:10,
-    top:335,
-    right:10,
+    text:'To',
+    left:135,
+    top:160,
     height:40,
+    width:30,
   });
 
   // Add the label to the window
@@ -137,21 +227,48 @@ if(Titanium.App.Properties.getInt("userUid")) {
   // Create the textarea to hold the body
   var endText = Titanium.UI.createTextField({
     value:hours+':'+minutes,
-    height:60,
-    left:10,
-    right:10,
-    top:380,
+    top:160,
+    height:35,
+    left:165,
+    width:60,
+    font:{fontSize:16},
+    borderWidth:2,
+    borderColor:'#bbb',
+    borderRadius:5,
+    paddingLeft: 5,
+    paddingRight: 5,
   });
 
   // Add the textarea to the window
   view.add(endText);
+  
+  var tr = Titanium.UI.create2DMatrix();
+  tr = tr.rotate(90);
+  
+  var drop_button =  Titanium.UI.createButton({
+    style:Titanium.UI.iPhone.SystemButton.DISCLOSURE,
+    transform:tr
+  });
+  
+  var clientText = Titanium.UI.createTextField({
+    hintText:"Choose a client",
+    height:40,
+    width:300,
+    top:200,
+    borderStyle:Titanium.UI.INPUT_BORDERSTYLE_ROUNDED,
+    rightButton:drop_button,
+    rightButtonMode:Titanium.UI.INPUT_BUTTONMODE_ALWAYS,
+    enabled:true,
+  });
+  
+  win.add(clientText);
 
   // Add the save button
   var saveButton = Titanium.UI.createButton({
     title:'Save',
-    height:60,
-    width:200,
-    top:460
+    height:35,
+    width:150,
+    top:315
   });
 
   // Add the button to the window
@@ -244,15 +361,15 @@ if (Titanium.Platform.osname == 'android') {
 }
 else if (Titanium.Platform.osname == 'iphone' || Titanium.Platform.osname == 'ipad') {
   // Create a new button
-  var rightButton = Ti.UI.createButton({
-    title: 'Settings',
-    style:Titanium.UI.iPhone.SystemButtonStyle.DONE
-  });
-
-  // Create a new event listener for the rightButton
-  rightButton.addEventListener("click", function() {
-    Ti.App.settingsWin.open();
-  });
+  // var rightButton = Ti.UI.createButton({
+    // title: 'Settings',
+    // style:Titanium.UI.iPhone.SystemButtonStyle.DONE
+  // });
+// 
+  // // Create a new event listener for the rightButton
+  // rightButton.addEventListener("click", function() {
+    // Ti.App.settingsWin.open();
+  // });
 
   var leftButton = Ti.UI.createButton({
     title: 'Logout',
@@ -266,6 +383,6 @@ else if (Titanium.Platform.osname == 'iphone' || Titanium.Platform.osname == 'ip
 
   // We don't add the button to the window, instead, we tell the app
   // to set the button as the right navigation button
-  win.setRightNavButton(rightButton);
+  // win.setRightNavButton(rightButton);
   win.setLeftNavButton(leftButton);
 }

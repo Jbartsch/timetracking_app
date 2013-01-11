@@ -8,7 +8,7 @@
         <target device="android">true</target>
         <target device="blackberry">false</target>
     </deployment-targets>
-    <id>com.baertsch.pmc</id>
+    <id>com.baertsch.timetracking</id>
     <name>PMC Mobile</name>
     <version>1.0</version>
     <publisher>Innoveto</publisher>
