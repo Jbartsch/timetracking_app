@@ -71,7 +71,7 @@ Ti.App.loginWin = loginWin;
   // window: projectWin
 // });
 
-// Create the timetracking window
+// Create the timetracking add window
 var timeWin = Ti.UI.createWindow({
   title: 'Add Timetracking',
   backgroundColor: '#fff',
@@ -83,6 +83,20 @@ var timeTab = Ti.UI.createTab({
   icon: "icons/11-clock.png",
   title:'Add Timetracking',
   window: timeWin
+});
+
+// Create the timetrackings view window
+var timeViewWin = Ti.UI.createWindow({
+  title: "Timetrackings",
+  backgroundColor: '#fff',
+  url: 'includes/timetrackings.js',
+});
+
+// Create the project tab
+var timeViewTab = Ti.UI.createTab({
+  icon: "icons/111-user.png",
+  title: "Timetrackings",
+  window: timeViewWin
 });
 
 // Create a new window here to show the form
@@ -109,6 +123,7 @@ Ti.App.tabGroup = tabGroup;
 
 // Add the timetracking tab to the tab group
 Ti.App.tabGroup.addTab(timeTab);
+Ti.App.tabGroup.addTab(timeViewTab);
 // 
 // // Add the user tab to the tab group
 // Ti.App.tabGroup.addTab(projectTab);

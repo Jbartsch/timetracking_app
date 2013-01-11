@@ -92,7 +92,6 @@ if(Titanium.App.Properties.getInt("userUid")) {
     // Save the status of the xhr in a variable
     // this will be used to see if we have a xhr (200) or not
     var statusCode = clientXhr.status;
-    Ti.API.info('clients '+statusCode);
     // Check if we have a xhr
     if(statusCode == 200) {
   
@@ -166,7 +165,6 @@ if(Titanium.App.Properties.getInt("userUid")) {
     // Save the status of the xhr in a variable
     // this will be used to see if we have a xhr (200) or not
     var statusCode = projectXhr.status;
-    Ti.API.info('projects '+statusCode);
     // Check if we have a xhr
     if(statusCode == 200) {
   
@@ -495,7 +493,6 @@ if(Titanium.App.Properties.getInt("userUid")) {
         var data = JSON.parse(response);
 
         alert("Content created with id " + data.nid);
-        Ti.API.info("Content created with id " + data.nid);
       }
       else {
         alert("There was an error");

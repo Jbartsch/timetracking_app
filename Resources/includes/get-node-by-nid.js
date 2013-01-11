@@ -29,6 +29,7 @@ var view = Titanium.UI.createScrollView({
 // Add our scrollview to the window
 win.add(view);
 
+Ti.API.info(win.nid);
 // Define the url which contains the full url
 // See how we build the url using the win.nid which is 
 // the nid property we pass to this file when we create the window
