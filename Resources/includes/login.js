@@ -20,12 +20,13 @@ if (Titanium.Platform.osname == 'android') {
     top:5,
     right:10,
     height:40,
-    color: 'black'
+    color: 'white'
   });
 
   // Create the username textfield
   var usernameTextfield = Ti.UI.createTextField({
-    height:60,
+  	backgroundColor:'#9CA998',
+  	height:60,
     top:50,
     left:10,
     right:10,
@@ -39,7 +40,7 @@ if (Titanium.Platform.osname == 'android') {
     top:115,
     right:10,
     height:40,
-    color: 'black'
+    color: 'white'
   });
 
   // Create the password textfield
@@ -48,6 +49,7 @@ if (Titanium.Platform.osname == 'android') {
     top:160,
     left:10,
     right:10,
+    color: 'white',
     // This is very important. Don't auto capitalize the first letter of the password
     autocapitalization:Titanium.UI.TEXT_AUTOCAPITALIZATION_NONE,
     // Mask the password so nobody sees it
@@ -69,8 +71,9 @@ else if (Titanium.Platform.osname == 'iphone' || Titanium.Platform.osname == 'ip
   var usernameLabel = Titanium.UI.createLabel({
     text:'Username',
     font:{fontSize:14, fontWeight: "bold"},
+    color: 'white',
     left:10,
-    top:10,
+    top:110,
     width:300,
     height:'auto'
   });
@@ -78,16 +81,18 @@ else if (Titanium.Platform.osname == 'iphone' || Titanium.Platform.osname == 'ip
   // Create the username textfield
   var usernameTextfield = Titanium.UI.createTextField({
     height:35,
-    top:30,
+    top:130,
     left:10,
     width:300,
     font:{fontSize:16},
-    borderWidth:2,
+    borderWidth:1,
     borderColor:'#bbb',
-    borderRadius:5,
+    borderRadius:3,
     autocapitalization:Titanium.UI.TEXT_AUTOCAPITALIZATION_NONE,
     paddingLeft: 5,
     paddingRight: 5,
+    color: 'black',
+	backgroundColor: 'white',
   });
 
   // Create the label for the password
@@ -95,27 +100,30 @@ else if (Titanium.Platform.osname == 'iphone' || Titanium.Platform.osname == 'ip
     text:'Password',
     font:{fontSize:14, fontWeight: "bold"},
     left:10,
-    top:75,
+    top:175,
     width:300,
-    height:'auto'
+    height:'auto',
+    color: 'white',
   });
 
   // Create the password textfield
   var passwordTextfield = Titanium.UI.createTextField({
     height:35,
-    top:100,
+    top:200,
     left:10,
     width:300,
     font:{fontSize:16},
-    borderWidth:2,
+    borderWidth:1,
     borderColor:'#bbb',
-    borderRadius:5,
+    borderRadius:3,
     // This is very important. Don't auto capitalize the first letter of the password
     autocapitalization:Titanium.UI.TEXT_AUTOCAPITALIZATION_NONE,
     // Mask the password so nobody sees it
     passwordMask:true,
     paddingLeft: 5,
     paddingRight: 5,
+    color: 'black',
+	backgroundColor: 'white',
   });
 
   // Create the login button
@@ -123,7 +131,7 @@ else if (Titanium.Platform.osname == 'iphone' || Titanium.Platform.osname == 'ip
     title:'Login',
     height:40,
     width:200,
-    top:170
+    top:270
   });
 }
 
