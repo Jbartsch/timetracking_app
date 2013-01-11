@@ -31,6 +31,40 @@ if(Titanium.App.Properties.getInt("userUid")) {
   // Add the view to the window
   win.add(view);
   
+  var slide_in =  Titanium.UI.createAnimation({bottom:0});
+  var slide_out =  Titanium.UI.createAnimation({bottom:-251});
+  
+  var picker_view = Titanium.UI.createView({
+    height:251,
+    bottom:-251
+  });
+   
+  var cancel =  Titanium.UI.createButton({
+    title:'Cancel',
+    style:Titanium.UI.iPhone.SystemButtonStyle.BORDERED
+  });
+  
+  cancel.addEventListener('click', function() {
+    picker_view.animate(slide_out);
+  })
+   
+  var done =  Titanium.UI.createButton({
+    title:'Done',
+    style:Titanium.UI.iPhone.SystemButtonStyle.DONE
+  });
+   
+  var spacer =  Titanium.UI.createButton({
+    systemButton:Titanium.UI.iPhone.SystemButton.FLEXIBLE_SPACE
+  });
+   
+  var toolbar =  Titanium.UI.iOS.createToolbar({
+    top:0,
+    items:[cancel,spacer,done]
+  });
+   
+   
+  picker_view.add(toolbar);
+  
   var url = REST_PATH + 'organizations.json';
 
   // Create a connection inside the variable xhr
@@ -76,15 +110,21 @@ if(Titanium.App.Properties.getInt("userUid")) {
       }
       
       var picker = Ti.UI.createPicker({
-        top:200,
+        top:43,
         selectionIndicator:true,
       });
   
       picker.add(results);
   
       // add our table to the view
-      // win.add(picker);
+      picker_view.add(picker);
+      win.add(picker_view);
   
+      done.addEventListener('click',function() {
+        clientText.value =  picker.getSelectedRow(0).title;
+        picker_view.animate(slide_out);
+      });
+      
     }
     else {
       // Create a label for the node title
@@ -261,7 +301,43 @@ if(Titanium.App.Properties.getInt("userUid")) {
     enabled:true,
   });
   
-  win.add(clientText);
+  clientText.addEventListener('focus', function() {
+    picker_view.animate(slide_out);
+  });
+  
+  drop_button.addEventListener('click', function() {
+    picker_view.animate(slide_in);
+    clientText.blur();
+  });
+  
+  win.add(clientText)
+  
+  var drop_button2 =  Titanium.UI.createButton({
+    style:Titanium.UI.iPhone.SystemButton.DISCLOSURE,
+    transform:tr
+  });
+  
+  var projectText = Titanium.UI.createTextField({
+    hintText:"Choose a project",
+    height:40,
+    width:300,
+    top:245,
+    borderStyle:Titanium.UI.INPUT_BORDERSTYLE_ROUNDED,
+    rightButton:drop_button2,
+    rightButtonMode:Titanium.UI.INPUT_BUTTONMODE_ALWAYS,
+    enabled:true,
+  });
+  
+  projectText.addEventListener('focus', function() {
+    picker_view.animate(slide_out);
+  });
+  
+  drop_button2.addEventListener('click', function() {
+    picker_view.animate(slide_in);
+    clientText.blur();
+  });
+  
+  win.add(projectText);
 
   // Add the save button
   var saveButton = Titanium.UI.createButton({
