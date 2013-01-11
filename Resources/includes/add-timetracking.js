@@ -65,6 +65,8 @@ if(Titanium.App.Properties.getInt("userUid")) {
    
   picker_view.add(toolbar);
   
+  var clientnid = 0;
+  
   var url = REST_PATH + 'organizations.json';
 
   // Create a connection inside the variable xhr
@@ -122,6 +124,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
   
       done.addEventListener('click',function() {
         clientText.value =  picker.getSelectedRow(0).title;
+        clientnid = picker.getSelectedRow(0).nid;
         picker_view.animate(slide_out);
       });
       
@@ -367,7 +370,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
       node:{
         title: nodeTitleTextfield.value,
         type:'stormtimetracking',
-        organization_nid:943,
+        organization_nid:clientnid,
         trackingdate: {popup: {date: dateText.value}},
         timebegin: beginText.value,
         timeend: endText.value,
@@ -383,8 +386,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
     var xhr = Titanium.Network.createHTTPClient();
 
     // Open the connection using POST
-    xhr.open("POST",url);
-
+    xhr.open("POST", url);
     xhr.setRequestHeader('Content-Type','application/json; charset=utf-8');
     xhr.setRequestHeader('Cookie', user.session_name+'='+user.sessid);
 
@@ -395,7 +397,6 @@ if(Titanium.App.Properties.getInt("userUid")) {
       // Save the status of the connection in a variable
       // this will be used to see if we have a connection (200) or not
       var statusCode = xhr.status;
-
       // Check if we have a valid status
       if(statusCode == 200) {
 
@@ -406,6 +407,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
         var data = JSON.parse(response);
 
         alert("Content created with id " + data.nid);
+        Ti.API.info("Content created with id " + data.nid);
       }
       else {
         alert("There was an error");
