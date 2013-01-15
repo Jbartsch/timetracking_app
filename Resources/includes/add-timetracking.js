@@ -74,6 +74,22 @@ if(Titanium.App.Properties.getInt("userUid")) {
   // Open the xhr
   clientXhr.open("GET", clientUrl);
   
+  var datePicker = Ti.UI.createPicker({
+    type:Ti.UI.PICKER_TYPE_DATE,
+    minDate:new Date(2000,0,1),
+    maxDate:new Date(2020,11,31),
+    value:new Date(),
+    top:43,
+    visible:false
+  });
+  
+  picker_view.add(datePicker);
+  
+  var trackingdate = 0;
+  datePicker.addEventListener('change',function(e){
+    trackingdate = e.value.toLocaleDateString();
+  });
+  
   var sessName = Titanium.App.Properties.getString("userSessionName");
   var sessId = Titanium.App.Properties.getString("userSessionId");
   clientXhr.setRequestHeader('Cookie', sessName+'='+sessId);
@@ -217,14 +233,20 @@ if(Titanium.App.Properties.getInt("userUid")) {
     projectnid = projectPicker.getSelectedRow(0).nid;
     picker_view.animate(slide_out);
     projectPicker.hide();
+    
     clientText.value =  clientPicker.getSelectedRow(0).title;
     clientnid = clientPicker.getSelectedRow(0).nid;
     picker_view.animate(slide_out);
     clientPicker.hide();
+    
+    dateText.value =  trackingdate;
+    picker_view.animate(slide_out);
+    datePicker.hide();
   });
   
   cancel.addEventListener('click', function() {
     picker_view.animate(slide_out);
+    datePicker.hide();
     clientPicker.hide();
     projectPicker.hide();
   })
@@ -283,20 +305,36 @@ if(Titanium.App.Properties.getInt("userUid")) {
   if (month.length == 1) {
     month = '0' + month;
   }
-
+  
+  var tr = Titanium.UI.create2DMatrix();
+  tr = tr.rotate(90);
+  
+  var drop_button_date = Titanium.UI.createButton({
+    style:Titanium.UI.iPhone.SystemButton.DISCLOSURE,
+    transform:tr
+  });
+  
   // Create the textarea to hold the body
   var dateText = Titanium.UI.createTextField({
     value:year+'-'+month+'-'+day,
-    height:35,
+    height:40,
     top:115,
     left:10,
     width:300,
-    font:{fontSize:16},
-    borderWidth:2,
-    borderColor:'#bbb',
-    borderRadius:5,
-    paddingLeft: 5,
-    paddingRight: 5,
+    borderStyle:Titanium.UI.INPUT_BORDERSTYLE_ROUNDED,
+    rightButton:drop_button_date,
+    rightButtonMode:Titanium.UI.INPUT_BUTTONMODE_ALWAYS,
+    enabled:true,
+  });
+  
+  dateText.addEventListener('focus', function() {
+    picker_view.animate(slide_out);
+  });
+  
+  drop_button_date.addEventListener('click', function() {
+    datePicker.show();
+    picker_view.animate(slide_in);
+    dateText.blur();
   });
 
   // Add the textarea to the window
@@ -369,9 +407,6 @@ if(Titanium.App.Properties.getInt("userUid")) {
   // Add the textarea to the window
   view.add(endText);
   
-  var tr = Titanium.UI.create2DMatrix();
-  tr = tr.rotate(90);
-  
   var drop_button_client =  Titanium.UI.createButton({
     style:Titanium.UI.iPhone.SystemButton.DISCLOSURE,
     transform:tr
@@ -398,7 +433,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
     clientText.blur();
   });
   
-  win.add(clientText)
+  view.add(clientText)
   
   var drop_button_project =  Titanium.UI.createButton({
     style:Titanium.UI.iPhone.SystemButton.DISCLOSURE,
@@ -426,7 +461,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
     clientText.blur();
   });
   
-  win.add(projectText);
+  view.add(projectText);
 
   // Add the save button
   var saveButton = Titanium.UI.createButton({
@@ -450,17 +485,21 @@ if(Titanium.App.Properties.getInt("userUid")) {
 
   // Add the event listener for when the button is created
   saveButton.addEventListener("click", function() {
-
+    
+    var date = dateText.value.split('-');
     // Create a new node object
     var node = {
       node:{
         title: nodeTitleTextfield.value,
         type:'stormtimetracking',
         organization_nid:clientnid,
-        trackingdate: {popup: {date: dateText.value}},
+        project_nid:projectnid,
+        trackingdate: {year: date[0], month: date[1], day:date[2]},
         timebegin: beginText.value,
         timeend: endText.value,
         uid: user.uid,
+        billable: 0,
+        billed: 0
       }
     };
 
@@ -484,6 +523,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
       // this will be used to see if we have a connection (200) or not
       var statusCode = xhr.status;
       // Check if we have a valid status
+      Ti.API.info(statusCode);
       if(statusCode == 200) {
 
         // Create a variable response to hold the response
