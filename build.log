@@ -1,0 +1,16 @@
+Logfile initialized
+[INFO] logfile = /Users/jonasbartsch/Documents/Titanium_Studio_Workspace/timetracking_app/build.log
+[DEBUG] /Users/jonasbartsch/Library/Application Support/Titanium/mobilesdk/osx/2.1.4.GA/android/builder.py simulator PMC Mobile /Users/jonasbartsch/Documents/Android /Users/jonasbartsch/Documents/Titanium_Studio_Workspace/timetracking_app com.baertsch.timetracking 24 HVGA 
+[INFO] Building PMC Mobile for Android ... one moment
+[INFO] Titanium SDK version: 2.1.4 (11/09/12 12:46 51f2c64)
+[DEBUG] Waiting for device to be ready ...
+[TRACE] adb devices returned 0 devices/emulators
+[INFO] Creating new Android Virtual Device (24 HVGA)
+[DEBUG] /Users/jonasbartsch/Documents/Android/tools/emulator -avd titanium_24_HVGA -port 5560 -sdcard /Users/jonasbartsch/.titanium/titanium_24_HVGA.sdcard -logcat *:d,*,TiAPI:V -no-boot-anim -partition-size 128
+[TRACE] adb devices returned 0 devices/emulators
+[TRACE] adb devices returned 0 devices/emulators
+[TRACE] adb devices returned 0 devices/emulators
+[TRACE] adb devices returned 0 devices/emulators
+[TRACE] adb devices returned 0 devices/emulators
+[INFO] Android Emulator has exited
+[ERROR] Timed out waiting for emulator to be ready, you may need to close the emulator and try again
