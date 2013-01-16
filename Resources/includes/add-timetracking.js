@@ -23,8 +23,12 @@ if(Titanium.App.Properties.getInt("userUid")) {
     name: Titanium.App.Properties.getString("userName"),
   }
 
-  // Create a new view "view" to hold the form
-  var view = Ti.UI.createView({
+  // Create the scrollview
+  var view = Titanium.UI.createScrollView({
+    contentWidth:'auto',
+    contentHeight:'auto',
+    showVerticalScrollIndicator:true,
+    showHorizontalScrollIndicator:true,
     top: 0,
   });
 
@@ -87,7 +91,17 @@ if(Titanium.App.Properties.getInt("userUid")) {
   
   var trackingdate = 0;
   datePicker.addEventListener('change',function(e){
-    trackingdate = e.value.toLocaleDateString();
+    var pickerdate = e.value;
+    var day = pickerdate.getDate();
+    if (day < 10) {
+      day = '0' + day;
+    }
+    var month = pickerdate.getMonth() + 1;
+    if (month < 10) {
+      month = '0' + month;
+    }
+    var year = pickerdate.getFullYear();
+    trackingdate = year + '-' + month + '-' + day;
   });
   
   var sessName = Titanium.App.Properties.getString("userSessionName");
@@ -182,6 +196,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
     // this will be used to see if we have a xhr (200) or not
     var statusCode = projectXhr.status;
     // Check if we have a xhr
+    Ti.API.info(statusCode);
     if(statusCode == 200) {
   
       // Save the responseText from the xhr in the response variable
@@ -229,19 +244,25 @@ if(Titanium.App.Properties.getInt("userUid")) {
   }
   
   done.addEventListener('click',function() {
-    projectText.value =  projectPicker.getSelectedRow(0).title;
-    projectnid = projectPicker.getSelectedRow(0).nid;
-    picker_view.animate(slide_out);
-    projectPicker.hide();
+    if (projectPicker.visible == 1) {
+      projectText.value =  projectPicker.getSelectedRow(0).title;
+      projectnid = projectPicker.getSelectedRow(0).nid;
+      picker_view.animate(slide_out);
+      projectPicker.hide();
+    }
     
-    clientText.value =  clientPicker.getSelectedRow(0).title;
-    clientnid = clientPicker.getSelectedRow(0).nid;
-    picker_view.animate(slide_out);
-    clientPicker.hide();
+    if (clientPicker.visible == 1) {
+      clientText.value =  clientPicker.getSelectedRow(0).title;
+      clientnid = clientPicker.getSelectedRow(0).nid;
+      picker_view.animate(slide_out);
+      clientPicker.hide();
+    }
     
-    dateText.value =  trackingdate;
-    picker_view.animate(slide_out);
-    datePicker.hide();
+    if (datePicker.visible == 1) {
+      dateText.value =  trackingdate;
+      picker_view.animate(slide_out);
+      datePicker.hide();
+    }
   });
   
   cancel.addEventListener('click', function() {
@@ -435,7 +456,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
   
   view.add(clientText)
   
-  var drop_button_project =  Titanium.UI.createButton({
+  var drop_button_project = Titanium.UI.createButton({
     style:Titanium.UI.iPhone.SystemButton.DISCLOSURE,
     transform:tr
   });
@@ -458,7 +479,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
   drop_button_project.addEventListener('click', function() {
     projectPicker.show();
     picker_view.animate(slide_in);
-    clientText.blur();
+    projectText.blur();
   });
   
   view.add(projectText);

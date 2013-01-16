@@ -68,7 +68,18 @@ xhr.onload = function() {
     for(var key in result) {
       // Create the data variable and hold every result
       var data = result[key];
-      results[key] = {title: data.title, nid:data.nid};
+      var date = new Date(data.trackingdate*1000);
+      var day = date.getDate();
+      if (day < 10) {
+        day = '0' + day;
+      }
+      var month = date.getMonth() + 1;
+      if (month < 10) {
+        month = '0' + month;
+      }
+      var year = date.getFullYear();
+      title = day + '.' + month + '.' + year + ' ' + data.timebegin + ' - ' + data.timeend; 
+      results[key] = {title: title, nid:data.nid};
     }
 
     // Create a new table to hold our results
@@ -77,7 +88,6 @@ xhr.onload = function() {
     // Specially the properties
     var table = Titanium.UI.createTableView({
       data:results,
-
     });
 
     // add a listener for click to the table
