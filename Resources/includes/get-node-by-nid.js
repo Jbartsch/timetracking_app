@@ -94,12 +94,11 @@ if(Titanium.App.Properties.getInt("userUid")) {
         items:[cancel,spacer,done]
       });
        
-       
       picker_view.add(toolbar);
       
-      var clientnid = 0;
+      var clientnid = node.organization_nid;
       
-      var projectnid = 0;
+      var projectnid = node.project_nid;
       
       var clientUrl = REST_PATH + 'organizations.json';
     
@@ -148,6 +147,10 @@ if(Titanium.App.Properties.getInt("userUid")) {
         selectionIndicator:true,
         visible:false
       });
+      
+      var defaultClient = 0;
+     
+      var clientColumn = Ti.UI.createPickerColumn();
      
       // When the xhr loads we do:
       clientXhr.onload = function() {
@@ -173,8 +176,11 @@ if(Titanium.App.Properties.getInt("userUid")) {
       
             results[i] = Ti.UI.createPickerRow({title: data.title, nid:data.nid});
             
+            if (data.nid == node.organization_nid) {
+              defaultClient = i;
+            }
+            
             i = i + 1;
-            // results[key] = {title: data.title, nid:data.nid};
           }
       
           clientPicker.add(results);
@@ -221,14 +227,16 @@ if(Titanium.App.Properties.getInt("userUid")) {
         selectionIndicator:true,
         visible:false
       });
-     
+      
+      var defaultProject = 0;
+      
       // When the xhr loads we do:
       projectXhr.onload = function() {
         // Save the status of the xhr in a variable
         // this will be used to see if we have a xhr (200) or not
         var statusCode = projectXhr.status;
         // Check if we have a xhr
-        Ti.API.info(statusCode);
+
         if(statusCode == 200) {
       
           // Save the responseText from the xhr in the response variable
@@ -247,8 +255,11 @@ if(Titanium.App.Properties.getInt("userUid")) {
       
             results[i] = Ti.UI.createPickerRow({title: data.title, nid:data.nid});
             
+            if (data.nid == node.project_nid) {
+              defaultProject = i;
+            }
+            
             i = i + 1;
-            // results[key] = {title: data.title, nid:data.nid};
           }
       
           projectPicker.add(results);
@@ -458,7 +469,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
       });
       
       var clientText = Titanium.UI.createTextField({
-        hintText:"Choose a client",
+        value:node.organization_title,
         height:40,
         width:300,
         top:200,
@@ -486,7 +497,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
       });
       
       var projectText = Titanium.UI.createTextField({
-        hintText:"Choose a project",
+        value:node.project_title,
         height:40,
         width:300,
         top:245,
@@ -507,10 +518,10 @@ if(Titanium.App.Properties.getInt("userUid")) {
       });
       
       view.add(projectText);
-    
+      
       // Add the save button
       var saveButton = Titanium.UI.createButton({
-        title:'Save',
+        title:'Update',
         height:35,
         width:150,
         top:315
@@ -536,8 +547,8 @@ if(Titanium.App.Properties.getInt("userUid")) {
         var newnode = {
           node:{
             title: nodeTitleTextfield.value,
-            // organization_nid:clientnid,
-            // project_nid:projectnid,
+            organization_nid:clientnid,
+            project_nid:projectnid,
             trackingdate: {year: date[0], month: date[1], day:date[2]},
             timebegin: beginText.value,
             timeend: endText.value,
@@ -556,35 +567,32 @@ if(Titanium.App.Properties.getInt("userUid")) {
         var updateurl = REST_PATH + 'node/' + node.nid + '.json';
 
         // Create a connection
-        var updatexhr = Titanium.Network.createHTTPClient();
+        var nodeXhr = Titanium.Network.createHTTPClient();
     
         // Open the connection using POST
-        updatexhr.open("PUT", updateurl);
-        updatexhr.setRequestHeader('Content-Type','application/json; charset=utf-8');
-        updatexhr.setRequestHeader('Cookie', user.session_name+'='+user.sessid);
+        nodeXhr.open('PUT', updateurl);
+        nodeXhr.setRequestHeader('X-HTTP-Method-Override','PUT');
+        nodeXhr.setRequestHeader('Content-Type','application/json; charset=utf-8');
+        nodeXhr.setRequestHeader('Cookie', user.session_name+'='+user.sessid);
     
         // Send the connection and the user object as argument
-        updatexhr.send(JSON.stringify(newnode));
-        Ti.API.info(JSON.stringify(newnode));
-        updatexhr.onload = function() {
+        nodeXhr.send(JSON.stringify(newnode));
+        nodeXhr.onload = function() {
           // Save the status of the connection in a variable
           // this will be used to see if we have a connection (200) or not
-          var statusCode = updatexhr.status;
+          var statusCode = nodeXhr.status;
           // Check if we have a valid status
-          Ti.API.info(statusCode);
+
           if(statusCode == 200) {
     
-            // Create a variable response to hold the response
-            var response = updatexhr.responseText;
-    
-            // Parse (build data structure) the JSON response into an object (data)
-            var data = JSON.parse(response);
-    
-            alert("Content with id " + data.nid + ' updated.');
+            alert('Timetracking "' + node.title + '" updated.');
           }
           else {
             alert("There was an error");
           }
+        }
+        nodeXhr.onerror = function() {
+          Ti.API.info(nodeXhr.status);
         }
     
       });

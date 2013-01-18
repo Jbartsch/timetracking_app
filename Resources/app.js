@@ -92,6 +92,8 @@ var timeViewWin = Ti.UI.createWindow({
   url: 'includes/timetrackings.js',
 });
 
+Ti.App.timeViewWin = timeViewWin;
+
 // Create the project tab
 var timeViewTab = Ti.UI.createTab({
   icon: "icons/111-user.png",

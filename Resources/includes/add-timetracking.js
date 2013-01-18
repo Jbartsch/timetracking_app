@@ -196,7 +196,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
     // this will be used to see if we have a xhr (200) or not
     var statusCode = projectXhr.status;
     // Check if we have a xhr
-    Ti.API.info(statusCode);
+    
     if(statusCode == 200) {
   
       // Save the responseText from the xhr in the response variable
@@ -544,16 +544,10 @@ if(Titanium.App.Properties.getInt("userUid")) {
       // this will be used to see if we have a connection (200) or not
       var statusCode = xhr.status;
       // Check if we have a valid status
-      Ti.API.info(statusCode);
+
       if(statusCode == 200) {
 
-        // Create a variable response to hold the response
-        var response = xhr.responseText;
-
-        // Parse (build data structure) the JSON response into an object (data)
-        var data = JSON.parse(response);
-
-        alert("Content created with id " + data.nid);
+        alert('Timetracking "' + node.title + '" created.');
       }
       else {
         alert("There was an error");
