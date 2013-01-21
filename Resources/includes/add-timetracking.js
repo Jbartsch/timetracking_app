@@ -293,11 +293,12 @@ if(Titanium.App.Properties.getInt("userUid")) {
     left:10,
     width:300,
     font:{fontSize:16},
-    borderWidth:2,
+    borderWidth:1,
     borderColor:'#bbb',
-    borderRadius:5,
+    borderRadius:3,
     paddingLeft: 5,
     paddingRight: 5,
+    backgroundColor: 'white',
   });
 
   // Add the textfield to the window
@@ -342,6 +343,13 @@ if(Titanium.App.Properties.getInt("userUid")) {
     top:115,
     left:10,
     width:300,
+    font:{fontSize:16},
+    borderWidth:1,
+    borderColor:'#bbb',
+    borderRadius:3,
+    paddingLeft: 5,
+    paddingRight: 5,
+    backgroundColor: 'white',
     borderStyle:Titanium.UI.INPUT_BORDERSTYLE_ROUNDED,
     rightButton:drop_button_date,
     rightButtonMode:Titanium.UI.INPUT_BUTTONMODE_ALWAYS,
@@ -364,7 +372,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
   var beginLabel = Titanium.UI.createLabel({
     text:'From',
     left:10,
-    top:166,
+    top:155,
     width:50,
     height:40,
   });
@@ -379,11 +387,12 @@ if(Titanium.App.Properties.getInt("userUid")) {
     left:65,
     width:60,
     font:{fontSize:16},
-    borderWidth:2,
+    borderWidth:1,
     borderColor:'#bbb',
-    borderRadius:5,
+    borderRadius:3,
     paddingLeft: 5,
     paddingRight: 5,
+    backgroundColor: 'white',
   });
 
   // Add the textarea to the window
@@ -393,7 +402,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
   var endLabel = Titanium.UI.createLabel({
     text:'To',
     left:135,
-    top:160,
+    top:155,
     height:40,
     width:30,
   });
@@ -418,11 +427,12 @@ if(Titanium.App.Properties.getInt("userUid")) {
     left:165,
     width:60,
     font:{fontSize:16},
-    borderWidth:2,
+    borderWidth:1,
     borderColor:'#bbb',
-    borderRadius:5,
+    borderRadius:3,
     paddingLeft: 5,
     paddingRight: 5,
+    backgroundColor: 'white',
   });
 
   // Add the textarea to the window
