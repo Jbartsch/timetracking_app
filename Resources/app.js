@@ -102,7 +102,8 @@ var timeTab = Ti.UI.createTab({
 // Create the timetrackings view window
 var timeViewWin = Ti.UI.createWindow({
   title: "Timetrackings",
-  backgroundColor: '#fff',
+  backgroundColor: '#D8D8D8',
+  barColor: '#009900',
   url: 'includes/timetrackings.js',
 });
 

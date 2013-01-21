@@ -68,7 +68,7 @@ if (Titanium.Platform.osname == 'android') {
 else if (Titanium.Platform.osname == 'iphone' || Titanium.Platform.osname == 'ipad') {
 
  var loginText = Titanium.UI.createTextArea({
- 	editable: '0',
+ 	  editable: '0',
     text:'Welcome message',
     value: 'Welcome to timetracking app, please provide your login credentials. If you don\'t have any yet, subscribe <a href="http://innoveto.com">here</a>',
     font:{fontSize:14, fontWeight: "light"},
@@ -77,8 +77,8 @@ else if (Titanium.Platform.osname == 'iphone' || Titanium.Platform.osname == 'ip
     top:10,
     width:300,
     height:'auto',
-	backgroundColor: 'transparent',
-	  });
+	  backgroundColor: 'transparent',
+	 });
 
   // Create the labelfor the username
   var usernameLabel = Titanium.UI.createLabel({

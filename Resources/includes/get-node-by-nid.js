@@ -101,6 +101,11 @@ if(Titanium.App.Properties.getInt("userUid")) {
       var projectnid = node.project_nid;
       
       var clientUrl = REST_PATH + 'organizations.json';
+      
+      var datetxt = '';
+  
+      var monthNames = [ "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December" ];
     
       // Create a connection inside the variable xhr
       var clientXhr = Titanium.Network.createHTTPClient();
@@ -131,8 +136,10 @@ if(Titanium.App.Properties.getInt("userUid")) {
         if (month < 10) {
           month = '0' + month;
         }
+        var monthString = monthNames[pickerdate.getMonth()];
         var year = pickerdate.getFullYear();
-        trackingdate = year + '-' + month + '-' + day;
+        datetxt = year + '-' + month + '-' + day;
+        trackingdate = monthString + ' ' + day + ', ' + year;
       });
       
       var sessName = Titanium.App.Properties.getString("userSessionName");
@@ -302,7 +309,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
         }
         
         if (datePicker.visible == 1) {
-          dateText.value =  trackingdate;
+          dateTextLabel.text = trackingdate;
           picker_view.animate(slide_out);
           datePicker.hide();
         }
@@ -337,11 +344,12 @@ if(Titanium.App.Properties.getInt("userUid")) {
         left:10,
         width:300,
         font:{fontSize:16},
-        borderWidth:2,
+        borderWidth:1,
         borderColor:'#bbb',
-        borderRadius:5,
+        borderRadius:3,
         paddingLeft: 5,
         paddingRight: 5,
+        backgroundColor: 'white',
       });
     
       // Add the textfield to the window
@@ -351,6 +359,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
       // Create the label for the date
       var dateLabel = Titanium.UI.createLabel({
         text:'Date',
+        font: {fontWeight:'bold', fontSize:18},
         left:10,
         top:80,
         right:10,
@@ -362,6 +371,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
     
       var day = oldDate.getDate().toString();
       var month = (oldDate.getMonth() + 1).toString();
+      var monthString = monthNames[oldDate.getMonth()];
       var year = oldDate.getFullYear();
       if (day.length == 1) {
         day = '0' + day;
@@ -370,39 +380,32 @@ if(Titanium.App.Properties.getInt("userUid")) {
         month = '0' + month;
       }
       
-      var tr = Titanium.UI.create2DMatrix();
-      tr = tr.rotate(90);
+      datetxt = year+'-'+month+'-'+day;
       
-      var drop_button_date = Titanium.UI.createButton({
-        style:Titanium.UI.iPhone.SystemButton.DISCLOSURE,
-        transform:tr
-      });
-      
-      // Create the textarea to hold the body
-      var dateText = Titanium.UI.createTextField({
-        value:year+'-'+month+'-'+day,
+      var dateTextLabel = Titanium.UI.createLabel({
+        text:monthString + ' ' + day + ', ' + year,
         height:40,
-        top:115,
+        top:110,
         left:10,
-        width:300,
-        borderStyle:Titanium.UI.INPUT_BORDERSTYLE_ROUNDED,
-        rightButton:drop_button_date,
-        rightButtonMode:Titanium.UI.INPUT_BUTTONMODE_ALWAYS,
-        enabled:true,
+        width:200
       });
       
-      dateText.addEventListener('focus', function() {
-        picker_view.animate(slide_out);
+      var dateChangeButton = Titanium.UI.createButton({
+        title:'Change',
+        height:35,
+        top:110,
+        left:210,
+        width:100
       });
       
-      drop_button_date.addEventListener('click', function() {
+      dateChangeButton.addEventListener('click', function() {
         datePicker.show();
         picker_view.animate(slide_in);
-        dateText.blur();
       });
     
       // Add the textarea to the window
-      view.add(dateText);
+      view.add(dateTextLabel);
+      view.add(dateChangeButton);
     
       var beginLabel = Titanium.UI.createLabel({
         text:'From',
@@ -423,11 +426,12 @@ if(Titanium.App.Properties.getInt("userUid")) {
         left:65,
         width:60,
         font:{fontSize:16},
-        borderWidth:2,
+        borderWidth:1,
         borderColor:'#bbb',
-        borderRadius:5,
+        borderRadius:3,
         paddingLeft: 5,
         paddingRight: 5,
+        backgroundColor: 'white',
       });
     
       // Add the textarea to the window
@@ -453,15 +457,19 @@ if(Titanium.App.Properties.getInt("userUid")) {
         left:165,
         width:60,
         font:{fontSize:16},
-        borderWidth:2,
+        borderWidth:1,
         borderColor:'#bbb',
-        borderRadius:5,
+        borderRadius:3,
         paddingLeft: 5,
         paddingRight: 5,
+        backgroundColor: 'white',
       });
     
       // Add the textarea to the window
       view.add(endText);
+      
+      var tr = Titanium.UI.create2DMatrix();
+      tr = tr.rotate(90);
       
       var drop_button_client =  Titanium.UI.createButton({
         style:Titanium.UI.iPhone.SystemButton.DISCLOSURE,
@@ -530,19 +538,10 @@ if(Titanium.App.Properties.getInt("userUid")) {
       // Add the button to the window
       view.add(saveButton);
     
-      win.addEventListener("focus", function(e) {
-        if (e.source.top == 50) {
-          nodeTitleTextfield.value = '';
-          dateText.value = year+'-'+month+'-'+day;
-          beginText.value = '';
-          endText.value = hours+':'+minutes;
-        }
-      });
-    
       // Add the event listener for when the button is created
       saveButton.addEventListener("click", function() {
         
-        var date = dateText.value.split('-');
+        var date = datetxt.split('-');
         // Create a new node object
         var newnode = {
           node:{
@@ -585,7 +584,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
 
           if(statusCode == 200) {
     
-            alert('Timetracking "' + node.title + '" updated.');
+            alert('Timetracking "' + newnode.node.title + '" updated.');
           }
           else {
             alert("There was an error");

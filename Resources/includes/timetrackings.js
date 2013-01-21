@@ -16,7 +16,8 @@ var view = Titanium.UI.createScrollView({
   contentHeight:'auto',
   showVerticalScrollIndicator:true,
   showHorizontalScrollIndicator:true,
-  top: 0
+  top: 0,
+  backgroundColor: '#D8D8D8',
 });
 
 // Add our scrollview to the window
@@ -81,6 +82,8 @@ function loadView() {
   
       table = Titanium.UI.createTableView({
         data:results,
+        backgroundColor: '#D8D8D8',
+        separatorColor: '#FFF',
       });
   
       // add a listener for click to the table
@@ -89,7 +92,8 @@ function loadView() {
         // Define a new Window "nodeWindow"
         var nodeWindow = Titanium.UI.createWindow({
           url:'get-node-by-nid.js',
-          backgroundColor:'#fff',
+          backgroundColor: '#D8D8D8',
+          barColor: '#009900',
           title:e.rowData.title,
           nid:e.rowData.nid,
           touchEnabled: true,
