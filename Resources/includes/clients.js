@@ -114,26 +114,13 @@ xhr.onload = function() {
 
       // Define a new Window "nodeWindow"
             var nodeWindow = Titanium.UI.createWindow({
-              // the window is not here, but in the file get-node-by-nid.js
-              // so we load it
-              url:'get-node-by-nid.js',
-
-              // define some basic properties
-              backgroundColor:'#fff',
-
-              // Define the title of our new window using the node title
-              // e.rowData contains the information we defined when we passed it
-              // to Titanium.UI.createTableView using the property "data"
-              // so e.rowData.title = data.title for each of the rows in the table
+              url:'edit-client.js',
+              backgroundColor: '#D8D8D8',
+              barColor: '#009900',
               title:e.rowData.title,
-
-              // The same for the nid
-              // We send the nid as an property in this window and the
-              // get-node-by-nid file will recognize it and use it
               nid:e.rowData.nid,
-
-              // a boolean indicating if the view should receive touch events (true, default) or forward them to peers (false)
-              touchEnabled: true
+              touchEnabled: true,
+              tabBarHidden: true,
             });
 
             // order the app to open the nodeWindow window in the current Tab

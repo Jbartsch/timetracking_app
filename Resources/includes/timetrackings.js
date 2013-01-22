@@ -91,7 +91,7 @@ function loadView() {
       table.addEventListener('click',function(e) {
         // Define a new Window "nodeWindow"
         var nodeWindow = Titanium.UI.createWindow({
-          url:'get-node-by-nid.js',
+          url:'edit-timetracking.js',
           backgroundColor: '#D8D8D8',
           barColor: '#009900',
           title:e.rowData.title,
