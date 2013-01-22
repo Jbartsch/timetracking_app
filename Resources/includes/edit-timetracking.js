@@ -100,19 +100,11 @@ if(Titanium.App.Properties.getInt("userUid")) {
       
       var projectnid = node.project_nid;
       
-      var clientUrl = REST_PATH + 'organizations.json';
-      
       var datetxt = '';
   
       var monthNames = [ "January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December" ];
-    
-      // Create a connection inside the variable xhr
-      var clientXhr = Titanium.Network.createHTTPClient();
-      
-      // Open the xhr
-      clientXhr.open("GET", clientUrl);
-      
+
       var oldDate = new Date(node.trackingdate*1000);
       var datePicker = Ti.UI.createPicker({
         type:Ti.UI.PICKER_TYPE_DATE,
@@ -141,6 +133,12 @@ if(Titanium.App.Properties.getInt("userUid")) {
         datetxt = year + '-' + month + '-' + day;
         trackingdate = monthString + ' ' + day + ', ' + year;
       });
+      
+      var clientUrl = REST_PATH + 'organizations.json';
+      // Create a connection inside the variable xhr
+      var clientXhr = Titanium.Network.createHTTPClient();
+      // Open the xhr
+      clientXhr.open("GET", clientUrl);
       
       var sessName = Titanium.App.Properties.getString("userSessionName");
       var sessId = Titanium.App.Properties.getString("userSessionId");
@@ -497,13 +495,6 @@ if(Titanium.App.Properties.getInt("userUid")) {
             timeend: endText.value,
           }
         };
-        
-        // node.title = nodeTitleTextfield.value;
-        // node.organization_nid = clientnid;
-        // node.project_nid = projectnid;
-        // node.trackingdate = {year: date[0], month: date[1], day:date[2]};
-        // node.timebegin = beginText.value;
-        // node.timeend = endText.value;
     
         // Define the url
         // in this case, we'll connecting to http://example.com/api/rest/node
