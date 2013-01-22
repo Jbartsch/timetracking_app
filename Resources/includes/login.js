@@ -26,23 +26,11 @@ var loginText = Titanium.UI.createTextArea({
 
 loginView.add(loginText);
 
-// Create the labelfor the username
-var usernameLabel = Titanium.UI.createLabel({
-  text:'Username',
-  font:{fontSize:14, fontWeight: "bold"},
-  color: 'white',
-  left:10,
-  top:110,
-  width:300,
-  height:'auto'
-});
-
-loginView.add(usernameLabel);
-
 // Create the username textfield
 var usernameTextfield = Titanium.UI.createTextField({
+  hintText:'Username',
   height:35,
-  top:130,
+  top:120,
   left:10,
   width:300,
   font:{fontSize:16},
@@ -58,23 +46,11 @@ backgroundColor: 'white',
 
 loginView.add(usernameTextfield);
 
-// Create the label for the password
-var passwordLabel = Titanium.UI.createLabel({
-  text:'Password',
-  font:{fontSize:14, fontWeight: "bold"},
-  left:10,
-  top:175,
-  width:300,
-  height:'auto',
-  color: 'white',
-});
-
-loginView.add(passwordLabel);
-
 // Create the password textfield
 var passwordTextfield = Titanium.UI.createTextField({
+  hintText:'Password',
   height:35,
-  top:200,
+  top:170,
   left:10,
   width:300,
   font:{fontSize:16},
@@ -95,7 +71,7 @@ var cancelButton = Titanium.UI.createButton({
   title:'Cancel',
   height:40,
   width:140,
-  top:270,
+  top:220,
   left:10
 });
 
@@ -110,7 +86,7 @@ var loginButton = Titanium.UI.createButton({
   title:'Login',
   height:40,
   width:140,
-  top:270,
+  top:220,
   left:160
 });
 
