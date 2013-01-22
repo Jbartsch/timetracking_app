@@ -46,44 +46,6 @@ var linearGradient = Ti.UI.createView({
 });
 loginWin.add(linearGradient);
 
-// Create the home window
-// var homeWin = Titanium.UI.createWindow({
-  // // Set the title for the window
-    // title:'Projects',
-// 
-    // // Set the background color for the window
-    // backgroundColor:'#fff',
-// 
-    // // The actual window data will be in this file, not here
-    // url: 'home.js'
-// });
-
-// Create the home tab
-// var homeTab = Titanium.UI.createTab({
-  // // Set the icon for the button
-    // icon:'icons/53-house.png',
-// 
-    // // Set the title for the tab
-    // title:'Projects',
-// 
-    // // Relate the tab to a window so the app knows what window to open.
-    // window:homeWin
-// });
-
-// Create the project window
-// var projectWin = Ti.UI.createWindow({
-  // title: "Projects",
-  // backgroundColor: '#fff',
-  // url: 'includes/projects.js',
-// });
-// 
-// // Create the project tab
-// var projectTab = Ti.UI.createTab({
-  // icon: "icons/111-user.png",
-  // title: "Projects",
-  // window: projectWin
-// });
-
 // Create the timetracking add window
 var timeWin = Ti.UI.createWindow({
   title: 'Add Timetracking',
@@ -94,36 +56,55 @@ var timeWin = Ti.UI.createWindow({
 
 // Create the timetracking tab
 var timeTab = Ti.UI.createTab({
-  icon: "icons/11-clock.png",
-  title:'Add Timetracking',
+  icon: "icons/78-stopwatch.png",
+  title:'Timetracking',
   window: timeWin
 });
 
 // Create the timetrackings view window
-var timeViewWin = Ti.UI.createWindow({
-  title: "Timetrackings",
+var clientsWin = Ti.UI.createWindow({
+  title: "Clients",
   backgroundColor: '#D8D8D8',
   barColor: '#009900',
-  url: 'includes/timetrackings.js',
+  url: 'includes/clients.js',
 });
 
-Ti.App.timeViewWin = timeViewWin;
+// Create the project tab
+var clientsTab = Ti.UI.createTab({
+  icon: "icons/112-group.png",
+  title: "Clients",
+  window: clientsWin
+});
+
+// Create the project window
+var projectsWin = Ti.UI.createWindow({
+  title: "Projects",
+  backgroundColor: '#D8D8D8',
+  barColor: '#009900',
+  url: 'includes/projects.js',
+});
 
 // Create the project tab
-var timeViewTab = Ti.UI.createTab({
-  icon: "icons/111-user.png",
-  title: "Timetrackings",
-  window: timeViewWin
+var projectsTab = Ti.UI.createTab({
+  icon: "icons/104-index-cards.png",
+  title: "Projects",
+  window: projectsWin
 });
 
 // Create a new window here to show the form
-// var settingsWin = Ti.UI.createWindow({
-  // title: "Settings",
-  // modal: true,
-  // url: 'includes/settings.js',
-// });
-// 
-// Ti.App.settingsWin = settingsWin;
+var settingsWin = Ti.UI.createWindow({
+  title: "Settings",
+  backgroundColor: '#D8D8D8',
+  barColor: '#009900',
+  url: 'includes/settings.js',
+});
+
+// Create the settings tab
+var settingsTab = Ti.UI.createTab({
+  icon: "icons/19-gear.png",
+  title: "Settings",
+  window: settingsWin
+});
 
 var logoutWin = Ti.UI.createWindow({
   title: "Logout",
@@ -132,15 +113,13 @@ var logoutWin = Ti.UI.createWindow({
 });
 
 Ti.App.logoutWin = logoutWin;
-
 Ti.App.tabGroup = tabGroup;
-
-// Add the home tab to the tab group
-// Ti.App.tabGroup.addTab(homeTab);
 
 // Add the timetracking tab to the tab group
 Ti.App.tabGroup.addTab(timeTab);
-Ti.App.tabGroup.addTab(timeViewTab);
+Ti.App.tabGroup.addTab(clientsTab);
+Ti.App.tabGroup.addTab(projectsTab);
+Ti.App.tabGroup.addTab(settingsTab);
 // 
 // // Add the user tab to the tab group
 // Ti.App.tabGroup.addTab(projectTab);

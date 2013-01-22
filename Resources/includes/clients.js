@@ -24,7 +24,7 @@ win.add(view);
 
 // Define the url which contains the full url
 // in this case, we'll connecting to http://example.com/api/rest/node/1.json
-var url = REST_PATH + 'projects.json';
+var url = REST_PATH + 'organizations.json';
 
 // Create a connection inside the variable xhr
 var xhr = Titanium.Network.createHTTPClient();

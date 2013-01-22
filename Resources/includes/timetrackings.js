@@ -139,18 +139,7 @@ if (Titanium.Platform.osname == 'iphone' || Titanium.Platform.osname == 'ipad') 
     loadView();
   });
 
-  var leftButton = Ti.UI.createButton({
-    title: 'Logout',
-    style:Titanium.UI.iPhone.SystemButtonStyle.DONE
-  });
-
-  leftButton.addEventListener('click', function() {
-    Ti.App.logoutWin.open();
-    Ti.App.tabGroup.close();
-  });
-
   // We don't add the button to the window, instead, we tell the app
   // to set the button as the right navigation button
   win.setRightNavButton(rightButton);
-  win.setLeftNavButton(leftButton);
 }

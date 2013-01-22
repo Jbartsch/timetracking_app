@@ -295,52 +295,49 @@ if(Titanium.App.Properties.getInt("userUid")) {
       
       done.addEventListener('click',function() {
         if (projectPicker.visible == 1) {
-          projectText.value =  projectPicker.getSelectedRow(0).title;
+          projectButton.title =  projectPicker.getSelectedRow(0).title;
           projectnid = projectPicker.getSelectedRow(0).nid;
           picker_view.animate(slide_out);
-          projectPicker.hide();
+          setTimeout(function(){
+            projectPicker.hide();
+          }, 500);
         }
         
         if (clientPicker.visible == 1) {
-          clientText.value =  clientPicker.getSelectedRow(0).title;
+          clientButton.title =  clientPicker.getSelectedRow(0).title;
           clientnid = clientPicker.getSelectedRow(0).nid;
           picker_view.animate(slide_out);
-          clientPicker.hide();
+          setTimeout(function(){
+            clientPicker.hide();
+          }, 500);
         }
         
         if (datePicker.visible == 1) {
-          dateTextLabel.text = trackingdate;
+          dateChangeButton.title = trackingdate;
           picker_view.animate(slide_out);
-          datePicker.hide();
+          setTimeout(function(){
+            datePicker.hide();
+          }, 500);
         }
       });
       
       cancel.addEventListener('click', function() {
         picker_view.animate(slide_out);
-        datePicker.hide();
-        clientPicker.hide();
-        projectPicker.hide();
+        setTimeout(function(){
+          datePicker.hide();
+          clientPicker.hide();
+          projectPicker.hide();
+        }, 500);
       })
       
       win.add(picker_view);
     
-      // Create the label for the node title
-      var nodeTitleLabel = Titanium.UI.createLabel({
-        text:'Description',
-        left:10,
-        top:5,
-        right:10,
-        height:40,
-      });
-    
-      // Add the label to the window
-      view.add(nodeTitleLabel);
-    
       // Create the textfield to hold the node title
       var nodeTitleTextfield = Titanium.UI.createTextField({
         value:node.title,
+        hintText:"Description",
         height:35,
-        top:40,
+        top:10,
         left:10,
         width:300,
         font:{fontSize:16},
@@ -355,20 +352,6 @@ if(Titanium.App.Properties.getInt("userUid")) {
       // Add the textfield to the window
       view.add(nodeTitleTextfield);
     
-    
-      // Create the label for the date
-      var dateLabel = Titanium.UI.createLabel({
-        text:'Date',
-        font: {fontWeight:'bold', fontSize:18},
-        left:10,
-        top:80,
-        right:10,
-        height:40,
-      });
-    
-      // Add the label to the window
-      view.add(dateLabel);
-    
       var day = oldDate.getDate().toString();
       var month = (oldDate.getMonth() + 1).toString();
       var monthString = monthNames[oldDate.getMonth()];
@@ -380,22 +363,15 @@ if(Titanium.App.Properties.getInt("userUid")) {
         month = '0' + month;
       }
       
+      var currentDateText = monthString + ' ' + day + ', ' + year;
       datetxt = year+'-'+month+'-'+day;
       
-      var dateTextLabel = Titanium.UI.createLabel({
-        text:monthString + ' ' + day + ', ' + year,
-        height:40,
-        top:110,
-        left:10,
-        width:200
-      });
-      
       var dateChangeButton = Titanium.UI.createButton({
-        title:'Change',
+        title:currentDateText,
         height:35,
-        top:110,
-        left:210,
-        width:100
+        top:55,
+        left:10,
+        width:300
       });
       
       dateChangeButton.addEventListener('click', function() {
@@ -403,14 +379,13 @@ if(Titanium.App.Properties.getInt("userUid")) {
         picker_view.animate(slide_in);
       });
     
-      // Add the textarea to the window
-      view.add(dateTextLabel);
+      // Add the label & button to the view
       view.add(dateChangeButton);
     
       var beginLabel = Titanium.UI.createLabel({
         text:'From',
         left:10,
-        top:166,
+        top:100,
         width:50,
         height:40,
       });
@@ -421,7 +396,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
       var beginText = Titanium.UI.createTextField({
         value:node.timebegin,
         right:10,
-        top:160,
+        top:100,
         height:35,
         left:65,
         width:60,
@@ -441,7 +416,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
       var endLabel = Titanium.UI.createLabel({
         text:'To',
         left:135,
-        top:160,
+        top:100,
         height:40,
         width:30,
       });
@@ -452,7 +427,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
       // Create the textarea to hold the body
       var endText = Titanium.UI.createTextField({
         value:node.timeend,
-        top:160,
+        top:100,
         height:35,
         left:165,
         width:60,
@@ -468,71 +443,40 @@ if(Titanium.App.Properties.getInt("userUid")) {
       // Add the textarea to the window
       view.add(endText);
       
-      var tr = Titanium.UI.create2DMatrix();
-      tr = tr.rotate(90);
-      
-      var drop_button_client =  Titanium.UI.createButton({
-        style:Titanium.UI.iPhone.SystemButton.DISCLOSURE,
-        transform:tr
+      var clientButton = Titanium.UI.createButton({
+        title:node.organization_title,
+        height:40,
+        width:300,
+        top:150,
       });
       
-      var clientText = Titanium.UI.createTextField({
-        value:node.organization_title,
+      clientButton.addEventListener('click', function() {
+        clientPicker.show();
+        picker_view.animate(slide_in);
+      });
+      
+      view.add(clientButton);
+      
+      var projectButton = Titanium.UI.createButton({
+        title:node.project_title,
         height:40,
         width:300,
         top:200,
-        borderStyle:Titanium.UI.INPUT_BORDERSTYLE_ROUNDED,
-        rightButton:drop_button_client,
-        rightButtonMode:Titanium.UI.INPUT_BUTTONMODE_ALWAYS,
-        enabled:true,
       });
       
-      clientText.addEventListener('focus', function() {
-        picker_view.animate(slide_out);
-      });
-      
-      drop_button_client.addEventListener('click', function() {
-        clientPicker.show();
-        picker_view.animate(slide_in);
-        clientText.blur();
-      });
-      
-      view.add(clientText)
-      
-      var drop_button_project = Titanium.UI.createButton({
-        style:Titanium.UI.iPhone.SystemButton.DISCLOSURE,
-        transform:tr
-      });
-      
-      var projectText = Titanium.UI.createTextField({
-        value:node.project_title,
-        height:40,
-        width:300,
-        top:245,
-        borderStyle:Titanium.UI.INPUT_BORDERSTYLE_ROUNDED,
-        rightButton:drop_button_project,
-        rightButtonMode:Titanium.UI.INPUT_BUTTONMODE_ALWAYS,
-        enabled:true,
-      });
-      
-      projectText.addEventListener('focus', function() {
-        picker_view.animate(slide_out);
-      });
-      
-      drop_button_project.addEventListener('click', function() {
+      projectButton.addEventListener('click', function() {
         projectPicker.show();
         picker_view.animate(slide_in);
-        projectText.blur();
       });
       
-      view.add(projectText);
+      view.add(projectButton);
       
       // Add the save button
       var saveButton = Titanium.UI.createButton({
         title:'Update',
         height:35,
         width:150,
-        top:315
+        top:260
       });
     
       // Add the button to the window
