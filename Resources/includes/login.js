@@ -11,158 +11,109 @@ var loginView = Titanium.UI.createView({
 
 win.add(loginView);
 
-if (Titanium.Platform.osname == 'android') {
+var loginText = Titanium.UI.createTextArea({
+  editable: '0',
+  text:'Welcome message',
+  value: 'Please provide your login credentials.',
+  font:{fontSize:16, fontWeight: "light"},
+  color: 'white',
+  left:10,
+  top:40,
+  width:300,
+  height:'auto',
+  backgroundColor: 'transparent',
+});
 
-  // Create the labelfor the username
-  var usernameLabel = Ti.UI.createLabel({
-    text:'Username',
-    left:10,
-    top:5,
-    right:10,
-    height:40,
-    color: 'white'
-  });
-
-  // Create the username textfield
-  var usernameTextfield = Ti.UI.createTextField({
-  	backgroundColor:'#9CA998',
-  	height:60,
-    top:50,
-    left:10,
-    right:10,
-    autocapitalization:Titanium.UI.TEXT_AUTOCAPITALIZATION_NONE,
-  });
-
-  // Create the label for the password
-  var passwordLabel = Titanium.UI.createLabel({
-    text:'Password',
-    left:10,
-    top:115,
-    right:10,
-    height:40,
-    color: 'white'
-  });
-
-  // Create the password textfield
-  var passwordTextfield = Titanium.UI.createTextField({
-    height:60,
-    top:160,
-    left:10,
-    right:10,
-    color: 'white',
-    // This is very important. Don't auto capitalize the first letter of the password
-    autocapitalization:Titanium.UI.TEXT_AUTOCAPITALIZATION_NONE,
-    // Mask the password so nobody sees it
-    passwordMask:true,
-  });
-
-  // Create the login button
-  var loginButton = Titanium.UI.createButton({
-    title:'Login',
-    height:60,
-    width:200,
-    top:250
-  });
-
-}
-else if (Titanium.Platform.osname == 'iphone' || Titanium.Platform.osname == 'ipad') {
-
- var loginText = Titanium.UI.createTextArea({
- 	  editable: '0',
-    text:'Welcome message',
-    value: 'Welcome to timetracking app, please provide your login credentials. If you don\'t have any yet, subscribe <a href="http://innoveto.com">here</a>',
-    font:{fontSize:14, fontWeight: "light"},
-    color: 'white',
-    left:10,
-    top:10,
-    width:300,
-    height:'auto',
-	  backgroundColor: 'transparent',
-	 });
-
-  // Create the labelfor the username
-  var usernameLabel = Titanium.UI.createLabel({
-    text:'Username',
-    font:{fontSize:14, fontWeight: "bold"},
-    color: 'white',
-    left:10,
-    top:110,
-    width:300,
-    height:'auto'
-  });
-
-  // Create the username textfield
-  var usernameTextfield = Titanium.UI.createTextField({
-    height:35,
-    top:130,
-    left:10,
-    width:300,
-    font:{fontSize:16},
-    borderWidth:1,
-    borderColor:'#bbb',
-    borderRadius:3,
-    autocapitalization:Titanium.UI.TEXT_AUTOCAPITALIZATION_NONE,
-    paddingLeft: 5,
-    paddingRight: 5,
-    color: 'black',
-	backgroundColor: 'white',
-  });
-
-  // Create the label for the password
-  var passwordLabel = Titanium.UI.createLabel({
-    text:'Password',
-    font:{fontSize:14, fontWeight: "bold"},
-    left:10,
-    top:175,
-    width:300,
-    height:'auto',
-    color: 'white',
-  });
-
-  // Create the password textfield
-  var passwordTextfield = Titanium.UI.createTextField({
-    height:35,
-    top:200,
-    left:10,
-    width:300,
-    font:{fontSize:16},
-    borderWidth:1,
-    borderColor:'#bbb',
-    borderRadius:3,
-    // This is very important. Don't auto capitalize the first letter of the password
-    autocapitalization:Titanium.UI.TEXT_AUTOCAPITALIZATION_NONE,
-    // Mask the password so nobody sees it
-    passwordMask:true,
-    paddingLeft: 5,
-    paddingRight: 5,
-    color: 'black',
-	backgroundColor: 'white',
-  });
-
-  // Create the login button
-  var loginButton = Titanium.UI.createButton({
-    title:'Login',
-    height:40,
-    width:200,
-    top:270
-  });
-}
-// Add a login intro message
 loginView.add(loginText);
 
-// Add the label to the view
+// Create the labelfor the username
+var usernameLabel = Titanium.UI.createLabel({
+  text:'Username',
+  font:{fontSize:14, fontWeight: "bold"},
+  color: 'white',
+  left:10,
+  top:110,
+  width:300,
+  height:'auto'
+});
+
 loginView.add(usernameLabel);
 
-// Add the textfield to the view
+// Create the username textfield
+var usernameTextfield = Titanium.UI.createTextField({
+  height:35,
+  top:130,
+  left:10,
+  width:300,
+  font:{fontSize:16},
+  borderWidth:1,
+  borderColor:'#bbb',
+  borderRadius:3,
+  autocapitalization:Titanium.UI.TEXT_AUTOCAPITALIZATION_NONE,
+  paddingLeft: 5,
+  paddingRight: 5,
+  color: 'black',
+backgroundColor: 'white',
+});
+
 loginView.add(usernameTextfield);
 
-// Add the label to the view
+// Create the label for the password
+var passwordLabel = Titanium.UI.createLabel({
+  text:'Password',
+  font:{fontSize:14, fontWeight: "bold"},
+  left:10,
+  top:175,
+  width:300,
+  height:'auto',
+  color: 'white',
+});
+
 loginView.add(passwordLabel);
 
-// Add the textarea to the view
+// Create the password textfield
+var passwordTextfield = Titanium.UI.createTextField({
+  height:35,
+  top:200,
+  left:10,
+  width:300,
+  font:{fontSize:16},
+  borderWidth:1,
+  borderColor:'#bbb',
+  borderRadius:3,
+  autocapitalization:Titanium.UI.TEXT_AUTOCAPITALIZATION_NONE,
+  passwordMask:true,
+  paddingLeft: 5,
+  paddingRight: 5,
+  color: 'black',
+  backgroundColor: 'white',
+});
+
 loginView.add(passwordTextfield);
 
-// Add the button to the view
+var cancelButton = Titanium.UI.createButton({
+  title:'Cancel',
+  height:40,
+  width:140,
+  top:270,
+  left:10
+});
+
+loginView.add(cancelButton);
+
+cancelButton.addEventListener('click', function() {
+  win.close();
+})
+
+// Create the login button
+var loginButton = Titanium.UI.createButton({
+  title:'Login',
+  height:40,
+  width:140,
+  top:270,
+  left:160
+});
+
 loginView.add(loginButton);
 
 // Add the event listener for when the button is created
@@ -230,8 +181,6 @@ loginButton.addEventListener('click', function() {
           // Set the user.userName to the logged in user name
           Titanium.App.Properties.setString("userName", user.name);
           Ti.App.tabGroup.open();
-          Ti.UI.loginCount = Ti.UI.loginCount + 1;
-          win.remove(loginView);
           win.close();
         }
       }

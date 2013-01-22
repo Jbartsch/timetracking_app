@@ -1,9 +1,5 @@
-// Create a reference to the underscore.js module
-// var _ = require('lib/underscore')._;
-
 // this sets the background color of the master UIView (when there are no windows/tab groups on it)
-Titanium.UI.setBackgroundColor('#D8D8D8');
-Ti.include("lib/tiajax.js");
+// Titanium.UI.setBackgroundColor('#D8D8D8');
 
 // Create tab group to hold all the tabs
 var tabGroup = Titanium.UI.createTabGroup();
@@ -15,36 +11,6 @@ var user = {
   session_name: Titanium.App.Properties.getString("userSessionName"),
   name: Titanium.App.Properties.getString("userName"),
 }
-
-
-Ti.UI.loginCount = 0;
-
-// Create the login window
-var loginWin = Titanium.UI.createWindow({
-  // Set the title for the window
-    title:'Login',
-    // Set the background color for the window
-    backgroundColor:'#fff',
-    // The actual window data will be in this file, not here
-    url: 'includes/login.js',
-    exitOnClose: true,
-    navBarHidden: true,
-});
-
-Ti.App.loginWin = loginWin;
-
-var linearGradient = Ti.UI.createView({
-    // top: 10,
-    // width: 100,
-    // height: 100,
-    backgroundGradient: {
-        type: 'linear',
-        startPoint: { x: '50%', y: '00%' },
-        endPoint: { x: '50%', y: '100%' },
-        colors: [ { color: '#00CC00	', offset: 0.0}, { color: '#009900', offset: 0.25 }, { color: '#00CC00', offset: 1.0 } ],
-    }
-});
-loginWin.add(linearGradient);
 
 // Create the timetracking add window
 var timeWin = Ti.UI.createWindow({
@@ -108,6 +74,7 @@ var settingsTab = Ti.UI.createTab({
 
 var logoutWin = Ti.UI.createWindow({
   title: "Logout",
+  backgroundColor:'#000',
   fullscreen: true,
   url: 'includes/logout.js',
 });
@@ -115,21 +82,34 @@ var logoutWin = Ti.UI.createWindow({
 Ti.App.logoutWin = logoutWin;
 Ti.App.tabGroup = tabGroup;
 
-// Add the timetracking tab to the tab group
 Ti.App.tabGroup.addTab(timeTab);
 Ti.App.tabGroup.addTab(clientsTab);
 Ti.App.tabGroup.addTab(projectsTab);
 Ti.App.tabGroup.addTab(settingsTab);
-// 
-// // Add the user tab to the tab group
-// Ti.App.tabGroup.addTab(projectTab);
 
 if(Titanium.App.Properties.getInt("userUid")) {
   // open tab group
   Ti.App.tabGroup.open();
 }
 else {
-  loginWin.open();
+  // Create the login window
+  var homeWin = Titanium.UI.createWindow({
+    title:'Home',
+    backgroundColor:'#009900',
+    url: 'home.js',
+    exitOnClose: true,
+    navBarHidden: true,
+  });
+  var linearGradient = Ti.UI.createView({
+    backgroundGradient: {
+      type: 'linear',
+      startPoint: { x: '50%', y: '00%' },
+      endPoint: { x: '50%', y: '100%' },
+      colors: [ { color: '#00CC00 ', offset: 0.0}, { color: '#009900', offset: 0.25 }, { color: '#00CC00', offset: 1.0 } ],
+    }
+  });
+  homeWin.add(linearGradient);
+  homeWin.open();
 }
 
 

@@ -38,7 +38,6 @@ xhr3.onerror = function() {
     Titanium.App.Properties.removeProperty("userSessionId");
     Titanium.App.Properties.removeProperty("userSessionName");
     Titanium.App.Properties.removeProperty("userName");
-    Ti.App.loginWin.open();
     win.close();
   }
 }
@@ -55,7 +54,6 @@ xhr3.onload = function() {
     Titanium.App.Properties.removeProperty("userSessionId");
     Titanium.App.Properties.removeProperty("userSessionName");
     Titanium.App.Properties.removeProperty("userName");
-    Ti.App.loginWin.open();
     win.close();
   }
   else {
@@ -66,7 +64,6 @@ xhr3.onload = function() {
     Titanium.App.Properties.removeProperty("userSessionId");
     Titanium.App.Properties.removeProperty("userSessionName");
     Titanium.App.Properties.removeProperty("userName");
-    Ti.App.loginWin.open();
     win.close();
   }
 }
