@@ -41,7 +41,7 @@ var usernameTextfield = Titanium.UI.createTextField({
   paddingLeft: 5,
   paddingRight: 5,
   color: 'black',
-backgroundColor: 'white',
+  backgroundColor: 'white',
 });
 
 loginView.add(usernameTextfield);
@@ -92,6 +92,20 @@ var loginButton = Titanium.UI.createButton({
 });
 
 loginView.add(loginButton);
+
+var forgotLabel = Titanium.UI.createLabel({
+  text:'Request new password',
+  width:'auto',
+  top:280,
+  font:{fontSize:16, fontWeight: "bold", textDecoration:'underline'},
+  color: 'white',
+})
+
+loginView.add(forgotLabel);
+
+forgotLabel.addEventListener('click', function(){
+  Ti.Platform.openURL("http://timetracking.innoveto.com/user/password");
+})
 
 // Add the event listener for when the button is created
 loginButton.addEventListener('click', function() {
