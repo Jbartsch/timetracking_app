@@ -71,7 +71,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
       // Create the textfield to hold the node title
       var nodeTitleTextfield = Titanium.UI.createTextField({
         value:node.title,
-        hintText:"Description",
+        hintText:"Name",
         height:35,
         top:10,
         left:10,
@@ -87,6 +87,116 @@ if(Titanium.App.Properties.getInt("userUid")) {
     
       // Add the textfield to the window
       view.add(nodeTitleTextfield);
+      
+      var addressTextfield = Titanium.UI.createTextField({
+        value:node.address,
+        hintText:"Address",
+        height:35,
+        top:55,
+        left:10,
+        width:300,
+        font:{fontSize:16},
+        borderWidth:1,
+        borderColor:'#bbb',
+        borderRadius:3,
+        paddingLeft: 5,
+        paddingRight: 5,
+        backgroundColor: 'white',
+      });
+    
+      view.add(addressTextfield);
+      
+      var zipTextfield = Titanium.UI.createTextField({
+        value:node.zip,
+        hintText:"ZIP",
+        height:35,
+        top:100,
+        left:10,
+        width:80,
+        font:{fontSize:16},
+        borderWidth:1,
+        borderColor:'#bbb',
+        borderRadius:3,
+        paddingLeft: 5,
+        paddingRight: 5,
+        backgroundColor: 'white',
+      });
+    
+      view.add(zipTextfield);
+      
+      var cityTextfield = Titanium.UI.createTextField({
+        value:node.city,
+        hintText:"City",
+        height:35,
+        top:100,
+        left:100,
+        width:210,
+        font:{fontSize:16},
+        borderWidth:1,
+        borderColor:'#bbb',
+        borderRadius:3,
+        paddingLeft: 5,
+        paddingRight: 5,
+        backgroundColor: 'white',
+      });
+    
+      view.add(cityTextfield);
+      
+      var phoneTextfield = Titanium.UI.createTextField({
+        value:node.phone,
+        hintText:"Phone",
+        height:35,
+        top:145,
+        left:10,
+        width:300,
+        font:{fontSize:16},
+        borderWidth:1,
+        borderColor:'#bbb',
+        borderRadius:3,
+        paddingLeft: 5,
+        paddingRight: 5,
+        backgroundColor: 'white',
+      });
+    
+      view.add(phoneTextfield);
+      
+      var emailTextfield = Titanium.UI.createTextField({
+        value:node.email,
+        hintText:"E-Mail",
+        height:35,
+        top:190,
+        left:10,
+        width:300,
+        font:{fontSize:16},
+        borderWidth:1,
+        borderColor:'#bbb',
+        borderRadius:3,
+        paddingLeft: 5,
+        paddingRight: 5,
+        backgroundColor: 'white',
+        autocapitalization:Titanium.UI.TEXT_AUTOCAPITALIZATION_NONE,
+      });
+    
+      view.add(emailTextfield);
+      
+      var wwwTextfield = Titanium.UI.createTextField({
+        value:node.www,
+        hintText:"WWW",
+        height:35,
+        top:235,
+        left:10,
+        width:300,
+        font:{fontSize:16},
+        borderWidth:1,
+        borderColor:'#bbb',
+        borderRadius:3,
+        paddingLeft: 5,
+        paddingRight: 5,
+        backgroundColor: 'white',
+        autocapitalization:Titanium.UI.TEXT_AUTOCAPITALIZATION_NONE,
+      });
+    
+      view.add(wwwTextfield);
     
       // Add the event listener for when the button is created
       rightButton.addEventListener("click", function() {
@@ -94,6 +204,12 @@ if(Titanium.App.Properties.getInt("userUid")) {
         var newnode = {
           node:{
             title: nodeTitleTextfield.value,
+            address: addressTextfield.value,
+            zip: zipTextfield.value,
+            city: cityTextfield.value,
+            phone: phoneTextfield.value,
+            email: emailTextfield.value,
+            www: wwwTextfield.value,
           }
         };
     

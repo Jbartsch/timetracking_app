@@ -433,7 +433,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
   
   projectButton.addEventListener('click', function() {
     projectPicker.show();
-    picker_view.animate(slide_in);
+    picker_view.animate(slide_in); 
   });
   
   view.add(projectButton);

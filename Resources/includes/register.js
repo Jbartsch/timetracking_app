@@ -123,6 +123,7 @@ registerView.add(cancelButton);
 
 cancelButton.addEventListener('click', function() {
   win.close();
+  Ti.App.homeWin.show();
 })
 
 // Create the login button
