@@ -25,8 +25,6 @@ win.add(view);
 
 var table;
 
-loadView();
-
 function loadView() {
   // Define the url which contains the full url
   // in this case, we'll connecting to http://example.com/api/rest/node/1.json
@@ -83,7 +81,7 @@ function loadView() {
       table = Titanium.UI.createTableView({
         data:results,
         backgroundColor: '#D8D8D8',
-        separatorColor: '#FFF',
+        separatorColor: '#BBBBBB',
       });
   
       // add a listener for click to the table
@@ -127,19 +125,6 @@ function loadView() {
   }
 }
 
-if (Titanium.Platform.osname == 'iphone' || Titanium.Platform.osname == 'ipad') {
-
-  var rightButton = Ti.UI.createButton({
-    systemButton:Ti.UI.iPhone.SystemButton.REFRESH
-  });
-
-  // Create a new event listener for the rightButton
-  rightButton.addEventListener("click", function() {
-    view.remove(table);
-    loadView();
-  });
-
-  // We don't add the button to the window, instead, we tell the app
-  // to set the button as the right navigation button
-  win.setRightNavButton(rightButton);
-}
+win.addEventListener("focus", function() {
+  loadView();
+});

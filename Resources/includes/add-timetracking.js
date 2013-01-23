@@ -499,6 +499,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
       // this will be used to see if we have a connection (200) or not
       var statusCode = xhr.status;
       // Check if we have a valid status
+      Ti.API.info(statusCode);
       if(statusCode == 200) {
 
         alert('Timetracking "' + node.node.title + '" created.');
@@ -515,6 +516,12 @@ if(Titanium.App.Properties.getInt("userUid")) {
         alert("There was an error");
       }
     }
+    
+    xhr.onerror = function() {
+      var statusCode = xhr.status;
+      // Check if we have a valid status
+      Ti.API.info(statusCode);
+    }
 
   });
 }
@@ -522,44 +529,26 @@ else {
   alert("You need to login first");
 }
 
-if (Titanium.Platform.osname == 'android') {
-  var activity = win.activity;
 
-  activity.onCreateOptionsMenu = function(e) {
-    var menu = e.menu;
-    var postButton = menu.add({title: 'Settings'});
-    postButton.addEventListener('click', function(e) {
-      Ti.App.settingsWin.open();
-    });
+// Create a new button
+var rightButton = Ti.UI.createButton({
+  title: 'List',
+  style:Titanium.UI.iPhone.SystemButtonStyle.PLAIN
+});
 
-    var logoutMenuButton = menu.add({title: 'Logout'});
-    logoutMenuButton.addEventListener('click', function(e) {
-      Ti.App.logoutWin.open();
-      Ti.App.tabGroup.close();
-    });
-  };
-}
-else if (Titanium.Platform.osname == 'iphone' || Titanium.Platform.osname == 'ipad') {
-  // Create a new button
-  var rightButton = Ti.UI.createButton({
-    title: 'List',
-    style:Titanium.UI.iPhone.SystemButtonStyle.PLAIN
+// Create a new event listener for the rightButton
+rightButton.addEventListener("click", function() {
+  var timetrackingsWindow = Titanium.UI.createWindow({
+    url:'timetrackings.js',
+    backgroundColor: '#D8D8D8',
+    barColor: '#009900',
+    touchEnabled: true,
+    tabBarHidden: true,
   });
+  
+  Titanium.UI.currentTab.open(timetrackingsWindow,{animated:true});
+});
 
-  // Create a new event listener for the rightButton
-  rightButton.addEventListener("click", function() {
-    var timetrackingsWindow = Titanium.UI.createWindow({
-      url:'timetrackings.js',
-      backgroundColor: '#D8D8D8',
-      barColor: '#009900',
-      touchEnabled: true,
-      tabBarHidden: true,
-    });
-    
-    Titanium.UI.currentTab.open(timetrackingsWindow,{animated:true});
-  });
-
-  // We don't add the button to the window, instead, we tell the app
-  // to set the button as the right navigation button
-  win.setRightNavButton(rightButton);
-}
+// We don't add the button to the window, instead, we tell the app
+// to set the button as the right navigation button
+win.setRightNavButton(rightButton);

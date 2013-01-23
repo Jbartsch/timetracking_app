@@ -31,12 +31,14 @@ if(Titanium.App.Properties.getInt("userUid")) {
   	top: 0,
   });
   
-  // Add our scrollview to the window
   win.add(view);
   
-  // Define the url which contains the full url
-  // See how we build the url using the win.nid which is 
-  // the nid property we pass to this file when we create the window
+  var rightButton = Ti.UI.createButton({
+    systemButton:Ti.UI.iPhone.SystemButton.SAVE,
+  });
+  
+  win.setRightNavButton(rightButton);
+
   var url = REST_PATH + 'node/' + win.nid + '.json';
   
   // Create a connection inside the variable xhr
@@ -118,11 +120,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
         selectionIndicator:true,
         visible:false
       });
-      
-      var defaultClient = 0;
-     
-      var clientColumn = Ti.UI.createPickerColumn();
-     
+
       // When the xhr loads we do:
       clientXhr.onload = function() {
         // Save the status of the xhr in a variable
@@ -146,10 +144,6 @@ if(Titanium.App.Properties.getInt("userUid")) {
             var data = result[key];
       
             results[i] = Ti.UI.createPickerRow({title: data.title, nid:data.nid});
-            
-            if (data.nid == node.organization_nid) {
-              defaultClient = i;
-            }
             
             i = i + 1;
           }
@@ -231,20 +225,9 @@ if(Titanium.App.Properties.getInt("userUid")) {
       });
       
       view.add(clientButton);
-      
-      // Add the save button
-      var saveButton = Titanium.UI.createButton({
-        title:'Update',
-        height:35,
-        width:150,
-        top:260
-      });
-    
-      // Add the button to the window
-      view.add(saveButton);
     
       // Add the event listener for when the button is created
-      saveButton.addEventListener("click", function() {
+      rightButton.addEventListener("click", function() {
         // Create a new node object
         var newnode = {
           node:{
@@ -274,8 +257,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
           // Check if we have a valid status
 
           if(statusCode == 200) {
-    
-            alert('Project "' + newnode.node.title + '" updated.');
+            win.close();
           }
           else {
             alert("There was an error");

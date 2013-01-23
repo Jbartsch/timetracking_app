@@ -156,6 +156,7 @@ loginButton.addEventListener('click', function() {
 
           // Set the user.userName to the logged in user name
           Titanium.App.Properties.setString("userName", user.name);
+          Ti.App.buildTabGroup();
           Ti.App.tabGroup.open();
           win.close();
         }

@@ -39,6 +39,8 @@ xhr3.onerror = function() {
     Titanium.App.Properties.removeProperty("userSessionName");
     Titanium.App.Properties.removeProperty("userName");
     win.close();
+    Ti.App.tabGroup.close();
+    Ti.App.homeWin.show();
   }
 }
 
@@ -55,6 +57,8 @@ xhr3.onload = function() {
     Titanium.App.Properties.removeProperty("userSessionName");
     Titanium.App.Properties.removeProperty("userName");
     win.close();
+    Ti.App.tabGroup.close();
+    Ti.App.homeWin.show();
   }
   else {
     //~alert("You're not currently logged in");
@@ -65,5 +69,7 @@ xhr3.onload = function() {
     Titanium.App.Properties.removeProperty("userSessionName");
     Titanium.App.Properties.removeProperty("userName");
     win.close();
+    Ti.App.tabGroup.close();
+    Ti.App.homeWin.show();
   }
 }

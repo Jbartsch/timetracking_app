@@ -63,6 +63,7 @@ loginButton.addEventListener('click', function() {
   });
   loginWin.add(linearGradient);
   loginWin.open();
+  win.hide();
 });
 
 var registerButton = Titanium.UI.createButton({
@@ -91,4 +92,5 @@ registerButton.addEventListener('click', function() {
   });
   registerWin.add(linearGradient);
   registerWin.open();
+  win.hide();
 });

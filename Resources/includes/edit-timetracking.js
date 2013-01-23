@@ -34,6 +34,12 @@ if(Titanium.App.Properties.getInt("userUid")) {
   // Add our scrollview to the window
   win.add(view);
   
+  var rightButton = Ti.UI.createButton({
+    systemButton:Ti.UI.iPhone.SystemButton.SAVE,
+  });
+  
+  win.setRightNavButton(rightButton);
+  
   // Define the url which contains the full url
   // See how we build the url using the win.nid which is 
   // the nid property we pass to this file when we create the window
@@ -468,20 +474,9 @@ if(Titanium.App.Properties.getInt("userUid")) {
       });
       
       view.add(projectButton);
-      
-      // Add the save button
-      var saveButton = Titanium.UI.createButton({
-        title:'Update',
-        height:35,
-        width:150,
-        top:260
-      });
-    
-      // Add the button to the window
-      view.add(saveButton);
     
       // Add the event listener for when the button is created
-      saveButton.addEventListener("click", function() {
+      rightButton.addEventListener("click", function() {
         
         var date = datetxt.split('-');
         // Create a new node object
@@ -518,8 +513,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
           // Check if we have a valid status
 
           if(statusCode == 200) {
-    
-            alert('Timetracking "' + newnode.node.title + '" updated.');
+            win.close();
           }
           else {
             alert("There was an error");

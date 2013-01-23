@@ -31,12 +31,14 @@ if(Titanium.App.Properties.getInt("userUid")) {
   	top: 0,
   });
   
-  // Add our scrollview to the window
   win.add(view);
   
-  // Define the url which contains the full url
-  // See how we build the url using the win.nid which is 
-  // the nid property we pass to this file when we create the window
+  var rightButton = Ti.UI.createButton({
+    systemButton:Ti.UI.iPhone.SystemButton.SAVE,
+  });
+
+  win.setRightNavButton(rightButton);
+  
   var url = REST_PATH + 'node/' + win.nid + '.json';
   
   // Create a connection inside the variable xhr
@@ -85,20 +87,9 @@ if(Titanium.App.Properties.getInt("userUid")) {
     
       // Add the textfield to the window
       view.add(nodeTitleTextfield);
-
-      // Add the save button
-      var saveButton = Titanium.UI.createButton({
-        title:'Update',
-        height:35,
-        width:150,
-        top:260
-      });
-    
-      // Add the button to the window
-      view.add(saveButton);
     
       // Add the event listener for when the button is created
-      saveButton.addEventListener("click", function() {
+      rightButton.addEventListener("click", function() {
         // Create a new node object
         var newnode = {
           node:{
@@ -121,7 +112,6 @@ if(Titanium.App.Properties.getInt("userUid")) {
     
         // Send the connection and the user object as argument
         nodeXhr.send(JSON.stringify(newnode));
-        Ti.API.info(JSON.stringify(newnode));
         nodeXhr.onload = function() {
           // Save the status of the connection in a variable
           // this will be used to see if we have a connection (200) or not
@@ -129,7 +119,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
           // Check if we have a valid status
 
           if(statusCode == 200) {
-            alert('Client "' + newnode.node.title + '" updated.');
+            win.close();
           }
           else {
             alert("There was an error");
@@ -140,7 +130,6 @@ if(Titanium.App.Properties.getInt("userUid")) {
         }
     
       });
-  		
   		
   	} // End the statusCode 200 
   	else {
