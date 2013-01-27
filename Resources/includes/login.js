@@ -109,80 +109,112 @@ forgotLabel.addEventListener('click', function(){
 
 // Add the event listener for when the button is created
 loginButton.addEventListener('click', function() {
-
-  // alert("Clicked button loginButton");
-
-  // Create an object to hold the data entered in the form
-  var user = {
-    username: usernameTextfield.value,
-    password: passwordTextfield.value
-  };
-
-  var userString = JSON.stringify(user);
-
-  // Define the url which contains the full url
-  // in this case, we'll connecting to http://example.com/api/rest/user/login
-  var url = REST_PATH + 'user/login.json';
-
-  // Create a connection
-  var xhr = Titanium.Network.createHTTPClient();
-
-  // Open the connection using POST
-  xhr.open("POST", url);
-
-  xhr.setRequestHeader('Content-Type','application/json; charset=utf-8');
-
-  // Send the connection and the user object as argument
-  xhr.send(userString);
-
-  // When the connection loads we do:
-  xhr.onload = function() {
-    // Save the status of the connection in a variable
-    // this will be used to see if we have a connection (200) or not
-    var statusCode = xhr.status;
-
-    // Check if we have a valid status
-    if(statusCode == 200) {
-
-      // Create a variable response to hold the response
-      var response = xhr.responseText;
-
-      // Parse (build data structure) the JSON response into an object (data)
-      var data = JSON.parse(response);
-
-      // Set a global variable
-      Titanium.App.Properties.setInt("userUid", data.user.uid);
-      Titanium.App.Properties.setString("userSessionId", data.sessid);
-      Titanium.App.Properties.setString("userSessionName", data.session_name);
-
-      // Create another connection to get the user
-      var xhr2 = Titanium.Network.createHTTPClient();
-
-      var getUser = REST_PATH + 'user/' + data.user.uid + '.json';
-      xhr2.open("GET", getUser);
-      xhr2.send();
-
-      xhr2.onload = function() {
-        var userStatusCode = xhr2.status;
-
-        if(userStatusCode == 200) {
-          var userResponse = xhr2.responseText;
-          var user = JSON.parse(userResponse);
-
-          // Set the user.userName to the logged in user name
-          Titanium.App.Properties.setString("userName", user.name);
-          Ti.App.buildTabGroup();
-          Ti.App.tabGroup.open();
-          win.close();
+  if (usernameTextfield.value == '' || passwordTextfield.value == '') {
+    alert('Please fill out the username and password fields.')
+  }
+  else {
+    // Create an object to hold the data entered in the form
+    var user = {
+      username: usernameTextfield.value,
+      password: passwordTextfield.value
+    };
+  
+    var userString = JSON.stringify(user);
+  
+    // Define the url which contains the full url
+    // in this case, we'll connecting to http://example.com/api/rest/user/login
+    var url = REST_PATH + 'user/login.json';
+  
+    // Create a connection
+    var xhr = Titanium.Network.createHTTPClient();
+  
+    // Open the connection using POST
+    xhr.open("POST", url);
+  
+    xhr.setRequestHeader('Content-Type','application/json; charset=utf-8');
+  
+    // Send the connection and the user object as argument
+    xhr.send(userString);
+  
+    // When the connection loads we do:
+    xhr.onload = function() {
+      // Save the status of the connection in a variable
+      // this will be used to see if we have a connection (200) or not
+      var statusCode = xhr.status;
+      Ti.API.info('onload');
+      Ti.API.info(statusCode);
+      Ti.API.info(xhr.responseText);
+  
+      // Check if we have a valid status
+      if(statusCode == 200) {
+  
+        // Create a variable response to hold the response
+        var response = xhr.responseText;
+  
+        // Parse (build data structure) the JSON response into an object (data)
+        var data = JSON.parse(response);
+  
+        // Set a global variable
+        Titanium.App.Properties.setInt("userUid", data.user.uid);
+        Titanium.App.Properties.setString("userSessionId", data.sessid);
+        Titanium.App.Properties.setString("userSessionName", data.session_name);
+  
+        // Create another connection to get the user
+        var xhr2 = Titanium.Network.createHTTPClient();
+  
+        var getUser = REST_PATH + 'user/' + data.user.uid + '.json';
+        xhr2.open("GET", getUser);
+        xhr2.send();
+  
+        xhr2.onload = function() {
+          var userStatusCode = xhr2.status;
+          // Ti.API.info('onload');
+          // Ti.API.info(userStatusCode);
+          // Ti.API.info(xhr2.responseText);
+          if(userStatusCode == 200) {
+            var userResponse = xhr2.responseText;
+            var user = JSON.parse(userResponse);
+  
+            // Set the user.userName to the logged in user name
+            Titanium.App.Properties.setString("userName", user.name);
+            Ti.App.buildTabGroup();
+            Ti.App.tabGroup.open();
+            win.close();
+          }
+        }
+        xhr2.onerror = function() {
+          // Ti.API.info('onerror');
+          // Ti.API.info(xhr2.status);
+          // Ti.API.info(xhr2.responseText);
+        }
+      }
+      else {
+        alert("There was an error");
+      }
+    }
+  
+    xhr.onerror = function() {
+      Ti.API.info('onerror');
+      var statusCode = xhr.status;
+      Ti.API.info(statusCode);
+      var response = JSON.parse(xhr.responseText);
+      Ti.API.info(response);
+      if (statusCode == 401) {
+        var error = response[0];
+        alert(error);
+      }
+      else if (statusCode == 406) {
+        var error = response[0];
+        var loggedIn = error.search(/Already logged in as.+/);
+        if (loggedIn != -1) {
+          var logoutUrl = REST_PATH + 'user/logout.json';
+          var xhr3 = Titanium.Network.createHTTPClient();
+          xhr3.open("POST", logoutUrl);
+          xhr3.setRequestHeader('Content-Type','application/json; charset=utf-8');
+          xhr3.send();
+          alert('Error. Please try again.');
         }
       }
     }
-    else {
-      alert("There was an error");
-    }
-  }
-
-  xhr.onerror = function() {
-    Ti.API.info(xhr.status);
   }
 });

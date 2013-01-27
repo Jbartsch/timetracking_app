@@ -32,44 +32,22 @@ xhr3.send();
 
 // When the connection doesnt load we do:
 xhr3.onerror = function() {
-  if(xhr3.status == 406) {
-    //~alert("You're not currently logged in");
-    Titanium.App.Properties.removeProperty("userUid");
-    Titanium.App.Properties.removeProperty("userSessionId");
-    Titanium.App.Properties.removeProperty("userSessionName");
-    Titanium.App.Properties.removeProperty("userName");
-    win.close();
-    Ti.App.tabGroup.close();
-    Ti.App.homeWin.show();
-  }
+  Titanium.App.Properties.removeProperty("userUid");
+  Titanium.App.Properties.removeProperty("userSessionId");
+  Titanium.App.Properties.removeProperty("userSessionName");
+  Titanium.App.Properties.removeProperty("userName");
+  win.close();
+  Ti.App.tabGroup.close();
+  Ti.App.homeWin.show();
 }
 
 // When the connection loads we do:
 xhr3.onload = function() {
-  // Save the status of the connection in a variable
-  // this will be used to see if we have a connection (200) or not
-  var statusCodeLogout = xhr3.status;
- 
-  // Check if we have a connection
-  if(statusCodeLogout == 200) {
-    Titanium.App.Properties.removeProperty("userUid");
-    Titanium.App.Properties.removeProperty("userSessionId");
-    Titanium.App.Properties.removeProperty("userSessionName");
-    Titanium.App.Properties.removeProperty("userName");
-    win.close();
-    Ti.App.tabGroup.close();
-    Ti.App.homeWin.show();
-  }
-  else {
-    //~alert("You're not currently logged in");
-    // We remvoe all the properties since the user is requesting to logout
-    // is probably not logged in but the properties are set
-    Titanium.App.Properties.removeProperty("userUid");
-    Titanium.App.Properties.removeProperty("userSessionId");
-    Titanium.App.Properties.removeProperty("userSessionName");
-    Titanium.App.Properties.removeProperty("userName");
-    win.close();
-    Ti.App.tabGroup.close();
-    Ti.App.homeWin.show();
-  }
+  Titanium.App.Properties.removeProperty("userUid");
+  Titanium.App.Properties.removeProperty("userSessionId");
+  Titanium.App.Properties.removeProperty("userSessionName");
+  Titanium.App.Properties.removeProperty("userName");
+  win.close();
+  Ti.App.tabGroup.close();
+  Ti.App.homeWin.show();
 }
