@@ -462,24 +462,22 @@ if(Titanium.App.Properties.getInt("userUid")) {
   // Add the event listener for when the button is created
   saveButton.addEventListener("click", function() {
     
-    var beginTextValue = beginText.value;
-    // var validBegin = beginTextValue.search(/\d{2}:\d{2}/);
+    var beginTimes = beginText.value.split(':');
+    var endTimes = endText.value.split(':');
     
     // var validEnd;
     if (nodeTitleTextfield.value == '' || beginText.value == '' || endText.value == '') {
       alert('Please fill out all fields.');
     }
+    else if (beginTimes.length != 2 || beginTimes[0] > 23 || beginTimes[1] > 59) {
+      alert('Begin time has to be in the format 12:34.');
+    }
+    else if (endTimes.length != 2 || endTimes[0] > 23 || endTimes[1] > 59) {
+      alert('End time has to be in the format 12:34.');
+    }
     else if (clientnid == 0 || projectnid == 0) {
       alert('Please pick a client and a project.');
     }
-    // else if ('bla' == 'bla') {
-      // if (validBegin != -1) {
-        // alert('valid');
-      // }
-      // else {
-        // alert('invalid');
-      // }
-    // }
     else {
       
       var date = datetxt.split('-');
@@ -518,11 +516,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
         // Save the status of the connection in a variable
         // this will be used to see if we have a connection (200) or not
         var statusCode = xhr.status;
-        Ti.API.info('onload');
-        Ti.API.info(statusCode);
-        Ti.API.info(xhr.responseText);
         // Check if we have a valid status
-        Ti.API.info(statusCode);
         if(statusCode == 200) {
   
           alert('Timetracking "' + node.node.title + '" created.');
