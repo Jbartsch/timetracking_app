@@ -186,6 +186,7 @@ registerButton.addEventListener('click', function() {
             var logoutStatusCode = xhr2.status;
             alert('User successfully created. You can now log in.')
             win.close();
+            Ti.App.homeWin.show();
           }
         }
         else {
