@@ -140,57 +140,97 @@ registerView.add(registerButton);
 // Add the event listener for when the button is created
 registerButton.addEventListener('click', function() {
   
-  if (passwordTextfield.value == repeatPasswordTextfield.value) {
-
-    var newUser = {
-      name: usernameTextfield.value,
-      pass: passwordTextfield.value,
-      mail: emailTextfield.value,
-    };
-  
-    var userString = JSON.stringify(newUser);
-  
-    var url = REST_PATH + 'user/register.json';
-    var xhr = Titanium.Network.createHTTPClient();
-    xhr.open("POST", url);
-    xhr.setRequestHeader('Content-Type','application/json; charset=utf-8');
-    xhr.send(userString);
-  
-    // When the connection loads we do:
-    xhr.onload = function() {
-      // Save the status of the connection in a variable
-      // this will be used to see if we have a connection (200) or not
-      var statusCode = xhr.status;
-      // Check if we have a valid status
-      if(statusCode == 200) {
-  
-        // Create a variable response to hold the response
-        var response = xhr.responseText;
-  
-        // Ti.API.info(response);
-        var logoutUrl = REST_PATH + 'user/logout.json';
-        var xhr2 = Titanium.Network.createHTTPClient();
-        xhr2.open("POST", logoutUrl);
-        xhr2.setRequestHeader('Content-Type','application/json; charset=utf-8');
-        xhr2.send();
-  
-        xhr2.onload = function() {
-          var logoutStatusCode = xhr2.status;
-          alert('User successfully created. You can now log in.')
-          win.close();
-        }
-      }
-      else {
-        alert("There was an error");
-      }
-    }
-  
-    xhr.onerror = function() {
-      Ti.API.info(xhr.status);
-    }
-    
+  if (usernameTextfield.value == '' || emailTextfield.value == '' || passwordTextfield.value == '') {
+    alert('Please fill out all fields.')
   }
   else {
-    alert('The passwords do not match.')
+    
+    if (passwordTextfield.value == repeatPasswordTextfield.value) {
+  
+      var newUser = {
+        name: usernameTextfield.value,
+        pass: passwordTextfield.value,
+        mail: emailTextfield.value,
+      };
+    
+      var userString = JSON.stringify(newUser);
+    
+      var url = REST_PATH + 'user/register.json';
+      var xhr = Titanium.Network.createHTTPClient();
+      xhr.open("POST", url);
+      xhr.setRequestHeader('Content-Type','application/json; charset=utf-8');
+      xhr.send(userString);
+    
+      // When the connection loads we do:
+      xhr.onload = function() {
+        // Save the status of the connection in a variable
+        // this will be used to see if we have a connection (200) or not
+        var statusCode = xhr.status;
+        Ti.API.info('onload');
+        Ti.API.info(statusCode);
+        Ti.API.info(xhr.responseText);
+        // Check if we have a valid status
+        if(statusCode == 200) {
+    
+          // Create a variable response to hold the response
+          var response = xhr.responseText;
+    
+          // Ti.API.info(response);
+          var logoutUrl = REST_PATH + 'user/logout.json';
+          var xhr2 = Titanium.Network.createHTTPClient();
+          xhr2.open("POST", logoutUrl);
+          xhr2.setRequestHeader('Content-Type','application/json; charset=utf-8');
+          xhr2.send();
+    
+          xhr2.onload = function() {
+            var logoutStatusCode = xhr2.status;
+            alert('User successfully created. You can now log in.')
+            win.close();
+          }
+        }
+        else {
+          alert("There was an error");
+        }
+      }
+    
+      xhr.onerror = function() {
+        Ti.API.info('onerror');
+        var statusCode = xhr.status;
+        Ti.API.info(statusCode);
+        var response = JSON.parse(xhr.responseText);
+        Ti.API.info(response);
+        if (statusCode == 401) {
+          var error = response[0];
+          alert(error);
+        }
+        else if (statusCode == 406) {
+          var error = response[0];
+          // If username is invalid
+          var userInvalid = error.search(/The username contains an illegal character.+/);
+          // If username is taken
+          var userTaken = error.search(/The name <em class=\"placeholder\">.*<\/em> is already taken.+/);
+          // If E-Mail is invalid
+          var mailInvalid = error.search(/The e-mail address <em class=\"placeholder\">.*<\/em> is not valid.+/);
+          // If E-Mail is taken
+          var mailTaken = error.search(/The e-mail address <em class=\"placeholder\">.*<\/em> is already registered.+/);
+          if (userInvalid != -1) {
+            alert('The username contains an illegal character.');
+          }
+          else if (userTaken != -1) {
+            alert('The username is already taken.');
+          }
+          else if (mailInvalid != -1) {
+            alert('Invalid e-mail address.');
+          }
+          else if (mailTaken != -1) {
+            alert('The e-mail address is already registered.');
+          }
+        }
+      }
+      
+    }
+    else {
+      alert('The passwords do not match.')
+    }
   }
 });

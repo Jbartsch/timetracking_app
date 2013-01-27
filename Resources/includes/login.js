@@ -104,7 +104,7 @@ var forgotLabel = Titanium.UI.createLabel({
 loginView.add(forgotLabel);
 
 forgotLabel.addEventListener('click', function(){
-  Ti.Platform.openURL("http://timetracking.innoveto.com/user/password");
+  Ti.Platform.openURL(SITE_PATH + "user/password");
 })
 
 // Add the event listener for when the button is created
@@ -141,9 +141,6 @@ loginButton.addEventListener('click', function() {
       // Save the status of the connection in a variable
       // this will be used to see if we have a connection (200) or not
       var statusCode = xhr.status;
-      Ti.API.info('onload');
-      Ti.API.info(statusCode);
-      Ti.API.info(xhr.responseText);
   
       // Check if we have a valid status
       if(statusCode == 200) {
@@ -168,9 +165,6 @@ loginButton.addEventListener('click', function() {
   
         xhr2.onload = function() {
           var userStatusCode = xhr2.status;
-          // Ti.API.info('onload');
-          // Ti.API.info(userStatusCode);
-          // Ti.API.info(xhr2.responseText);
           if(userStatusCode == 200) {
             var userResponse = xhr2.responseText;
             var user = JSON.parse(userResponse);
@@ -181,11 +175,6 @@ loginButton.addEventListener('click', function() {
             Ti.App.tabGroup.open();
             win.close();
           }
-        }
-        xhr2.onerror = function() {
-          // Ti.API.info('onerror');
-          // Ti.API.info(xhr2.status);
-          // Ti.API.info(xhr2.responseText);
         }
       }
       else {
