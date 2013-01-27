@@ -196,45 +196,55 @@ if(Titanium.App.Properties.getInt("userUid")) {
   });
   
   rightButton.addEventListener("click", function() {
-    // Create a new node object
-    var newnode = {
-      node:{
-        title: nodeTitleTextfield.value,
-        type:'stormproject',
-        organization_nid:clientnid,
-        uid: user.uid,
-      }
-    };
-
-    // Define the url
-    // in this case, we'll connecting to http://example.com/api/rest/node
-    var updateurl = REST_PATH + 'node';
-
-    // Create a connection
-    var nodeXhr = Titanium.Network.createHTTPClient();
-
-    // Open the connection using POST
-    nodeXhr.open('POST', updateurl);
-    nodeXhr.setRequestHeader('Content-Type','application/json; charset=utf-8');
-    nodeXhr.setRequestHeader('Cookie', user.session_name+'='+user.sessid);
-
-    // Send the connection and the user object as argument
-    nodeXhr.send(JSON.stringify(newnode));
-    nodeXhr.onload = function() {
-      // Save the status of the connection in a variable
-      // this will be used to see if we have a connection (200) or not
-      var statusCode = nodeXhr.status;
-      // Check if we have a valid status
-
-      if(statusCode == 200) {
-        win.close();
-      }
-      else {
-        alert("There was an error");
-      }
+    
+    if (nodeTitleTextfield.value == '') {
+      alert('Please set a name.');
     }
-    nodeXhr.onerror = function() {
-      Ti.API.info(nodeXhr.status);
+    else if (clientnid == 0) {
+      alert('Please pick a client.');
+    }
+    else {
+    
+      // Create a new node object
+      var newnode = {
+        node:{
+          title: nodeTitleTextfield.value,
+          type:'stormproject',
+          organization_nid:clientnid,
+          uid: user.uid,
+        }
+      };
+  
+      // Define the url
+      // in this case, we'll connecting to http://example.com/api/rest/node
+      var updateurl = REST_PATH + 'node';
+  
+      // Create a connection
+      var nodeXhr = Titanium.Network.createHTTPClient();
+  
+      // Open the connection using POST
+      nodeXhr.open('POST', updateurl);
+      nodeXhr.setRequestHeader('Content-Type','application/json; charset=utf-8');
+      nodeXhr.setRequestHeader('Cookie', user.session_name+'='+user.sessid);
+  
+      // Send the connection and the user object as argument
+      nodeXhr.send(JSON.stringify(newnode));
+      nodeXhr.onload = function() {
+        // Save the status of the connection in a variable
+        // this will be used to see if we have a connection (200) or not
+        var statusCode = nodeXhr.status;
+        // Check if we have a valid status
+  
+        if(statusCode == 200) {
+          win.close();
+        }
+        else {
+          alert("There was an error");
+        }
+      }
+      nodeXhr.onerror = function() {
+        Ti.API.info(nodeXhr.status);
+      }
     }
   });
   
