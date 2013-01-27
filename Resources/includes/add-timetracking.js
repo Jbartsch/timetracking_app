@@ -461,68 +461,93 @@ if(Titanium.App.Properties.getInt("userUid")) {
 
   // Add the event listener for when the button is created
   saveButton.addEventListener("click", function() {
-
-    var date = datetxt.split('-');
-    // Create a new node object
-    var node = {
-      node:{
-        title: nodeTitleTextfield.value,
-        type:'stormtimetracking',
-        organization_nid:clientnid,
-        project_nid:projectnid,
-        trackingdate: {year: date[0], month: date[1], day:date[2]},
-        timebegin: beginText.value,
-        timeend: endText.value,
-        uid: user.uid,
-        billable: 0,
-        billed: 0
-      }
-    };
-
-    // Define the url
-    // in this case, we'll connecting to http://example.com/api/rest/node
-    var url = REST_PATH + 'node';
-
-    // Create a connection
-    var xhr = Titanium.Network.createHTTPClient();
-
-    // Open the connection using POST
-    xhr.open("POST", url);
-    xhr.setRequestHeader('Content-Type','application/json; charset=utf-8');
-    xhr.setRequestHeader('Cookie', user.session_name+'='+user.sessid);
-
-    // Send the connection and the user object as argument
-    xhr.send(JSON.stringify(node));
-
-    xhr.onload = function() {
-      // Save the status of the connection in a variable
-      // this will be used to see if we have a connection (200) or not
-      var statusCode = xhr.status;
-      // Check if we have a valid status
-      Ti.API.info(statusCode);
-      if(statusCode == 200) {
-
-        alert('Timetracking "' + node.node.title + '" created.');
-        nodeTitleTextfield.value = '';
-        dateChangeButton.title = currentDateText;
-        beginText.value = '';
-        endText.value = endTime;
-        clientnid = 0;
-        projectnid = 0;
-        clientButton.title = 'Choose a client';
-        projectButton.title = 'Choose a project';
-      }
-      else {
-        alert("There was an error");
-      }
-    }
     
-    xhr.onerror = function() {
-      var statusCode = xhr.status;
-      // Check if we have a valid status
-      Ti.API.info(statusCode);
+    var beginTextValue = beginText.value;
+    // var validBegin = beginTextValue.search(/\d{2}:\d{2}/);
+    
+    // var validEnd;
+    if (nodeTitleTextfield.value == '' || beginText.value == '' || endText.value == '') {
+      alert('Please fill out all fields.');
     }
-
+    else if (clientnid == 0 || projectnid == 0) {
+      alert('Please pick a client and a project.');
+    }
+    // else if ('bla' == 'bla') {
+      // if (validBegin != -1) {
+        // alert('valid');
+      // }
+      // else {
+        // alert('invalid');
+      // }
+    // }
+    else {
+      
+      var date = datetxt.split('-');
+      // Create a new node object
+      var node = {
+        node:{
+          title: nodeTitleTextfield.value,
+          type:'stormtimetracking',
+          organization_nid:clientnid,
+          project_nid:projectnid,
+          trackingdate: {year: date[0], month: date[1], day:date[2]},
+          timebegin: beginText.value,
+          timeend: endText.value,
+          uid: user.uid,
+          billable: 0,
+          billed: 0
+        }
+      };
+  
+      // Define the url
+      // in this case, we'll connecting to http://example.com/api/rest/node
+      var url = REST_PATH + 'node';
+  
+      // Create a connection
+      var xhr = Titanium.Network.createHTTPClient();
+  
+      // Open the connection using POST
+      xhr.open("POST", url);
+      xhr.setRequestHeader('Content-Type','application/json; charset=utf-8');
+      xhr.setRequestHeader('Cookie', user.session_name+'='+user.sessid);
+  
+      // Send the connection and the user object as argument
+      xhr.send(JSON.stringify(node));
+  
+      xhr.onload = function() {
+        // Save the status of the connection in a variable
+        // this will be used to see if we have a connection (200) or not
+        var statusCode = xhr.status;
+        Ti.API.info('onload');
+        Ti.API.info(statusCode);
+        Ti.API.info(xhr.responseText);
+        // Check if we have a valid status
+        Ti.API.info(statusCode);
+        if(statusCode == 200) {
+  
+          alert('Timetracking "' + node.node.title + '" created.');
+          nodeTitleTextfield.value = '';
+          dateChangeButton.title = currentDateText;
+          beginText.value = '';
+          endText.value = endTime;
+          clientnid = 0;
+          projectnid = 0;
+          clientButton.title = 'Choose a client';
+          projectButton.title = 'Choose a project';
+        }
+        else {
+          alert("There was an error");
+        }
+      }
+      
+      xhr.onerror = function() {
+        Ti.API.info('onerror');
+        var statusCode = xhr.status;
+        Ti.API.info(statusCode);
+        var response = JSON.parse(xhr.responseText);
+        Ti.API.info(response);
+      }
+    }
   });
 }
 else {

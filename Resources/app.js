@@ -90,7 +90,8 @@ Ti.App.logoutWin = logoutWin;
 
 var homeWin = Titanium.UI.createWindow({
   title:'Home',
-  backgroundColor:'#009900',
+  // backgroundColor:'#009900',
+  backgroundImage: 'images/background_green.png',
   url: 'home.js',
   exitOnClose: true,
   navBarHidden: true,
@@ -104,7 +105,7 @@ var linearGradient = Ti.UI.createView({
   }
 });
 
-homeWin.add(linearGradient);
+// homeWin.add(linearGradient);
 Ti.App.homeWin = homeWin;
 Ti.App.homeWin.open();
 

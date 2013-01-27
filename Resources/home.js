@@ -21,13 +21,13 @@ var view = Titanium.UI.createView({
 // Add our scrollview to the window
 win.add(view);
 
-var tutorialFlow = Titanium.UI.createImageView({
-    image:'images/tut1.png',
-    width: "100%",
-  	height: "100%"
-    
-});
-view.add(tutorialFlow);
+// var tutorialFlow = Titanium.UI.createImageView({
+    // image:'images/background_green.png',
+    // width: "100%",
+  	// height: "100%"
+//     
+// });
+// view.add(tutorialFlow);
 
 function imageLoop(i){
 	if(i<=3) {
@@ -67,20 +67,11 @@ view.add(loginButton);
 loginButton.addEventListener('click', function() {
   var loginWin = Titanium.UI.createWindow({
     title:'Login',
-    backgroundColor:'#009900',
+    backgroundImage: '../images/background_green.png',
     barColor: '#009900',
     url: 'includes/login.js',
     navBarHidden: true,
   });
-  var linearGradient = Ti.UI.createView({
-    backgroundGradient: {
-      type: 'linear',
-      startPoint: { x: '50%', y: '00%' },
-      endPoint: { x: '50%', y: '100%' },
-      colors: [ { color: '#00CC00 ', offset: 0.0}, { color: '#009900', offset: 0.25 }, { color: '#00CC00', offset: 1.0 } ],
-    }
-  });
-  loginWin.add(linearGradient);
   loginWin.open();
   win.hide();
 });
@@ -98,19 +89,10 @@ view.add(registerButton);
 registerButton.addEventListener('click', function() {
   var registerWin = Titanium.UI.createWindow({
     title:'Register',
-    backgroundColor:'#009900',
+    backgroundImage: '../images/background_green.png',
     url: 'includes/register.js',
     navBarHidden: true,
   });
-  var linearGradient = Ti.UI.createView({
-    backgroundGradient: {
-      type: 'linear',
-      startPoint: { x: '50%', y: '00%' },
-      endPoint: { x: '50%', y: '100%' },
-      colors: [ { color: '#00CC00 ', offset: 0.0}, { color: '#009900', offset: 0.25 }, { color: '#00CC00', offset: 1.0 } ],
-    }
-  });
-  registerWin.add(linearGradient);
   registerWin.open();
   win.hide();
 });

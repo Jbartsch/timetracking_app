@@ -166,9 +166,6 @@ registerButton.addEventListener('click', function() {
         // Save the status of the connection in a variable
         // this will be used to see if we have a connection (200) or not
         var statusCode = xhr.status;
-        Ti.API.info('onload');
-        Ti.API.info(statusCode);
-        Ti.API.info(xhr.responseText);
         // Check if we have a valid status
         if(statusCode == 200) {
     
