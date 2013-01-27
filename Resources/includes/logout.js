@@ -35,7 +35,6 @@ xhr3.onerror = function() {
   Titanium.App.Properties.removeProperty("userUid");
   Titanium.App.Properties.removeProperty("userSessionId");
   Titanium.App.Properties.removeProperty("userSessionName");
-  Titanium.App.Properties.removeProperty("userName");
   win.close();
   Ti.App.tabGroup.close();
   Ti.App.homeWin.show();
@@ -46,7 +45,6 @@ xhr3.onload = function() {
   Titanium.App.Properties.removeProperty("userUid");
   Titanium.App.Properties.removeProperty("userSessionId");
   Titanium.App.Properties.removeProperty("userSessionName");
-  Titanium.App.Properties.removeProperty("userName");
   win.close();
   Ti.App.tabGroup.close();
   Ti.App.homeWin.show();

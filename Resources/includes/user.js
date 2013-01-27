@@ -6,7 +6,6 @@ var user = {
 	uid: Titanium.App.Properties.getInt("userUid"),
 	sessid: Titanium.App.Properties.getString("userSessionId"),
 	session_name: Titanium.App.Properties.getString("userSessionName"),
-	name: Titanium.App.Properties.getString("userName"),
 }
 
 // Create a new variable to map the current window

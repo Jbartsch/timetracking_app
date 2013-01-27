@@ -155,27 +155,6 @@ loginButton.addEventListener('click', function() {
         Titanium.App.Properties.setInt("userUid", data.user.uid);
         Titanium.App.Properties.setString("userSessionId", data.sessid);
         Titanium.App.Properties.setString("userSessionName", data.session_name);
-  
-        // Create another connection to get the user
-        var xhr2 = Titanium.Network.createHTTPClient();
-  
-        var getUser = REST_PATH + 'user/' + data.user.uid + '.json';
-        xhr2.open("GET", getUser);
-        xhr2.send();
-  
-        xhr2.onload = function() {
-          var userStatusCode = xhr2.status;
-          if(userStatusCode == 200) {
-            var userResponse = xhr2.responseText;
-            var user = JSON.parse(userResponse);
-  
-            // Set the user.userName to the logged in user name
-            Titanium.App.Properties.setString("userName", user.name);
-            Ti.App.buildTabGroup();
-            Ti.App.tabGroup.open();
-            win.close();
-          }
-        }
       }
       else {
         alert("There was an error");

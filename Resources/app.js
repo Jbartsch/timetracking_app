@@ -6,7 +6,6 @@ var user = {
   uid: Titanium.App.Properties.getInt("userUid"),
   sessid: Titanium.App.Properties.getString("userSessionId"),
   session_name: Titanium.App.Properties.getString("userSessionName"),
-  name: Titanium.App.Properties.getString("userName"),
 }
 Ti.App.buildTabGroup = function buildTabGroup() {
   var tabGroup = Titanium.UI.createTabGroup();
