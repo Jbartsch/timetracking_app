@@ -478,51 +478,69 @@ if(Titanium.App.Properties.getInt("userUid")) {
       // Add the event listener for when the button is created
       rightButton.addEventListener("click", function() {
         
-        var date = datetxt.split('-');
-        // Create a new node object
-        var newnode = {
-          node:{
-            title: nodeTitleTextfield.value,
-            organization_nid:clientnid,
-            project_nid:projectnid,
-            trackingdate: {year: date[0], month: date[1], day:date[2]},
-            timebegin: beginText.value,
-            timeend: endText.value,
+        var beginTimes = beginText.value.split(':');
+        var endTimes = endText.value.split(':');
+        
+        // var validEnd;
+        if (nodeTitleTextfield.value == '' || beginText.value == '' || endText.value == '') {
+          alert('Please fill out all fields.');
+        }
+        else if (beginTimes.length != 2 || beginTimes[0] > 23 || beginTimes[1] > 59) {
+          alert('Begin time has to be in the format 12:34.');
+        }
+        else if (endTimes.length != 2 || endTimes[0] > 23 || endTimes[1] > 59) {
+          alert('End time has to be in the format 12:34.');
+        }
+        else if (clientnid == 0 || projectnid == 0) {
+          alert('Please pick a client and a project.');
+        }
+        else {
+        
+          var date = datetxt.split('-');
+          // Create a new node object
+          var newnode = {
+            node:{
+              title: nodeTitleTextfield.value,
+              organization_nid:clientnid,
+              project_nid:projectnid,
+              trackingdate: {year: date[0], month: date[1], day:date[2]},
+              timebegin: beginText.value,
+              timeend: endText.value,
+            }
+          };
+      
+          // Define the url
+          // in this case, we'll connecting to http://example.com/api/rest/node
+          var updateurl = REST_PATH + 'node/' + node.nid + '.json';
+  
+          // Create a connection
+          var nodeXhr = Titanium.Network.createHTTPClient();
+      
+          // Open the connection using POST
+          nodeXhr.open('PUT', updateurl);
+          nodeXhr.setRequestHeader('X-HTTP-Method-Override','PUT');
+          nodeXhr.setRequestHeader('Content-Type','application/json; charset=utf-8');
+          nodeXhr.setRequestHeader('Cookie', user.session_name+'='+user.sessid);
+      
+          // Send the connection and the user object as argument
+          nodeXhr.send(JSON.stringify(newnode));
+          nodeXhr.onload = function() {
+            // Save the status of the connection in a variable
+            // this will be used to see if we have a connection (200) or not
+            var statusCode = nodeXhr.status;
+            // Check if we have a valid status
+  
+            if(statusCode == 200) {
+              win.close();
+            }
+            else {
+              alert("There was an error");
+            }
           }
-        };
-    
-        // Define the url
-        // in this case, we'll connecting to http://example.com/api/rest/node
-        var updateurl = REST_PATH + 'node/' + node.nid + '.json';
-
-        // Create a connection
-        var nodeXhr = Titanium.Network.createHTTPClient();
-    
-        // Open the connection using POST
-        nodeXhr.open('PUT', updateurl);
-        nodeXhr.setRequestHeader('X-HTTP-Method-Override','PUT');
-        nodeXhr.setRequestHeader('Content-Type','application/json; charset=utf-8');
-        nodeXhr.setRequestHeader('Cookie', user.session_name+'='+user.sessid);
-    
-        // Send the connection and the user object as argument
-        nodeXhr.send(JSON.stringify(newnode));
-        nodeXhr.onload = function() {
-          // Save the status of the connection in a variable
-          // this will be used to see if we have a connection (200) or not
-          var statusCode = nodeXhr.status;
-          // Check if we have a valid status
-
-          if(statusCode == 200) {
-            win.close();
-          }
-          else {
-            alert("There was an error");
+          nodeXhr.onerror = function() {
+            Ti.API.info(nodeXhr.status);
           }
         }
-        nodeXhr.onerror = function() {
-          Ti.API.info(nodeXhr.status);
-        }
-    
       });
   		
   		
