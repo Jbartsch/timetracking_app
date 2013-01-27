@@ -21,26 +21,45 @@ var view = Titanium.UI.createView({
 // Add our scrollview to the window
 win.add(view);
 
-var homeText = Titanium.UI.createTextArea({
-  editable: '0',
-  text:'Welcome message',
-  value: 'Welcome to timetracking app.\nYou can log in or register a new account.',
-  font:{fontSize:18, fontWeight: "light"},
-  color: 'white',
-  left:10,
-  top:40,
-  width:300,
-  height:'auto',
-  backgroundColor: 'transparent',
+var tutorialFlow = Titanium.UI.createImageView({
+    image:'images/tut1.png',
+    width: "100%",
+  	height: "100%"
+    
 });
+view.add(tutorialFlow);
 
-view.add(homeText);
+function imageLoop(i){
+	if(i<=3) {
+		Ti.API.info(i);
+		setTimeout(function(){
+        		tutorialFlow.image = 'images/tut'+i+'.png'; 
+        		i=i+1;
+        		imageLoop(i);
+        		var slide_in =  Titanium.UI.createAnimation({left:115});
+        	//	tutorialFlow.animate(slide_in);
+      	}, 4000);
+      //	tutorialFlow.left = -100;
+	}
+	if(i==4) {
+	      	i=1;
+	      	imageLoop(i);
+	}
+}
+
+i=2;
+
+	imageLoop(i);
+
+
 
 var loginButton = Titanium.UI.createButton({
   title:'Login',
   height:40,
-  width:250,
-  top:140
+  width:120,
+  left: 30,
+  bottom:20,
+  style: Titanium.UI.iPhone.SystemButtonStyle.BORDERED
 });
 
 view.add(loginButton);
@@ -69,8 +88,9 @@ loginButton.addEventListener('click', function() {
 var registerButton = Titanium.UI.createButton({
   title:'Register',
   height:40,
-  width:250,
-  top:200
+  width:120,
+  right:30,
+  bottom:20
 });
 
 view.add(registerButton);
