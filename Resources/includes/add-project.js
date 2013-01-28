@@ -184,6 +184,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
   });
   
   clientButton.addEventListener('click', function() {
+    nodeTitleTextfield.blur();
     clientPicker.show();
     picker_view.animate(slide_in);
   });
