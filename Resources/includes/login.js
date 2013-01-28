@@ -159,17 +159,9 @@ loginButton.addEventListener('click', function() {
       // Save the status of the connection in a variable
       // this will be used to see if we have a connection (200) or not
       var statusCode = xhr.status;
-  
-      // Check if we have a valid status
       if(statusCode == 200) {
-
-        // Create a variable response to hold the response
         var response = xhr.responseText;
-  
-        // Parse (build data structure) the JSON response into an object (data)
         var data = JSON.parse(response);
-  
-        // Set a global variable
         Titanium.App.Properties.setInt("userUid", data.user.uid);
         Titanium.App.Properties.setString("userSessionId", data.sessid);
         Titanium.App.Properties.setString("userSessionName", data.session_name);

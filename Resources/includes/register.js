@@ -185,77 +185,17 @@ registerButton.addEventListener('click', function() {
         var statusCode = xhr.status;
         // Check if we have a valid status
         if(statusCode == 200) {
-    
-          // Create a variable response to hold the response
-          var response = xhr.responseText;
-    
-          // Ti.API.info(response);
-          var logoutUrl = REST_PATH + 'user/logout.json';
-          var xhr2 = Titanium.Network.createHTTPClient();
-          xhr2.open("POST", logoutUrl);
-          xhr2.setRequestHeader('Content-Type','application/json; charset=utf-8');
-          xhr2.send();
-    
-          xhr2.onload = function() {
-            var user = {
-              username: newUser.name,
-              password: newUser.pass
-            };
-          
-            var userString = JSON.stringify(user);
-            var url = REST_PATH + 'user/login.json';
-            var xhr3 = Titanium.Network.createHTTPClient();
-            xhr3.open("POST", url);
-            xhr3.setRequestHeader('Content-Type','application/json; charset=utf-8');
-            xhr3.send(userString);
-            xhr3.onload = function() {
-              if(xhr3.status == 200) {
-                var data = JSON.parse(xhr3.responseText);
-                Titanium.App.Properties.setInt("userUid", data.user.uid);
-                Titanium.App.Properties.setString("userSessionId", data.sessid);
-                Titanium.App.Properties.setString("userSessionName", data.session_name);
-                Ti.App.buildTabGroup();
-                Ti.App.tabGroup.open();
-                actInd.hide();
-                win.close();
-              }
-            }
-            xhr3.onerror = function() {
-              actInd.hide();
-              Ti.API.info('onerror');
-              var statusCode = xhr3.status;
-              Ti.API.info(statusCode);
-              var response = JSON.parse(xhr3.responseText);
-              Ti.API.info(response);
-              if (statusCode == 401) {
-                var error = response[0];
-                alert(error);
-              }
-              else if (statusCode == 406) {
-                var error = response[0];
-                var loggedIn = error.search(/Already logged in as.+/);
-                if (loggedIn != -1) {
-                  var logoutUrl = REST_PATH + 'user/logout.json';
-                  var xhr4 = Titanium.Network.createHTTPClient();
-                  xhr4.open("POST", logoutUrl);
-                  xhr4.setRequestHeader('Content-Type','application/json; charset=utf-8');
-                  xhr4.send();
-                  xhr4.onload = function() {
-                    var loginWin = Titanium.UI.createWindow({
-                      title:'Login',
-                      backgroundImage: '../images/background_green.png',
-                      barColor: '#009900',
-                      url: 'includes/login.js',
-                      navBarHidden: true,
-                    });
-                    loginWin.open();
-                    actInd.hide();
-                    win.close();
-                  }
-                }
-              }
-            }
-          }
+          var data = JSON.parse(xhr.responseText);
+          var cookie = xhr.getResponseHeader('Set-Cookie');
+          var newSession = cookie.split(';', 1);
+          newSession = newSession[0].split('=', 2); 
+          Titanium.App.Properties.setInt("userUid", data.uid);
+          Titanium.App.Properties.setString("userSessionId", newSession[0]);
+          Titanium.App.Properties.setString("userSessionName", newSession[1]);
+          Ti.App.buildTabGroup();
+          Ti.App.tabGroup.open();
+          actInd.hide();
+          win.close();
         }
         else {
           alert("There was an error");
