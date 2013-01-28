@@ -188,10 +188,10 @@ registerButton.addEventListener('click', function() {
           var data = JSON.parse(xhr.responseText);
           var cookie = xhr.getResponseHeader('Set-Cookie');
           var newSession = cookie.split(';', 1);
-          newSession = newSession[0].split('=', 2); 
+          newSession = newSession[0].split('=', 2);
           Titanium.App.Properties.setInt("userUid", data.uid);
-          Titanium.App.Properties.setString("userSessionId", newSession[0]);
-          Titanium.App.Properties.setString("userSessionName", newSession[1]);
+          Titanium.App.Properties.setString("userSessionName", newSession[0]);
+          Titanium.App.Properties.setString("userSessionId", newSession[1]);
           Ti.App.buildTabGroup();
           Ti.App.tabGroup.open();
           actInd.hide();
