@@ -25,7 +25,7 @@ win.add(view);
 var table;
 
 function loadProjects() {
-  var url = REST_PATH + 'projects.json';
+  var url = REST_PATH + 'stormproject.json';
   
   // Create a connection inside the variable xhr
   var xhr = Titanium.Network.createHTTPClient();

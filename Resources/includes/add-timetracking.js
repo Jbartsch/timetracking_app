@@ -5,12 +5,6 @@
 // Include the config.js file
 Ti.include("../config.js");
 
-// Include the tiajax.js library
-//~Ti.include("../lib/tiajax.js");
-
-//~$ = {}
-//~$.ajax = Titanium.Network.ajax;
-
 //Define the variable win to contain the current window
 var win = Ti.UI.currentWindow;
 
@@ -451,7 +445,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
   }
   
   function showProjectPicker() {
-    var projectUrl = REST_PATH + 'projects.json';
+    var projectUrl = REST_PATH + 'stormproject.json?organization=' + clientnid;
     var projectXhr = Titanium.Network.createHTTPClient();
     projectXhr.open("GET", projectUrl);
     projectXhr.setRequestHeader('Cookie', sessName+'='+sessId);
