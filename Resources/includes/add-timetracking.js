@@ -412,13 +412,12 @@ if(Titanium.App.Properties.getInt("userUid")) {
   }
   
   function showClientPicker() {
+    var sessid = Titanium.App.Properties.getString("userSessionId");
+    var session_name = Titanium.App.Properties.getString("userSessionName");
     var clientUrl = REST_PATH + 'organizations.json';
-    // Create a connection inside the variable xhr
     var clientXhr = Titanium.Network.createHTTPClient();
-    // Open the xhr
     clientXhr.open("GET", clientUrl);
-    clientXhr.setRequestHeader('Cookie', sessName+'='+sessId);
-    // Send the xhr
+    clientXhr.setRequestHeader('Cookie', session_name+'='+sessid);
     clientXhr.send();
     clientPicker = Ti.UI.createPicker({
       top:43,
@@ -445,10 +444,12 @@ if(Titanium.App.Properties.getInt("userUid")) {
   }
   
   function showProjectPicker() {
+    var sessid = Titanium.App.Properties.getString("userSessionId");
+    var session_name = Titanium.App.Properties.getString("userSessionName");
     var projectUrl = REST_PATH + 'stormproject.json?organization=' + clientnid;
     var projectXhr = Titanium.Network.createHTTPClient();
     projectXhr.open("GET", projectUrl);
-    projectXhr.setRequestHeader('Cookie', sessName+'='+sessId);
+    projectXhr.setRequestHeader('Cookie', session_name+'='+sessid);
     projectXhr.send();
     projectPicker = Ti.UI.createPicker({
       top:43,
