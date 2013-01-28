@@ -114,6 +114,9 @@ xhr.onload = function() {
     Ti.App.tabGroup.open();    
   }
   else {
+    Titanium.App.Properties.removeProperty("userUid");
+    Titanium.App.Properties.removeProperty("userSessionId");
+    Titanium.App.Properties.removeProperty("userSessionName");
     Ti.App.homeWin.show();
   }
 }
@@ -126,12 +129,5 @@ xhr.onerror = function() {
   });
   noNetworkWin.open();
 }
-  
-// if(Titanium.App.Properties.getInt("userUid")) {
-  // // open tab group
-  // Ti.App.homeWin.hide();
-  // Ti.App.buildTabGroup();
-  // Ti.App.tabGroup.open();
-// }
 
 

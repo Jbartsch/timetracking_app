@@ -9,12 +9,6 @@ Ti.include("../config.js");
 var win = Ti.UI.currentWindow;
 
 if(Titanium.App.Properties.getInt("userUid")) {
-	// Create a user variable to hold some information about the user
-	var user = {
-		uid: Titanium.App.Properties.getInt("userUid"),
-		sessid: Titanium.App.Properties.getString("userSessionId"),
-		session_name: Titanium.App.Properties.getString("userSessionName"),
-	}
 	
 	// Create a new view "view" to hold the form
 	var view = Ti.UI.createView({
@@ -114,21 +108,44 @@ if(Titanium.App.Properties.getInt("userUid")) {
   });
   
   view.add(updateButton);
+  
+  var actInd = Titanium.UI.createActivityIndicator({
+    top: 250,
+    width: Ti.UI.SIZE,
+    height: Ti.UI.SIZE,
+    style: Ti.UI.iPhone.ActivityIndicatorStyle.BIG,
+    font: {
+        fontFamily: 'Helvetica Neue',
+        fontSize: 15,
+        fontWeight: 'bold'
+    },
+    message: 'Updating...',
+    width: 210,
+    indicatorColor: '#000',
+  });
+  view.add(actInd);
 	
   function loadSettings() {
-    var url = REST_PATH + 'user_mail/' + user.uid + '.json';
+    actInd.message = 'Loading...';
+    actInd.show();
+    var uid = Titanium.App.Properties.getString("userUid");
+    var sessid = Titanium.App.Properties.getString("userSessionId");
+    var session_name = Titanium.App.Properties.getString("userSessionName");
+    var url = REST_PATH + 'user_mail/' + uid + '.json';
     var xhr = Titanium.Network.createHTTPClient();
     xhr.open("GET", url);
     xhr.setRequestHeader('Content-Type','application/json; charset=utf-8');
-    xhr.setRequestHeader('Cookie', user.session_name+'='+user.sessid);
+    xhr.setRequestHeader('Cookie', session_name+'='+sessid);
     xhr.send();
     xhr.onload = function() {
+      actInd.hide();
       if(xhr.status == 200) {
         var data = JSON.parse(xhr.responseText);
         mailTextfield.value = data.mail;
         updateButton.enabled = true;
       }
       xhr.onerror = function() {
+        actInd.hide();
         Ti.API.info(xhr.status);
         Ti.API.info(xhr.responseText);
       }
@@ -136,7 +153,6 @@ if(Titanium.App.Properties.getInt("userUid")) {
   }
   
   updateButton.addEventListener("click", function() {
-        
     if (currentPasswordTextfield.value == '') {
       alert("Please type in your current password.");
     }
@@ -147,7 +163,8 @@ if(Titanium.App.Properties.getInt("userUid")) {
       alert("The current and the new password are the same.");
     }
     else {
-      
+      actInd.message = 'Updating...';
+      actInd.show();
       var updateUser = {
         data:{
           mail: mailTextfield.value,
@@ -156,9 +173,10 @@ if(Titanium.App.Properties.getInt("userUid")) {
         }
       };
   
+      var uid = Titanium.App.Properties.getString("userUid");
       var sessid = Titanium.App.Properties.getString("userSessionId");
       var session_name = Titanium.App.Properties.getString("userSessionName");
-      var updateurl = REST_PATH + 'user/' + user.uid + '.json';
+      var updateurl = REST_PATH + 'user/' + uid + '.json';
       var userXhr = Titanium.Network.createHTTPClient();
       userXhr.open('PUT', updateurl);
       userXhr.setRequestHeader('X-HTTP-Method-Override','PUT');
@@ -167,7 +185,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
       userXhr.send(JSON.stringify(updateUser));
       userXhr.onload = function() {
         if (userXhr.status == 200) {
-          alert("Updated");
+          actInd.hide();
           if (passwordTextfield.value != '') {
             var cookie = userXhr.getResponseHeader('Set-Cookie');
             var newSession = cookie.split(';', 1);
@@ -180,6 +198,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
         }
       }
       userXhr.onerror = function() {
+        actInd.hide();
         Ti.API.info(userXhr.responseText);
         Ti.API.info('onerror');
         var statusCode = userXhr.status;
