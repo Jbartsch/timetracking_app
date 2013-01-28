@@ -42,6 +42,11 @@ if(Titanium.App.Properties.getInt("userUid")) {
     bottom:-251,
     zIndex:100
   });
+  
+  var clientPicker;
+  var clientPickerAdded = 0;
+  var projectPicker;
+  var projectPickerAdded = 0;
    
   var cancel =  Titanium.UI.createButton({
     title:'Cancel',
@@ -69,19 +74,10 @@ if(Titanium.App.Properties.getInt("userUid")) {
   
   var projectnid = 0;
   
-  var clientUrl = REST_PATH + 'organizations.json';
   
   var datetxt = '';
-  
   var monthNames = [ "January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December" ];
-
-  // Create a connection inside the variable xhr
-  var clientXhr = Titanium.Network.createHTTPClient();
-  
-  // Open the xhr
-  clientXhr.open("GET", clientUrl);
-  
   var datePicker = Ti.UI.createPicker({
     type:Ti.UI.PICKER_TYPE_DATE,
     minDate:new Date(2000,0,1),
@@ -90,7 +86,6 @@ if(Titanium.App.Properties.getInt("userUid")) {
     top:43,
     visible:false
   });
-  
   picker_view.add(datePicker);
   
   var trackingdate = 0;
@@ -109,165 +104,31 @@ if(Titanium.App.Properties.getInt("userUid")) {
     datetxt = year + '-' + month + '-' + day;
     trackingdate = monthString + ' ' + day + ', ' + year;
   });
-  
+
   var sessName = Titanium.App.Properties.getString("userSessionName");
   var sessId = Titanium.App.Properties.getString("userSessionId");
-  clientXhr.setRequestHeader('Cookie', sessName+'='+sessId);
-  
-  // Send the xhr
-  clientXhr.send();
-  
-  var clientPicker = Ti.UI.createPicker({
-    top:43,
-    selectionIndicator:true,
-    visible:false
-  });
- 
-  // When the xhr loads we do:
-  clientXhr.onload = function() {
-    // Save the status of the xhr in a variable
-    // this will be used to see if we have a xhr (200) or not
-    var statusCode = clientXhr.status;
-    // Check if we have a xhr
-    if(statusCode == 200) {
-  
-      // Save the responseText from the xhr in the response variable
-      var response = clientXhr.responseText;
-  
-      // Parse (build data structure) the JSON response into an object (data)
-      var result = JSON.parse(response);
-  
-      var results = new Array();
-  
-      // Start loop
-      var i = 0;
-      for(var key in result) {
-        // Create the data variable and hold every result
-        var data = result[key];
-  
-        results[i] = Ti.UI.createPickerRow({title: data.title, nid:data.nid});
-        
-        i = i + 1;
-        // results[key] = {title: data.title, nid:data.nid};
-      }
-  
-      clientPicker.add(results);
-  
-      // add our table to the view
-      picker_view.add(clientPicker);
 
-    }
-    else {
-      // Create a label for the node title
-      var errorMessage = Ti.UI.createLabel({
-        // The text of the label will be the node title (data.title)
-        text: "Please check your internet xhr.",
-        color:'#000',
-        textAlign:'left',
-        font:{fontSize:24, fontWeight:'bold'},
-        top:25,
-        left:15,
-        height:18
-      });
-  
-      // Add the error message to the window
-      win.add(errorMessage);
-    }
-  }
-
-  var projectUrl = REST_PATH + 'projects.json';
-
-  // Create a connection inside the variable xhr
-  var projectXhr = Titanium.Network.createHTTPClient();
-  
-  // Open the xhr
-  projectXhr.open("GET", projectUrl);
-  
-  var sessName = Titanium.App.Properties.getString("userSessionName");
-  var sessId = Titanium.App.Properties.getString("userSessionId");
-  projectXhr.setRequestHeader('Cookie', sessName+'='+sessId);
-  
-  // Send the xhr
-  projectXhr.send();
-  
-  var projectPicker = Ti.UI.createPicker({
-    top:43,
-    selectionIndicator:true,
-    visible:false
-  });
- 
-  // When the xhr loads we do:
-  projectXhr.onload = function() {
-    // Save the status of the xhr in a variable
-    // this will be used to see if we have a xhr (200) or not
-    var statusCode = projectXhr.status;
-    // Check if we have a xhr
-    
-    if(statusCode == 200) {
-  
-      // Save the responseText from the xhr in the response variable
-      var response = projectXhr.responseText;
-  
-      // Parse (build data structure) the JSON response into an object (data)
-      var result = JSON.parse(response);
-  
-      var results = new Array();
-  
-      // Start loop
-      var i = 0;
-      for(var key in result) {
-        // Create the data variable and hold every result
-        var data = result[key];
-  
-        results[i] = Ti.UI.createPickerRow({title: data.title, nid:data.nid});
-        
-        i = i + 1;
-        // results[key] = {title: data.title, nid:data.nid};
-      }
-  
-      projectPicker.add(results);
-  
-      // add our table to the view
-      picker_view.add(projectPicker);
-  
-    }
-    else {
-      // Create a label for the node title
-      var errorMessage = Ti.UI.createLabel({
-        // The text of the label will be the node title (data.title)
-        text: "Please check your internet xhr.",
-        color:'#000',
-        textAlign:'left',
-        font:{fontSize:24, fontWeight:'bold'},
-        top:25,
-        left:15,
-        height:18
-      });
-  
-      // Add the error message to the window
-      win.add(errorMessage);
-    }
-  }
-  
   done.addEventListener('click',function() {
-    if (projectPicker.visible == 1) {
-      projectButton.title =  projectPicker.getSelectedRow(0).title;
-      projectnid = projectPicker.getSelectedRow(0).nid;
-      picker_view.animate(slide_out);
-      setTimeout(function(){
-        projectPicker.hide();
-      }, 500);
-    }
-    
-    if (clientPicker.visible == 1) {
+    if (clientPickerAdded == 1) {
       clientButton.title =  clientPicker.getSelectedRow(0).title;
       clientnid = clientPicker.getSelectedRow(0).nid;
       picker_view.animate(slide_out);
       setTimeout(function(){
-        clientPicker.hide();
+        picker_view.remove(clientPicker);
       }, 500);
+      clientPickerAdded == 0;
     }
     
+    if (projectPickerAdded == 1) {
+      projectButton.title =  projectPicker.getSelectedRow(0).title;
+      projectnid = projectPicker.getSelectedRow(0).nid;
+      picker_view.animate(slide_out);
+      setTimeout(function(){
+        picker_view.remove(projectPicker);
+      }, 500);
+      projectPickerAdded = 0;
+    }
+
     if (datePicker.visible == 1) {
       dateChangeButton.title = trackingdate;
       picker_view.animate(slide_out);
@@ -279,12 +140,18 @@ if(Titanium.App.Properties.getInt("userUid")) {
   
   cancel.addEventListener('click', function() {
     picker_view.animate(slide_out);
-    setTimeout(function(){
+    setTimeout(function() {
+      if (projectPickerAdded == 1) {
+        picker_view.remove(projectPicker);
+        projectPickerAdded = 0;
+      }
+      if (clientPickerAdded == 1) {
+        picker_view.remove(clientPicker);
+        clientPickerAdded == 0;
+      }
       datePicker.hide();
-      clientPicker.hide();
-      projectPicker.hide();
     }, 500);
-  })
+  });
   
   win.add(picker_view);
 
@@ -419,8 +286,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
   
   clientButton.addEventListener('click', function() {
     hideKeyboard();
-    clientPicker.show();
-    picker_view.animate(slide_in);
+    showClientPicker();
   });
   
   view.add(clientButton)
@@ -434,8 +300,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
   
   projectButton.addEventListener('click', function() {
     hideKeyboard();
-    projectPicker.show();
-    picker_view.animate(slide_in); 
+    showProjectPicker(); 
   });
   
   view.add(projectButton);
@@ -545,37 +410,100 @@ if(Titanium.App.Properties.getInt("userUid")) {
       }
     }
   });
+  
+  function hideKeyboard() {
+    nodeTitleTextfield.blur();
+    beginText.blur();
+    endText.blur();
+  }
+  
+  function showClientPicker() {
+    var clientUrl = REST_PATH + 'organizations.json';
+    // Create a connection inside the variable xhr
+    var clientXhr = Titanium.Network.createHTTPClient();
+    // Open the xhr
+    clientXhr.open("GET", clientUrl);
+    clientXhr.setRequestHeader('Cookie', sessName+'='+sessId);
+    // Send the xhr
+    clientXhr.send();
+    clientPicker = Ti.UI.createPicker({
+      top:43,
+      selectionIndicator:true
+    });
+    clientXhr.onload = function() {
+      var statusCode = clientXhr.status;
+      if(statusCode == 200) {
+        var response = clientXhr.responseText;
+        var result = JSON.parse(response);
+        var results = new Array();
+        var i = 0;
+        for(var key in result) {
+          var data = result[key];
+          results[i] = Ti.UI.createPickerRow({title: data.title, nid:data.nid});
+          i = i + 1;
+        }
+        clientPicker.add(results);
+        picker_view.add(clientPicker);
+        clientPickerAdded == 0;
+        picker_view.animate(slide_in);
+      }
+    }
+  }
+  
+  function showProjectPicker() {
+    var projectUrl = REST_PATH + 'projects.json';
+    var projectXhr = Titanium.Network.createHTTPClient();
+    projectXhr.open("GET", projectUrl);
+    projectXhr.setRequestHeader('Cookie', sessName+'='+sessId);
+    projectXhr.send();
+    projectPicker = Ti.UI.createPicker({
+      top:43,
+      selectionIndicator:true,
+    });
+    projectXhr.onload = function() {
+      var statusCode = projectXhr.status;
+      if(statusCode == 200) {
+        var response = projectXhr.responseText;
+        var result = JSON.parse(response);
+        var results = new Array();
+        var i = 0;
+        for(var key in result) {
+          var data = result[key];
+          results[i] = Ti.UI.createPickerRow({title: data.title, nid:data.nid});
+          i = i + 1;
+        }
+        projectPicker.add(results);
+        picker_view.add(projectPicker);
+        projectPickerAdded = 1;
+        picker_view.animate(slide_in);
+      }
+    }
+  }
+  
+  
+  // Create a new button
+  var rightButton = Ti.UI.createButton({
+    title: 'List',
+    style:Titanium.UI.iPhone.SystemButtonStyle.PLAIN
+  });
+  
+  // Create a new event listener for the rightButton
+  rightButton.addEventListener("click", function() {
+    var timetrackingsWindow = Titanium.UI.createWindow({
+      url:'timetrackings.js',
+      backgroundColor: '#D8D8D8',
+      barColor: '#009900',
+      touchEnabled: true,
+      tabBarHidden: true,
+    });
+    
+    Titanium.UI.currentTab.open(timetrackingsWindow,{animated:true});
+  });
+  
+  // We don't add the button to the window, instead, we tell the app
+  // to set the button as the right navigation button
+  win.setRightNavButton(rightButton);
 }
 else {
   alert("You need to login first");
 }
-
-function hideKeyboard() {
-  nodeTitleTextfield.blur();
-  beginText.blur();
-  endText.blur();
-}
-
-
-// Create a new button
-var rightButton = Ti.UI.createButton({
-  title: 'List',
-  style:Titanium.UI.iPhone.SystemButtonStyle.PLAIN
-});
-
-// Create a new event listener for the rightButton
-rightButton.addEventListener("click", function() {
-  var timetrackingsWindow = Titanium.UI.createWindow({
-    url:'timetrackings.js',
-    backgroundColor: '#D8D8D8',
-    barColor: '#009900',
-    touchEnabled: true,
-    tabBarHidden: true,
-  });
-  
-  Titanium.UI.currentTab.open(timetrackingsWindow,{animated:true});
-});
-
-// We don't add the button to the window, instead, we tell the app
-// to set the button as the right navigation button
-win.setRightNavButton(rightButton);
