@@ -444,7 +444,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
         }
         clientPicker.add(results);
         picker_view.add(clientPicker);
-        clientPickerAdded == 0;
+        clientPickerAdded = 1;
         picker_view.animate(slide_in);
       }
     }
