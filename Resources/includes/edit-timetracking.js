@@ -57,6 +57,13 @@ if(Titanium.App.Properties.getInt("userUid")) {
   xhr.onload = function() {
   	// Save the status of the xhr in a variable
   	// this will be used to see if we have a xhr (200) or not
+  	
+  	function hideKeyboard() {
+      nodeTitleTextfield.blur();
+      beginText.blur();
+      endText.blur();
+    }
+    
   	var statusCode = xhr.status;
   	
   	// Check if we have a xhr
@@ -378,6 +385,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
       });
       
       dateChangeButton.addEventListener('click', function() {
+        hideKeyboard();
         datePicker.show();
         picker_view.animate(slide_in);
       });
@@ -454,6 +462,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
       });
       
       clientButton.addEventListener('click', function() {
+        hideKeyboard();
         clientPicker.show();
         picker_view.animate(slide_in);
       });
@@ -468,6 +477,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
       });
       
       projectButton.addEventListener('click', function() {
+        hideKeyboard();
         projectPicker.show();
         picker_view.animate(slide_in);
       });

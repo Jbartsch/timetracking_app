@@ -331,6 +331,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
   });
   
   dateChangeButton.addEventListener('click', function() {
+    hideKeyboard();
     datePicker.show();
     picker_view.animate(slide_in);
   });
@@ -417,6 +418,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
   });
   
   clientButton.addEventListener('click', function() {
+    hideKeyboard();
     clientPicker.show();
     picker_view.animate(slide_in);
   });
@@ -431,6 +433,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
   });
   
   projectButton.addEventListener('click', function() {
+    hideKeyboard();
     projectPicker.show();
     picker_view.animate(slide_in); 
   });
@@ -545,6 +548,12 @@ if(Titanium.App.Properties.getInt("userUid")) {
 }
 else {
   alert("You need to login first");
+}
+
+function hideKeyboard() {
+  nodeTitleTextfield.blur();
+  beginText.blur();
+  endText.blur();
 }
 
 
