@@ -113,6 +113,24 @@ loginButton.addEventListener('click', function() {
     alert('Please fill out the username and password fields.')
   }
   else {
+    
+    var actInd = Titanium.UI.createActivityIndicator({
+      bottom: 10,
+      width: Ti.UI.SIZE,
+      height: Ti.UI.SIZE,
+      style: Ti.UI.iPhone.ActivityIndicatorStyle.BIG,
+      font: {
+          fontFamily: 'Helvetica Neue',
+          fontSize: 15,
+          fontWeight: 'bold'
+      },
+      color: 'white',
+      message: 'Loading...',
+      width: 210,
+    });
+    win.add(actInd);
+    actInd.show();
+    
     // Create an object to hold the data entered in the form
     var user = {
       username: usernameTextfield.value,
@@ -144,7 +162,7 @@ loginButton.addEventListener('click', function() {
   
       // Check if we have a valid status
       if(statusCode == 200) {
-  
+
         // Create a variable response to hold the response
         var response = xhr.responseText;
   
@@ -155,6 +173,10 @@ loginButton.addEventListener('click', function() {
         Titanium.App.Properties.setInt("userUid", data.user.uid);
         Titanium.App.Properties.setString("userSessionId", data.sessid);
         Titanium.App.Properties.setString("userSessionName", data.session_name);
+        Ti.App.buildTabGroup();
+        Ti.App.tabGroup.open();
+        actInd.hide();
+        win.close();
       }
       else {
         alert("There was an error");
@@ -162,6 +184,7 @@ loginButton.addEventListener('click', function() {
     }
   
     xhr.onerror = function() {
+      actInd.hide();
       Ti.API.info('onerror');
       var statusCode = xhr.status;
       Ti.API.info(statusCode);
@@ -180,7 +203,12 @@ loginButton.addEventListener('click', function() {
           xhr3.open("POST", logoutUrl);
           xhr3.setRequestHeader('Content-Type','application/json; charset=utf-8');
           xhr3.send();
-          alert('Error. Please try again.');
+          xhr3.onload = function() {
+            alert('Error. Please try again.');
+          }
+          xhr3.onerror = function() {
+            alert('Error. Please try again.');
+          }
         }
       }
     }

@@ -146,7 +146,24 @@ registerButton.addEventListener('click', function() {
   else {
     
     if (passwordTextfield.value == repeatPasswordTextfield.value) {
-  
+      
+      var actInd = Titanium.UI.createActivityIndicator({
+        bottom: 10,
+        width: Ti.UI.SIZE,
+        height: Ti.UI.SIZE,
+        style: Ti.UI.iPhone.ActivityIndicatorStyle.BIG,
+        font: {
+            fontFamily: 'Helvetica Neue',
+            fontSize: 15,
+            fontWeight: 'bold'
+        },
+        color: 'white',
+        message: 'Loading...',
+        width: 210,
+      });
+      win.add(actInd);
+      actInd.show();
+      
       var newUser = {
         name: usernameTextfield.value,
         pass: passwordTextfield.value,
@@ -180,10 +197,64 @@ registerButton.addEventListener('click', function() {
           xhr2.send();
     
           xhr2.onload = function() {
-            var logoutStatusCode = xhr2.status;
-            alert('User successfully created. You can now log in.')
-            win.close();
-            Ti.App.homeWin.show();
+            var user = {
+              username: newUser.name,
+              password: newUser.pass
+            };
+          
+            var userString = JSON.stringify(user);
+            var url = REST_PATH + 'user/login.json';
+            var xhr3 = Titanium.Network.createHTTPClient();
+            xhr3.open("POST", url);
+            xhr3.setRequestHeader('Content-Type','application/json; charset=utf-8');
+            xhr3.send(userString);
+            xhr3.onload = function() {
+              if(xhr3.status == 200) {
+                var data = JSON.parse(xhr3.responseText);
+                Titanium.App.Properties.setInt("userUid", data.user.uid);
+                Titanium.App.Properties.setString("userSessionId", data.sessid);
+                Titanium.App.Properties.setString("userSessionName", data.session_name);
+                Ti.App.buildTabGroup();
+                Ti.App.tabGroup.open();
+                actInd.hide();
+                win.close();
+              }
+            }
+            xhr3.onerror = function() {
+              actInd.hide();
+              Ti.API.info('onerror');
+              var statusCode = xhr3.status;
+              Ti.API.info(statusCode);
+              var response = JSON.parse(xhr3.responseText);
+              Ti.API.info(response);
+              if (statusCode == 401) {
+                var error = response[0];
+                alert(error);
+              }
+              else if (statusCode == 406) {
+                var error = response[0];
+                var loggedIn = error.search(/Already logged in as.+/);
+                if (loggedIn != -1) {
+                  var logoutUrl = REST_PATH + 'user/logout.json';
+                  var xhr4 = Titanium.Network.createHTTPClient();
+                  xhr4.open("POST", logoutUrl);
+                  xhr4.setRequestHeader('Content-Type','application/json; charset=utf-8');
+                  xhr4.send();
+                  xhr4.onload = function() {
+                    var loginWin = Titanium.UI.createWindow({
+                      title:'Login',
+                      backgroundImage: '../images/background_green.png',
+                      barColor: '#009900',
+                      url: 'includes/login.js',
+                      navBarHidden: true,
+                    });
+                    loginWin.open();
+                    actInd.hide();
+                    win.close();
+                  }
+                }
+              }
+            }
           }
         }
         else {
@@ -192,6 +263,7 @@ registerButton.addEventListener('click', function() {
       }
     
       xhr.onerror = function() {
+        actInd.hide();
         Ti.API.info('onerror');
         var statusCode = xhr.status;
         Ti.API.info(statusCode);
