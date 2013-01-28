@@ -1,5 +1,6 @@
 // this sets the background color of the master UIView (when there are no windows/tab groups on it)
 // Titanium.UI.setBackgroundColor('#D8D8D8');
+Ti.include('config.js');
 
 //Create a user variable to hold some information about the user
 var user = {
@@ -92,27 +93,45 @@ var homeWin = Titanium.UI.createWindow({
   // backgroundColor:'#009900',
   backgroundImage: 'images/background_green.png',
   url: 'home.js',
-  exitOnClose: true,
   navBarHidden: true,
-});
-var linearGradient = Ti.UI.createView({
-  backgroundGradient: {
-    type: 'linear',
-    startPoint: { x: '50%', y: '00%' },
-    endPoint: { x: '50%', y: '100%' },
-    colors: [ { color: '#00CC00 ', offset: 0.0}, { color: '#009900', offset: 0.25 }, { color: '#00CC00', offset: 1.0 } ],
-  }
+  visible: false,
 });
 
 // homeWin.add(linearGradient);
 Ti.App.homeWin = homeWin;
-Ti.App.homeWin.open();
 
-if(Titanium.App.Properties.getInt("userUid")) {
-  // open tab group
-  Ti.App.homeWin.hide();
-  Ti.App.buildTabGroup();
-  Ti.App.tabGroup.open();
+var url = REST_PATH + 'system/connect.json';
+var xhr = Titanium.Network.createHTTPClient();
+xhr.open("POST", url);
+xhr.setRequestHeader('Cookie', user.sess_name+'='+user.sessid);
+xhr.send();
+xhr.onload = function() {
+  Ti.App.homeWin.open();
+  data = JSON.parse(xhr.responseText);
+  if (data.user.uid > 0) {
+    Ti.App.homeWin.hide();
+    Ti.App.buildTabGroup();
+    Ti.App.tabGroup.open();    
+  }
+  else {
+    Ti.App.homeWin.show();
+  }
 }
+xhr.onerror = function() {
+  var noNetworkWin = Titanium.UI.createWindow({
+    title:'Home',
+    backgroundImage: '../images/background_green.png',
+    url: 'includes/no-network.js',
+    navBarHidden: true,
+  });
+  noNetworkWin.open();
+}
+  
+// if(Titanium.App.Properties.getInt("userUid")) {
+  // // open tab group
+  // Ti.App.homeWin.hide();
+  // Ti.App.buildTabGroup();
+  // Ti.App.tabGroup.open();
+// }
 
 

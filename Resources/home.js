@@ -21,35 +21,36 @@ var view = Titanium.UI.createView({
 // Add our scrollview to the window
 win.add(view);
 
+Ti.API.info(Ti.Network.getNetworkType());
+
 // var tutorialFlow = Titanium.UI.createImageView({
-    // image:'images/background_green.png',
-    // width: "100%",
-  	// height: "100%"
-//     
+  // image:'images/background_green.png',
+  // width: "100%",
+	// height: "100%"
 // });
 // view.add(tutorialFlow);
 
-function imageLoop(i){
-	if(i<=3) {
+function imageLoop(i) {
+	if (i<=3) {
 		Ti.API.info(i);
-		setTimeout(function(){
-        		tutorialFlow.image = 'images/tut'+i+'.png'; 
-        		i=i+1;
-        		imageLoop(i);
-        		var slide_in =  Titanium.UI.createAnimation({left:115});
-        	//	tutorialFlow.animate(slide_in);
-      	}, 4000);
-      //	tutorialFlow.left = -100;
+		setTimeout(function() {
+  		tutorialFlow.image = 'images/tut'+i+'.png'; 
+  		i=i+1;
+  		imageLoop(i);
+  		var slide_in =  Titanium.UI.createAnimation({left:115});
+  	  // tutorialFlow.animate(slide_in);
+  	}, 4000);
+  	// tutorialFlow.left = -100;
 	}
-	if(i==4) {
-	      	i=1;
-	      	imageLoop(i);
+	if (i==4) {
+  	i=1;
+  	imageLoop(i);
 	}
 }
 
 i=2;
 
-	// imageLoop(i);
+// imageLoop(i);
 
 
 
