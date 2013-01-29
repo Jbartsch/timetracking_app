@@ -13,13 +13,6 @@ Ti.include('../config.js');
 var win = Ti.UI.currentWindow;
 
 if(Titanium.App.Properties.getInt("userUid")) {
-  
-  // Create a user variable to hold some information about the user
-  var user = {
-    uid: Titanium.App.Properties.getInt("userUid"),
-    sessid: Titanium.App.Properties.getString("userSessionId"),
-    session_name: Titanium.App.Properties.getString("userSessionName"),
-  }
 
   // Create the scrollview
   var view = Titanium.UI.createScrollView({
@@ -39,24 +32,17 @@ if(Titanium.App.Properties.getInt("userUid")) {
   
   win.setRightNavButton(rightButton);
   
-  // Define the url which contains the full url
-  // See how we build the url using the win.nid which is 
-  // the nid property we pass to this file when we create the window
+  var sessName = Titanium.App.Properties.getString("userSessionName");
+  var sessId = Titanium.App.Properties.getString("userSessionId");
+  
   var url = REST_PATH + 'node/' + win.nid + '.json';
-  
-  // Create a connection inside the variable xhr
   var xhr = Titanium.Network.createHTTPClient();
-  
-  // Open the xhr
   xhr.open("GET",url);
-  
-  // Send the xhr
+  xhr.setRequestHeader('Content-Type','application/json; charset=utf-8');
+  xhr.setRequestHeader('Cookie', sessName+'='+sessId);
   xhr.send();
   
-  // When the xhr loads we do:
   xhr.onload = function() {
-  	// Save the status of the xhr in a variable
-  	// this will be used to see if we have a xhr (200) or not
   	
   	function hideKeyboard() {
       nodeTitleTextfield.blur();
@@ -151,9 +137,6 @@ if(Titanium.App.Properties.getInt("userUid")) {
         trackingdate = monthString + ' ' + day + ', ' + year;
       });
       
-      var sessName = Titanium.App.Properties.getString("userSessionName");
-      var sessId = Titanium.App.Properties.getString("userSessionId");
-
       done.addEventListener('click',function() {
         if (clientPickerAdded == 1) {
           clientButton.title =  clientPicker.getSelectedRow(0).title;
@@ -374,19 +357,16 @@ if(Titanium.App.Properties.getInt("userUid")) {
               timeend: endText.value,
             }
           };
-      
-          // Define the url
-          // in this case, we'll connecting to http://example.com/api/rest/node
+          
+          var sessid = Titanium.App.Properties.getString("userSessionId");
+          var session_name = Titanium.App.Properties.getString("userSessionName");
+
           var updateurl = REST_PATH + 'node/' + node.nid + '.json';
-  
-          // Create a connection
           var nodeXhr = Titanium.Network.createHTTPClient();
-      
-          // Open the connection using POST
           nodeXhr.open('PUT', updateurl);
           nodeXhr.setRequestHeader('X-HTTP-Method-Override','PUT');
           nodeXhr.setRequestHeader('Content-Type','application/json; charset=utf-8');
-          nodeXhr.setRequestHeader('Cookie', user.session_name+'='+user.sessid);
+          nodeXhr.setRequestHeader('Cookie', session_name+'='+sessid);
       
           // Send the connection and the user object as argument
           nodeXhr.send(JSON.stringify(newnode));
@@ -410,10 +390,12 @@ if(Titanium.App.Properties.getInt("userUid")) {
       });
       
       function showClientPicker() {
+        var sessid = Titanium.App.Properties.getString("userSessionId");
+        var session_name = Titanium.App.Properties.getString("userSessionName");
         var clientUrl = REST_PATH + 'organizations.json';
         var clientXhr = Titanium.Network.createHTTPClient();
         clientXhr.open("GET", clientUrl);
-        clientXhr.setRequestHeader('Cookie', sessName+'='+sessId);
+        clientXhr.setRequestHeader('Cookie', session_name+'='+sessid);
         clientXhr.send();
         clientPicker = Ti.UI.createPicker({
           top:43,
@@ -445,10 +427,12 @@ if(Titanium.App.Properties.getInt("userUid")) {
       }
       
       function showProjectPicker() {
+        var sessid = Titanium.App.Properties.getString("userSessionId");
+        var session_name = Titanium.App.Properties.getString("userSessionName");
         var projectUrl = REST_PATH + 'projects.json';
         var projectXhr = Titanium.Network.createHTTPClient();
         projectXhr.open("GET", projectUrl);
-        projectXhr.setRequestHeader('Cookie', sessName+'='+sessId);
+        projectXhr.setRequestHeader('Cookie', session_name+'='+sessid);
         projectXhr.send();
         projectPicker = Ti.UI.createPicker({
           top:43,

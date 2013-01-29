@@ -114,23 +114,8 @@ loginButton.addEventListener('click', function() {
   }
   else {
     
-    var actInd = Titanium.UI.createActivityIndicator({
-      bottom: 10,
-      width: Ti.UI.SIZE,
-      height: Ti.UI.SIZE,
-      style: Ti.UI.iPhone.ActivityIndicatorStyle.BIG,
-      font: {
-          fontFamily: 'Helvetica Neue',
-          fontSize: 15,
-          fontWeight: 'bold'
-      },
-      color: 'white',
-      message: 'Loading...',
-      width: 210,
-    });
-    win.add(actInd);
-    actInd.show();
-    
+    Ti.App.showThrobber(win);
+        
     // Create an object to hold the data entered in the form
     var user = {
       username: usernameTextfield.value,
@@ -159,6 +144,8 @@ loginButton.addEventListener('click', function() {
       // Save the status of the connection in a variable
       // this will be used to see if we have a connection (200) or not
       var statusCode = xhr.status;
+      Ti.App.fireEvent('stopThrobberInterval');
+      win.remove(Ti.App.throbberView);
       if(statusCode == 200) {
         var response = xhr.responseText;
         var data = JSON.parse(response);
@@ -167,7 +154,6 @@ loginButton.addEventListener('click', function() {
         Titanium.App.Properties.setString("userSessionName", data.session_name);
         Ti.App.buildTabGroup();
         Ti.App.tabGroup.open();
-        actInd.hide();
         win.close();
       }
       else {
@@ -176,7 +162,8 @@ loginButton.addEventListener('click', function() {
     }
   
     xhr.onerror = function() {
-      actInd.hide();
+      Ti.App.fireEvent('stopThrobberInterval');
+      win.remove(Ti.App.throbberView);
       Ti.API.info('onerror');
       var statusCode = xhr.status;
       Ti.API.info(statusCode);

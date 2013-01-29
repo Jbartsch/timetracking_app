@@ -10,11 +10,6 @@ var win = Ti.UI.currentWindow;
 
 if(Titanium.App.Properties.getInt("userUid")) {
   // Create a user variable to hold some information about the user
-  var user = {
-    uid: Titanium.App.Properties.getInt("userUid"),
-    sessid: Titanium.App.Properties.getString("userSessionId"),
-    session_name: Titanium.App.Properties.getString("userSessionName"),
-  }
 
   // Create the scrollview
   var view = Titanium.UI.createScrollView({
@@ -98,9 +93,6 @@ if(Titanium.App.Properties.getInt("userUid")) {
     datetxt = year + '-' + month + '-' + day;
     trackingdate = monthString + ' ' + day + ', ' + year;
   });
-
-  var sessName = Titanium.App.Properties.getString("userSessionName");
-  var sessId = Titanium.App.Properties.getString("userSessionId");
 
   done.addEventListener('click',function() {
     if (clientPickerAdded == 1) {
@@ -294,7 +286,12 @@ if(Titanium.App.Properties.getInt("userUid")) {
   
   projectButton.addEventListener('click', function() {
     hideKeyboard();
-    showProjectPicker(); 
+    if (clientnid == 0) {
+      alert('Please pick a client first.');
+    }
+    else {
+      showProjectPicker(); 
+    }
   });
   
   view.add(projectButton);
@@ -323,6 +320,10 @@ if(Titanium.App.Properties.getInt("userUid")) {
   // Add the event listener for when the button is created
   saveButton.addEventListener("click", function() {
     
+    var uid = Titanium.App.Properties.getInt("userUid");
+    var sessid = Titanium.App.Properties.getString("userSessionId");
+    var session_name = Titanium.App.Properties.getString("userSessionName");
+    
     var beginTimes = beginText.value.split(':');
     var endTimes = endText.value.split(':');
     
@@ -341,6 +342,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
     }
     else {
       
+      Ti.App.showThrobber(win);
       var date = datetxt.split('-');
       // Create a new node object
       var node = {
@@ -352,7 +354,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
           trackingdate: {year: date[0], month: date[1], day:date[2]},
           timebegin: beginText.value,
           timeend: endText.value,
-          uid: user.uid,
+          uid: uid,
           billable: 0,
           billed: 0
         }
@@ -368,7 +370,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
       // Open the connection using POST
       xhr.open("POST", url);
       xhr.setRequestHeader('Content-Type','application/json; charset=utf-8');
-      xhr.setRequestHeader('Cookie', user.session_name+'='+user.sessid);
+      xhr.setRequestHeader('Cookie', session_name+'='+sessid);
   
       // Send the connection and the user object as argument
       xhr.send(JSON.stringify(node));
@@ -389,6 +391,8 @@ if(Titanium.App.Properties.getInt("userUid")) {
           projectnid = 0;
           clientButton.title = 'Choose a client';
           projectButton.title = 'Choose a project';
+          Ti.App.fireEvent('stopThrobberInterval');
+          win.remove(Ti.App.throbberView);
         }
         else {
           alert("There was an error");
@@ -401,6 +405,8 @@ if(Titanium.App.Properties.getInt("userUid")) {
         Ti.API.info(statusCode);
         var response = JSON.parse(xhr.responseText);
         Ti.API.info(response);
+        Ti.App.fireEvent('stopThrobberInterval');
+        win.remove(Ti.App.throbberView);
       }
     }
   });
@@ -475,6 +481,13 @@ if(Titanium.App.Properties.getInt("userUid")) {
     }
   }
   
+  // Ti.App.showThrobber(win);
+//   
+  // setTimeout(function() {
+    // Ti.API.info('stop interval');
+    // Ti.App.fireEvent('stopThrobberInterval');
+    // win.remove(Ti.App.throbberView);
+  // }, 5000);
   
   // Create a new button
   var rightButton = Ti.UI.createButton({

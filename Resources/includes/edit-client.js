@@ -14,6 +14,8 @@ var win = Ti.UI.currentWindow;
 
 if(Titanium.App.Properties.getInt("userUid")) {
   
+  Ti.App.showThrobber(win);
+  
   // Create a user variable to hold some information about the user
   var user = {
     uid: Titanium.App.Properties.getInt("userUid"),
@@ -54,7 +56,8 @@ if(Titanium.App.Properties.getInt("userUid")) {
   	// Save the status of the xhr in a variable
   	// this will be used to see if we have a xhr (200) or not
   	var statusCode = xhr.status;
-  	
+  	Ti.App.fireEvent('stopThrobberInterval');
+    win.remove(Ti.App.throbberView);
   	// Check if we have a xhr
   	if(statusCode == 200) {
   		
@@ -204,6 +207,8 @@ if(Titanium.App.Properties.getInt("userUid")) {
           alert('Please set a name.');
         }
         else {
+          
+          Ti.App.showThrobber(win);
         
           // Create a new node object
           var newnode = {
@@ -237,7 +242,8 @@ if(Titanium.App.Properties.getInt("userUid")) {
             // Save the status of the connection in a variable
             // this will be used to see if we have a connection (200) or not
             var statusCode = nodeXhr.status;
-            // Check if we have a valid status
+            Ti.App.fireEvent('stopThrobberInterval');
+            win.remove(Ti.App.throbberView);
   
             if(statusCode == 200) {
               win.close();
@@ -248,27 +254,16 @@ if(Titanium.App.Properties.getInt("userUid")) {
           }
           nodeXhr.onerror = function() {
             Ti.API.info(nodeXhr.status);
+            Ti.App.fireEvent('stopThrobberInterval');
+            win.remove(Ti.App.throbberView);
           }
         }
       });
-  		
-  	} // End the statusCode 200 
-  	else {
-  		// Create a label for the node title
-  		var errorMessage = Ti.UI.createLabel({
-  			// The text of the label will be the node title (data.title)
-  			text: "Please check your internet connection.",
-  			color:'#000',
-  			textAlign:'left',
-  			font:{fontSize:24, fontWeight:'bold'},
-  			top:25,
-  			left:15,
-  			height:18
-  		});
-  		
-  		// Add the error message to the window
-  		win.add(errorMessage);
   	}
+  }
+  xhr.onerror = function() {
+    Ti.App.fireEvent('stopThrobberInterval');
+    win.remove(Ti.App.throbberView);
   }
 }
 else {

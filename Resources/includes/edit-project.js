@@ -14,12 +14,7 @@ var win = Ti.UI.currentWindow;
 
 if(Titanium.App.Properties.getInt("userUid")) {
   
-  // Create a user variable to hold some information about the user
-  var user = {
-    uid: Titanium.App.Properties.getInt("userUid"),
-    sessid: Titanium.App.Properties.getString("userSessionId"),
-    session_name: Titanium.App.Properties.getString("userSessionName"),
-  }
+  Ti.App.showThrobber(win);
 
   // Create the scrollview
   var view = Titanium.UI.createScrollView({
@@ -37,16 +32,15 @@ if(Titanium.App.Properties.getInt("userUid")) {
   });
   
   win.setRightNavButton(rightButton);
+  
+  var sessName = Titanium.App.Properties.getString("userSessionName");
+  var sessId = Titanium.App.Properties.getString("userSessionId");
 
   var url = REST_PATH + 'node/' + win.nid + '.json';
-  
-  // Create a connection inside the variable xhr
   var xhr = Titanium.Network.createHTTPClient();
-  
-  // Open the xhr
   xhr.open("GET",url);
-  
-  // Send the xhr
+  xhr.setRequestHeader('Content-Type','application/json; charset=utf-8');
+  xhr.setRequestHeader('Cookie', sessName+'='+sessId);
   xhr.send();
   
   // When the xhr loads we do:
@@ -57,7 +51,8 @@ if(Titanium.App.Properties.getInt("userUid")) {
   	
   	// Check if we have a xhr
   	if(statusCode == 200) {
-  		
+  		Ti.App.fireEvent('stopThrobberInterval');
+      win.remove(Ti.App.throbberView);
   		// Save the responseText from the xhr in the response variable
   		var response = xhr.responseText;
   		
@@ -76,6 +71,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
         zIndex:100
       });
       
+      var clientnid = node.organization_nid;
       var clientPicker;
       var clientPickerAdded = 0;
        
@@ -171,7 +167,8 @@ if(Titanium.App.Properties.getInt("userUid")) {
           alert('Please pick a client.');
         }
         else {
-        
+          
+          Ti.App.showThrobber(win);
           // Create a new node object
           var newnode = {
             node:{
@@ -179,26 +176,25 @@ if(Titanium.App.Properties.getInt("userUid")) {
               organization_nid:clientnid,
             }
           };
-      
-          // Define the url
-          // in this case, we'll connecting to http://example.com/api/rest/node
+          
+          var sessName = Titanium.App.Properties.getString("userSessionName");
+          var sessId = Titanium.App.Properties.getString("userSessionId");
+          
           var updateurl = REST_PATH + 'node/' + node.nid + '.json';
-          // Create a connection
           var nodeXhr = Titanium.Network.createHTTPClient();
       
-          // Open the connection using POST
           nodeXhr.open('PUT', updateurl);
           nodeXhr.setRequestHeader('X-HTTP-Method-Override','PUT');
           nodeXhr.setRequestHeader('Content-Type','application/json; charset=utf-8');
-          nodeXhr.setRequestHeader('Cookie', user.session_name+'='+user.sessid);
+          nodeXhr.setRequestHeader('Cookie', sessName+'='+sessId);
       
-          // Send the connection and the user object as argument
           nodeXhr.send(JSON.stringify(newnode));
           nodeXhr.onload = function() {
             // Save the status of the connection in a variable
             // this will be used to see if we have a connection (200) or not
             var statusCode = nodeXhr.status;
-            // Check if we have a valid status
+            Ti.App.fireEvent('stopThrobberInterval');
+            win.remove(Ti.App.throbberView);
   
             if(statusCode == 200) {
               win.close();
@@ -208,17 +204,21 @@ if(Titanium.App.Properties.getInt("userUid")) {
             }
           }
           nodeXhr.onerror = function() {
+            Ti.App.fireEvent('stopThrobberInterval');
+            win.remove(Ti.App.throbberView);
             Ti.API.info(nodeXhr.status);
           }
         }
       });
       
       function showClientPicker() {
+        var sessid = Titanium.App.Properties.getString("userSessionId");
+        var session_name = Titanium.App.Properties.getString("userSessionName");
         var clientnid = node.organization_nid;
         var clientUrl = REST_PATH + 'organizations.json';
         var clientXhr = Titanium.Network.createHTTPClient();
         clientXhr.open("GET", clientUrl);
-        clientXhr.setRequestHeader('Cookie', sessName+'='+sessId);
+        clientXhr.setRequestHeader('Cookie', session_name+'='+sessid);
         clientXhr.send();
         clientPicker = Ti.UI.createPicker({
           top:43,
@@ -243,24 +243,11 @@ if(Titanium.App.Properties.getInt("userUid")) {
           }
         }
       }
-
-  	} // End the statusCode 200 
-  	else {
-  		// Create a label for the node title
-  		var errorMessage = Ti.UI.createLabel({
-  			// The text of the label will be the node title (data.title)
-  			text: "Please check your internet connection.",
-  			color:'#000',
-  			textAlign:'left',
-  			font:{fontSize:24, fontWeight:'bold'},
-  			top:25,
-  			left:15,
-  			height:18
-  		});
-  		
-  		// Add the error message to the window
-  		win.add(errorMessage);
   	}
+  }
+  xhr.onerror = function() {
+    Ti.App.fireEvent('stopThrobberInterval');
+    win.remove(Ti.App.throbberView);
   }
 }
 else {

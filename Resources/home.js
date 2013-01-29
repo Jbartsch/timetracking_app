@@ -74,7 +74,9 @@ loginButton.addEventListener('click', function() {
     navBarHidden: true,
   });
   loginWin.open();
-  win.hide();
+  setTimeout(function() {
+    win.hide();  
+  }, 100);
 });
 
 var registerButton = Titanium.UI.createButton({
@@ -95,5 +97,7 @@ registerButton.addEventListener('click', function() {
     navBarHidden: true,
   });
   registerWin.open();
-  win.hide();
+  setTimeout(function() {
+    win.hide();  
+  }, 100);
 });

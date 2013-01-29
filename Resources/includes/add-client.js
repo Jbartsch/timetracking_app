@@ -166,6 +166,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
     }
     else {
     
+      Ti.App.showThrobber(win);
       // Create a new node object
       var newnode = {
         node:{
@@ -199,7 +200,8 @@ if(Titanium.App.Properties.getInt("userUid")) {
         // Save the status of the connection in a variable
         // this will be used to see if we have a connection (200) or not
         var statusCode = nodeXhr.status;
-        // Check if we have a valid status
+        Ti.App.fireEvent('stopThrobberInterval');
+        win.remove(Ti.App.throbberView);
   
         if(statusCode == 200) {
           win.close();
@@ -210,6 +212,8 @@ if(Titanium.App.Properties.getInt("userUid")) {
       }
       nodeXhr.onerror = function() {
         Ti.API.info(nodeXhr.status);
+        Ti.App.fireEvent('stopThrobberInterval');
+        win.remove(Ti.App.throbberView);
       }
     }
   });

@@ -147,22 +147,24 @@ registerButton.addEventListener('click', function() {
     
     if (passwordTextfield.value == repeatPasswordTextfield.value) {
       
-      var actInd = Titanium.UI.createActivityIndicator({
-        bottom: 10,
-        width: Ti.UI.SIZE,
-        height: Ti.UI.SIZE,
-        style: Ti.UI.iPhone.ActivityIndicatorStyle.BIG,
-        font: {
-            fontFamily: 'Helvetica Neue',
-            fontSize: 15,
-            fontWeight: 'bold'
-        },
-        color: 'white',
-        message: 'Loading...',
-        width: 210,
-      });
-      win.add(actInd);
-      actInd.show();
+      Ti.App.showThrobber(win);
+      
+      // var actInd = Titanium.UI.createActivityIndicator({
+        // bottom: 10,
+        // width: Ti.UI.SIZE,
+        // height: Ti.UI.SIZE,
+        // style: Ti.UI.iPhone.ActivityIndicatorStyle.BIG,
+        // font: {
+            // fontFamily: 'Helvetica Neue',
+            // fontSize: 15,
+            // fontWeight: 'bold'
+        // },
+        // color: 'white',
+        // message: 'Loading...',
+        // width: 210,
+      // });
+      // win.add(actInd);
+      // actInd.show();
       
       var newUser = {
         name: usernameTextfield.value,
@@ -183,7 +185,9 @@ registerButton.addEventListener('click', function() {
         // Save the status of the connection in a variable
         // this will be used to see if we have a connection (200) or not
         var statusCode = xhr.status;
-        // Check if we have a valid status
+        Ti.App.fireEvent('stopThrobberInterval');
+        win.remove(Ti.App.throbberView);
+        
         if(statusCode == 200) {
           var data = JSON.parse(xhr.responseText);
           var cookie = xhr.getResponseHeader('Set-Cookie');
@@ -194,7 +198,6 @@ registerButton.addEventListener('click', function() {
           Titanium.App.Properties.setString("userSessionId", newSession[1]);
           Ti.App.buildTabGroup();
           Ti.App.tabGroup.open();
-          actInd.hide();
           win.close();
         }
         else {
@@ -203,7 +206,8 @@ registerButton.addEventListener('click', function() {
       }
     
       xhr.onerror = function() {
-        actInd.hide();
+        Ti.App.fireEvent('stopThrobberInterval');
+        win.remove(Ti.App.throbberView);
         Ti.API.info('onerror');
         var statusCode = xhr.status;
         Ti.API.info(statusCode);

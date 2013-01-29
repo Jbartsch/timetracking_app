@@ -130,4 +130,49 @@ xhr.onerror = function() {
   noNetworkWin.open();
 }
 
+// THrobber
+Ti.App.throbberView = Ti.UI.createView({
+  width: 100,
+  height: 100
+});
 
+Ti.App.stopWatch = Ti.UI.createImageView({
+  image: 'images/stopwatch.png',
+});
+Ti.App.throbberView.add(Ti.App.stopWatch);
+
+Ti.App.watchHand = Ti.UI.createImageView({
+  image: 'images/watchhand.png',
+  height: 73,
+  width: 73,
+  bottom: 6,
+  left: 12,
+  backgroundColor: 'transparent',
+  anchorPoint : {
+    x : 0.5,
+    y : 0.5
+  },
+});
+Ti.App.throbberTransform = Ti.UI.create2DMatrix();
+// t = t.rotate(3); // in degrees
+// matrix2d = matrix2d.scale(1.5); // scale to 1.5 times original size
+Ti.App.throbberAnimation = Ti.UI.createAnimation({
+  transform: Ti.App.throbberTransform,
+  duration: 10,
+});
+Ti.App.throbberView.add(Ti.App.watchHand);
+
+var throbberInterval;
+
+Ti.App.addEventListener('stopThrobberInterval', function() {
+  clearInterval(throbberInterval);
+});
+
+Ti.App.showThrobber = function(win) {
+  win.add(Ti.App.throbberView);
+  throbberInterval = setInterval(function() {
+    Ti.App.throbberTransform = Ti.App.throbberTransform.rotate(3);
+    Ti.App.throbberAnimation.transform = Ti.App.throbberTransform;
+    Ti.App.watchHand.animate(Ti.App.throbberAnimation);
+  }, 20);
+}

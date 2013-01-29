@@ -108,26 +108,9 @@ if(Titanium.App.Properties.getInt("userUid")) {
   });
   
   view.add(updateButton);
-  
-  var actInd = Titanium.UI.createActivityIndicator({
-    top: 250,
-    width: Ti.UI.SIZE,
-    height: Ti.UI.SIZE,
-    style: Ti.UI.iPhone.ActivityIndicatorStyle.BIG,
-    font: {
-        fontFamily: 'Helvetica Neue',
-        fontSize: 15,
-        fontWeight: 'bold'
-    },
-    message: 'Updating...',
-    width: 210,
-    indicatorColor: '#000',
-  });
-  view.add(actInd);
 	
   function loadSettings() {
-    actInd.message = 'Loading...';
-    actInd.show();
+    Ti.App.showThrobber(win);
     var uid = Titanium.App.Properties.getString("userUid");
     var sessid = Titanium.App.Properties.getString("userSessionId");
     var session_name = Titanium.App.Properties.getString("userSessionName");
@@ -138,14 +121,16 @@ if(Titanium.App.Properties.getInt("userUid")) {
     xhr.setRequestHeader('Cookie', session_name+'='+sessid);
     xhr.send();
     xhr.onload = function() {
-      actInd.hide();
+      Ti.App.fireEvent('stopThrobberInterval');
+      win.remove(Ti.App.throbberView);
       if(xhr.status == 200) {
         var data = JSON.parse(xhr.responseText);
         mailTextfield.value = data.mail;
         updateButton.enabled = true;
       }
       xhr.onerror = function() {
-        actInd.hide();
+        Ti.App.fireEvent('stopThrobberInterval');
+        win.remove(Ti.App.throbberView);
         Ti.API.info(xhr.status);
         Ti.API.info(xhr.responseText);
       }
@@ -163,8 +148,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
       alert("The current and the new password are the same.");
     }
     else {
-      actInd.message = 'Updating...';
-      actInd.show();
+      Ti.App.showThrobber(win);
       var updateUser = {
         data:{
           mail: mailTextfield.value,
@@ -185,7 +169,8 @@ if(Titanium.App.Properties.getInt("userUid")) {
       userXhr.send(JSON.stringify(updateUser));
       userXhr.onload = function() {
         if (userXhr.status == 200) {
-          actInd.hide();
+          Ti.App.fireEvent('stopThrobberInterval');
+          win.remove(Ti.App.throbberView);
           if (passwordTextfield.value != '') {
             var cookie = userXhr.getResponseHeader('Set-Cookie');
             var newSession = cookie.split(';', 1);
@@ -198,7 +183,8 @@ if(Titanium.App.Properties.getInt("userUid")) {
         }
       }
       userXhr.onerror = function() {
-        actInd.hide();
+        Ti.App.fireEvent('stopThrobberInterval');
+        win.remove(Ti.App.throbberView);
         Ti.API.info(userXhr.responseText);
         Ti.API.info('onerror');
         var statusCode = userXhr.status;
