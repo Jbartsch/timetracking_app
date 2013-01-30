@@ -43,7 +43,6 @@ function loadProjects() {
       var results = new Array();
       for(var key in result) {
         var data = result[key];
-        Ti.API.info(JSON.stringify(data));
         var row = Titanium.UI.createTableViewRow({
           nid: data.nid,
           titleName: data.title,
