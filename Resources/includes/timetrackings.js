@@ -81,20 +81,22 @@ function loadView() {
         var dateView = Titanium.UI.createView({
           left: 0,
           width: 128,
-          top: 46,
+          top: 35,
         });
         row.add(dateView);
         var timeLabel = Titanium.UI.createLabel({
           text: data.timebegin + ' - ' + data.timeend,
           font: {fontSize: '9', fontFamily:"Open Sans", fontWeight: 'light'},
           right: 0,
+          height: 9,
         });
         dateView.add(timeLabel);
         var dateLabel = Titanium.UI.createLabel({
           text: day + '.' + month + '.' + year,
           font: {fontSize: '9', fontFamily:"Open Sans", fontWeight: 'light'},
-          top: 14,
+          top: 25,
           right: 0,
+          height: 9,
         });
         dateView.add(dateLabel);
         var projectLabel = Titanium.UI.createLabel({
