@@ -78,37 +78,53 @@ function loadView() {
           left: 10,
         });
         row.add(durationLabel);
+        var dateView = Titanium.UI.createView({
+          left: 0,
+          width: 128,
+          top: 46,
+        });
+        row.add(dateView);
+        var timeLabel = Titanium.UI.createLabel({
+          text: data.timebegin + ' - ' + data.timeend,
+          font: {fontSize: '9', fontFamily:"Open Sans", fontWeight: 'light'},
+          right: 0,
+        });
+        dateView.add(timeLabel);
         var dateLabel = Titanium.UI.createLabel({
           text: day + '.' + month + '.' + year,
           font: {fontSize: '9', fontFamily:"Open Sans", fontWeight: 'light'},
-          top: 50,
-          right: 196,
+          top: 14,
+          right: 0,
         });
-        row.add(dateLabel);
-        var titleLabel = Titanium.UI.createLabel({
-          text: data.title,
-          font: {fontSize: '14', fontFamily:"Open Sans", fontWeight: 'light'},
+        dateView.add(dateLabel);
+        var projectLabel = Titanium.UI.createLabel({
+          text: data.project,
+          font: {fontSize: '14', fontFamily:"Open Sans", fontWeight: 'bold'},
           top: 8,
           left: 150,
-          ellipsize: true,
-          height: 40,
+          height: 20,
+          verticalAlign: Titanium.UI.TEXT_VERTICAL_ALIGNMENT_TOP,
         });
-        row.add(titleLabel);
-        // var titleLabel = Titanium.UI.createLabel({
-          // text: data.title,
-          // font: {fontWeight: 'bold', fontSize:18},
-          // top: 35,
-          // left: 5,
-        // });
-        // row.add(titleLabel);
-        // var timeLabel = Titanium.UI.createLabel({
-          // text: data.timebegin + ' - ' + data.timeend,
-          // top: 5,
-          // right: 5,
-        // });
-        // row.add(timeLabel);
-        
-        
+        row.add(projectLabel);
+        var clientLabel = Titanium.UI.createLabel({
+          text: data.organization,
+          font: {fontSize: '14', fontFamily:"Open Sans", fontWeight: 'light'},
+          top: 24,
+          left: 150,
+          height: 20,
+          verticalAlign: Titanium.UI.TEXT_VERTICAL_ALIGNMENT_TOP,
+        });
+        row.add(clientLabel);
+        var titleLabel = Titanium.UI.createLabel({
+          text: data.title,
+          font: {fontSize: '12', fontFamily:"Open Sans", fontWeight: 'light'},
+          top: 48,
+          left: 150,
+          ellipsize: true,
+          height: 12,
+          verticalAlign: Titanium.UI.TEXT_VERTICAL_ALIGNMENT_TOP,
+        });
+        row.add(titleLabel);        
         results.push(row);
         // results[key] = {title: title, nid:data.nid};
       }
