@@ -43,7 +43,28 @@ function loadProjects() {
       var results = new Array();
       for(var key in result) {
         var data = result[key];
-        results[key] = {title: data.title, nid:data.nid};
+        Ti.API.info(JSON.stringify(data));
+        var row = Titanium.UI.createTableViewRow({
+          nid: data.nid,
+          titleName: data.title,
+          className: 'projectRow',
+          height: 60,
+        });
+        var titleLabel = Titanium.UI.createLabel({
+          text: data.title,
+          font: {fontWeight: 'bold', fontSize:20},
+          top: 5,
+          left: 5,
+        });
+        row.add(titleLabel);
+        var clientLabel = Titanium.UI.createLabel({
+          text: data.organization_title,
+          top: 35,
+          left: 5,
+        });
+        row.add(clientLabel);
+        results.push(row);
+        // results[key] = {title: data.title, nid:data.nid};
       }
   
       table = Titanium.UI.createTableView({
@@ -62,7 +83,7 @@ function loadProjects() {
           url:'edit-project.js',
           backgroundColor: '#D8D8D8',
           barColor: '#009900',
-          title:e.rowData.title,
+          title:e.rowData.titleName,
           nid:e.rowData.nid,
           touchEnabled: true,
           tabBarHidden: true,
