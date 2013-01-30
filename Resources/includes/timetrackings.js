@@ -55,43 +55,60 @@ function loadView() {
         }
         var year = date.getFullYear();
         title = day + '.' + month + '.' + year + '   ' + data.timebegin + ' - ' + data.timeend;
-        var row = Titanium.UI.createTableViewRow({
-          nid: data.nid,
-          titleName: data.title,
-          className: 'timetrackingRow',
-          height: 60,
-        });
-        var dateLabel = Titanium.UI.createLabel({
-          text: day + '.' + month + '.' + year,
-          top: 5,
-          left: 5,
-        });
-        row.add(dateLabel);
-        var titleLabel = Titanium.UI.createLabel({
-          text: data.title,
-          font: {fontWeight: 'bold', fontSize:18},
-          top: 35,
-          left: 5,
-        });
-        row.add(titleLabel);
-        var timeLabel = Titanium.UI.createLabel({
-          text: data.timebegin + ' - ' + data.timeend,
-          top: 5,
-          right: 5,
-        });
-        row.add(timeLabel);
         var hours = Math.floor(data.duration);
         if (hours < 10) {
           hours = '0' + hours;
         }
         var minDec = data.duration - hours;
         var mins = Math.round(60 * minDec);
+        if (mins < 10) {
+          mins = '0' + mins;
+        }
+        var row = Titanium.UI.createTableViewRow({
+          nid: data.nid,
+          titleName: data.title,
+          className: 'timetrackingRow',
+          height: 75,
+        });
         var durationLabel = Titanium.UI.createLabel({
-          text: 'Duration: ' + hours + ':' + mins,
-          top: 35,
-          right: 5,
+          text: hours + ':' + mins,
+          font: {fontSize: '45', fontFamily:"Open Sans", fontWeight: 'bold'},
+          color: '#8CC63F',
+          top: -5,
+          left: 10,
         });
         row.add(durationLabel);
+        var dateLabel = Titanium.UI.createLabel({
+          text: day + '.' + month + '.' + year,
+          font: {fontSize: '9', fontFamily:"Open Sans", fontWeight: 'light'},
+          top: 50,
+          right: 196,
+        });
+        row.add(dateLabel);
+        var titleLabel = Titanium.UI.createLabel({
+          text: data.title,
+          font: {fontSize: '14', fontFamily:"Open Sans", fontWeight: 'light'},
+          top: 8,
+          left: 150,
+          ellipsize: true,
+          height: 40,
+        });
+        row.add(titleLabel);
+        // var titleLabel = Titanium.UI.createLabel({
+          // text: data.title,
+          // font: {fontWeight: 'bold', fontSize:18},
+          // top: 35,
+          // left: 5,
+        // });
+        // row.add(titleLabel);
+        // var timeLabel = Titanium.UI.createLabel({
+          // text: data.timebegin + ' - ' + data.timeend,
+          // top: 5,
+          // right: 5,
+        // });
+        // row.add(timeLabel);
+        
+        
         results.push(row);
         // results[key] = {title: title, nid:data.nid};
       }
@@ -110,8 +127,8 @@ function loadView() {
       table.addEventListener('click',function(e) {
         var nodeWindow = Titanium.UI.createWindow({
           url:'edit-timetracking.js',
-          backgroundColor: '#D8D8D8',
-          barColor: '#009900',
+          backgroundImage: '../images/background_green.png',
+          barColor: '#383838',
           title:e.rowData.titleName,
           nid:e.rowData.nid,
           touchEnabled: true,

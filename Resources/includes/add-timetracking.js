@@ -140,15 +140,65 @@ if(Titanium.App.Properties.getInt("userUid")) {
   });
   
   win.add(picker_view);
-
-  // Create the textfield to hold the node title
-  var nodeTitleTextfield = Titanium.UI.createTextField({
-    hintText:"Description",
+  
+  var clientButton = Titanium.UI.createButton({
+    title:"Choose a client",
+    backgroundImage: '../images/select.png',
+    color: '#666666',
+    font: {fontFamily:"Open Sans", fontWeight: 'light'},
     height:35,
+    width:280,
     top:10,
-    left:10,
-    width:300,
-    font:{fontSize:16},
+  });
+  
+  clientButton.addEventListener('click', function() {
+    hideKeyboard();
+    showClientPicker();
+  });
+  
+  view.add(clientButton)
+  
+  var projectButton = Titanium.UI.createButton({
+    title:"Choose a project",
+    backgroundImage: '../images/select.png',
+    color: '#666666',
+    font: {fontFamily:"Open Sans", fontWeight: 'light'},
+    height:35,
+    width:280,
+    top:55,
+  });
+  
+  projectButton.addEventListener('click', function() {
+    hideKeyboard();
+    if (clientnid == 0) {
+      alert('Please pick a client first.');
+    }
+    else {
+      showProjectPicker(); 
+    }
+  });
+  
+  view.add(projectButton);
+  
+  // var beginLabel = Titanium.UI.createLabel({
+    // text:'From',
+    // font: {fontSize: 12, fontFamily:"Open Sans", fontWeight: 'light'},
+    // left:35,
+    // top:100,
+    // width:50,
+    // height:35,
+  // });
+//   
+  // view.add(beginLabel);
+
+  // Create the textarea to hold the body
+  var beginText = Titanium.UI.createTextField({
+    hintText: 'From',
+    top:145,
+    height:35,
+    left:20,
+    width:135,
+    font: {fontFamily:"Open Sans", fontWeight: 'light'},
     borderWidth:1,
     borderColor:'#bbb',
     borderRadius:3,
@@ -157,10 +207,53 @@ if(Titanium.App.Properties.getInt("userUid")) {
     backgroundColor: 'white',
   });
 
-  // Add the textfield to the window
-  view.add(nodeTitleTextfield);
+  // Add the textarea to the window
+  view.add(beginText);
 
+  // // Create the label for the date
+  // var endLabel = Titanium.UI.createLabel({
+    // text:'To',
+    // font: {fontSize: 12, fontFamily:"Open Sans", fontWeight: 'light'},
+    // left:135,
+    // top:100,
+    // height:40,
+    // width:30,
+  // });
+// 
+  // // Add the label to the window
+  // view.add(endLabel);
   var currentDate = new Date();
+  var hours = currentDate.getHours().toString();
+  var minutes = currentDate.getMinutes().toString();
+  if (hours.length == 1) {
+    hours = '0' + hours;
+  }
+  if (minutes.length == 1) {
+    minutes = '0' + minutes;
+  }
+  
+  var endTime = hours+':'+minutes; 
+
+  // Create the textarea to hold the body
+  var endText = Titanium.UI.createTextField({
+    hintText: 'To',
+    value:endTime,
+    top:145,
+    height:35,
+    right:20,
+    width:135,
+    font: {fontFamily:"Open Sans", fontWeight: 'light'},
+    borderWidth:1,
+    borderColor:'#bbb',
+    borderRadius:3,
+    paddingLeft: 5,
+    paddingRight: 5,
+    backgroundColor: 'white',
+  });
+
+  // Add the textarea to the window
+  view.add(endText);
+  
   var day = currentDate.getDate().toString();
   var month = (currentDate.getMonth() + 1).toString();
   var monthString = monthNames[currentDate.getMonth()];
@@ -177,10 +270,12 @@ if(Titanium.App.Properties.getInt("userUid")) {
   
   var dateChangeButton = Titanium.UI.createButton({
     title:currentDateText,
+    backgroundImage: '../images/cal_picker.png',
+    color: '#666666',
+    font: {fontFamily:"Open Sans", fontWeight: 'light'},
     height:35,
-    top:55,
-    left:10,
-    width:300
+    top:190,
+    width:280,
   });
   
   dateChangeButton.addEventListener('click', function() {
@@ -192,24 +287,13 @@ if(Titanium.App.Properties.getInt("userUid")) {
   // Add the label & button to the view
   view.add(dateChangeButton);
 
-  var beginLabel = Titanium.UI.createLabel({
-    text:'From',
-    left:10,
-    top:100,
-    width:50,
-    height:40,
-  });
-  
-  view.add(beginLabel);
-
-  // Create the textarea to hold the body
-  var beginText = Titanium.UI.createTextField({
-    right:10,
-    top:100,
-    height:35,
-    left:65,
-    width:60,
-    font:{fontSize:16},
+  // Create the textfield to hold the node title
+  var nodeTitleTextfield = Titanium.UI.createTextArea({
+    hintText:"Description",
+    height:80,
+    top:235,
+    width:280,
+    font: {fontFamily:"Open Sans", fontWeight: 'light'},
     borderWidth:1,
     borderColor:'#bbb',
     borderRadius:3,
@@ -218,90 +302,23 @@ if(Titanium.App.Properties.getInt("userUid")) {
     backgroundColor: 'white',
   });
 
-  // Add the textarea to the window
-  view.add(beginText);
-
-  // Create the label for the date
-  var endLabel = Titanium.UI.createLabel({
-    text:'To',
-    left:135,
-    top:100,
-    height:40,
-    width:30,
-  });
-
-  // Add the label to the window
-  view.add(endLabel);
-
-  var hours = currentDate.getHours().toString();
-  var minutes = currentDate.getMinutes().toString();
-  if (hours.length == 1) {
-    hours = '0' + hours;
-  }
-  if (minutes.length == 1) {
-    minutes = '0' + minutes;
-  }
-  
-  var endTime = hours+':'+minutes; 
-
-  // Create the textarea to hold the body
-  var endText = Titanium.UI.createTextField({
-    value:endTime,
-    top:100,
-    height:35,
-    left:165,
-    width:60,
-    font:{fontSize:16},
-    borderWidth:1,
-    borderColor:'#bbb',
-    borderRadius:3,
-    paddingLeft: 5,
-    paddingRight: 5,
-    backgroundColor: 'white',
-  });
-
-  // Add the textarea to the window
-  view.add(endText);
-  
-  var clientButton = Titanium.UI.createButton({
-    title:"Choose a client",
-    height:40,
-    width:300,
-    top:150,
-  });
-  
-  clientButton.addEventListener('click', function() {
-    hideKeyboard();
-    showClientPicker();
-  });
-  
-  view.add(clientButton)
-  
-  var projectButton = Titanium.UI.createButton({
-    title:"Choose a project",
-    height:40,
-    width:300,
-    top:200,
-  });
-  
-  projectButton.addEventListener('click', function() {
-    hideKeyboard();
-    if (clientnid == 0) {
-      alert('Please pick a client first.');
-    }
-    else {
-      showProjectPicker(); 
-    }
-  });
-  
-  view.add(projectButton);
+  // Add the textfield to the window
+  view.add(nodeTitleTextfield);
 
   // Add the save button
   var saveButton = Titanium.UI.createButton({
     title:'Save',
+    backgroundImage: 'none',
+    backgroundGradient: {
+      type: 'linear',
+      startPoint: { x: '50%', y: '0%' },
+      endPoint: { x: '50%', y: '100%' },
+      colors: [ { color: '#3536363', offset: 0.0}, { color: '747674', offset: 1.0 } ],
+    },
+    font: {fontFamily:"Open Sans", fontWeight: 'light'},
     height:35,
-    width:150,
-    top:260
+    width:280,
+    bottom:10
   });
 
   // Add the button to the window
@@ -500,7 +517,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
     var timetrackingsWindow = Titanium.UI.createWindow({
       url:'timetrackings.js',
       backgroundColor: '#D8D8D8',
-      barColor: '#009900',
+      barColor: '#383838',
       touchEnabled: true,
       tabBarHidden: true,
     });

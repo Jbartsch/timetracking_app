@@ -8,14 +8,26 @@ var user = {
   sessid: Titanium.App.Properties.getString("userSessionId"),
   session_name: Titanium.App.Properties.getString("userSessionName"),
 }
+
+// Ti.App.titleBarLabel = Titanium.UI.createLabel({
+    // color:'#000',
+    // height:18,
+    // width:210,
+    // top:10,
+    // text:'A Trebuchet TItle',
+    // textAlign:'center',
+    // font:{fontFamily:'Trebuchet MS',fontSize:10,fontWeight:'bold'},
+    // shadowColor:'#eee',shadowOffset:{x:0,y:1}
+// });
+
 Ti.App.buildTabGroup = function buildTabGroup() {
   var tabGroup = Titanium.UI.createTabGroup();
 
   // Create the timetracking add window
   var timeWin = Ti.UI.createWindow({
     title: 'Add Timetracking',
-    backgroundColor: '#D8D8D8',
-    barColor: '#009900',
+    backgroundImage: 'images/background_green.png',
+    barColor: '#383838',
     url: 'includes/add-timetracking.js'
   });
   
@@ -30,7 +42,7 @@ Ti.App.buildTabGroup = function buildTabGroup() {
   var clientsWin = Ti.UI.createWindow({
     title: "Clients",
     backgroundColor: '#D8D8D8',
-    barColor: '#009900',
+    barColor: '#383838',
     url: 'includes/clients.js',
   });
   
@@ -45,7 +57,7 @@ Ti.App.buildTabGroup = function buildTabGroup() {
   var projectsWin = Ti.UI.createWindow({
     title: "Projects",
     backgroundColor: '#D8D8D8',
-    barColor: '#009900',
+    barColor: '#383838',
     url: 'includes/projects.js',
   });
   
@@ -60,7 +72,7 @@ Ti.App.buildTabGroup = function buildTabGroup() {
   var settingsWin = Ti.UI.createWindow({
     title: "Settings",
     backgroundColor: '#D8D8D8',
-    barColor: '#009900',
+    barColor: '#383838',
     url: 'includes/settings.js',
   });
   

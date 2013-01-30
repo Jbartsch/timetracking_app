@@ -60,8 +60,8 @@ function loadClients() {
       table.addEventListener('click',function(e) {
         var nodeWindow = Titanium.UI.createWindow({
           url:'edit-client.js',
-          backgroundColor: '#D8D8D8',
-          barColor: '#009900',
+          backgroundImage: '../images/background_green.png',
+          barColor: '#383838',
           title:e.rowData.title,
           nid:e.rowData.nid,
           touchEnabled: true,
@@ -113,8 +113,8 @@ rightButton.addEventListener("click", function() {
   var nodeWindow = Titanium.UI.createWindow({
     title:'Add client',
     url:'add-client.js',
-    backgroundColor: '#D8D8D8',
-    barColor: '#009900',
+    backgroundImage: '../images/background_green.png',
+    barColor: '#383838',
     touchEnabled: true,
     tabBarHidden: true,
   });

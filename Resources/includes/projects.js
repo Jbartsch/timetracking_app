@@ -80,8 +80,8 @@ function loadProjects() {
       table.addEventListener('click',function(e) {
         var nodeWindow = Titanium.UI.createWindow({
           url:'edit-project.js',
-          backgroundColor: '#D8D8D8',
-          barColor: '#009900',
+          backgroundImage: '../images/background_green.png',
+          barColor: '#383838',
           title:e.rowData.titleName,
           nid:e.rowData.nid,
           touchEnabled: true,
@@ -132,8 +132,8 @@ rightButton.addEventListener("click", function() {
   var nodeWindow = Titanium.UI.createWindow({
     title:'Add project',
     url:'add-project.js',
-    backgroundColor: '#D8D8D8',
-    barColor: '#009900',
+    backgroundImage: '../images/background_green.png',
+    barColor: '#383838',
     touchEnabled: true,
     tabBarHidden: true,
   });
