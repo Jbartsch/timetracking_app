@@ -61,27 +61,33 @@ var clientnid = 0;
 var projectnid = 0;
 var total = 0;
 
+var durationView = Ti.UI.createView({
+  top: 0,
+  height: 40,
+  backgroundColor: '#000',
+  opacity: 0.8,
+  width: 320,
+})
+view.add(durationView);
 var duration1 = Titanium.UI.createLabel({
   text: 'All Clients All Projects',
   font: {fontSize: '13', fontFamily:"Open Sans", fontWeight: 'bold'},
   top: 0,
   height: 20,
-  backgroundColor: '#000',
-  opacity: 0.8,
   color: '#FFF',
   width: 320,
+  left: 10,
 });
-view.add(duration1);
+durationView.add(duration1);
 var duration2 = Titanium.UI.createLabel({
   font: {fontSize: '13', fontFamily:"Open Sans", fontWeight: 'bold'},
   top: 20,
   height: 20,
-  backgroundColor: '#000',
-  opacity: 0.8,
   color: '#FFF',
   width: 320,
+  left: 10,
 });
-view.add(duration2);
+durationView.add(duration2);
 
 var datetxt = '';
 var monthNames = [ "January", "February", "March", "April", "May", "June",
@@ -96,9 +102,14 @@ var datePicker = Ti.UI.createPicker({
 });
 picker_view.add(datePicker);
 
-var startTime = 0;
+var currentDate = new Date();
+var currentDay = currentDate.getDate();
+var currentMonth = monthNames[currentDate.getMonth()];
+var currentYear = currentDate.getFullYear();
+var currentTime = Date.parse(currentMonth + ' ' + currentDay + ', ' + currentYear) / 1000;
+var startTime = currentTime - 604800;
 var startClicked = 0;
-var endTime = 0;
+var endTime = currentTime + 84599;
 var endClicked = 0;
 
 var trackingdate = 0;
@@ -117,9 +128,11 @@ datePicker.addEventListener('change',function(e){
   trackingdate = monthString + ' ' + day + ', ' + year;
   if (startClicked == 1) {
     startTime = (Date.parse(trackingdate) / 1000);
+    startButton.title = trackingdate;
   }
   if (endClicked == 1) {
-    endTime = (Date.parse(trackingdate) / 1000);
+    endTime = (Date.parse(trackingdate) / 1000) + 84600;
+    endButton.title = trackingdate;
   }
 });
 
@@ -465,7 +478,7 @@ var startButton = Titanium.UI.createButton({
   },
   font: {fontFamily:"Open Sans", fontWeight: 'light'},
   height:35,
-  width:160,
+  width:159,
   left: 0,
   bottom: 0,
 })

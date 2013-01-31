@@ -14,19 +14,19 @@ var view = Titanium.UI.createView({
 // Add our scrollview to the window
 win.add(view);
 
-var loginText = Titanium.UI.createTextArea({
-  editable: '0',
-  text:'Welcome message',
-  value: 'Please provide your login credentials.',
-  font:{fontSize:16, fontFamily:"Open Sans", fontWeight: "light"},
-  color: 'white',
-  top:30,
-  width:280,
-  height:'auto',
-  backgroundColor: 'transparent',
-});
-
-view.add(loginText);
+// var loginText = Titanium.UI.createTextArea({
+  // editable: '0',
+  // text:'Welcome message',
+  // value: 'Please provide your login credentials.',
+  // font:{fontSize:16, fontFamily:"Open Sans", fontWeight: "light"},
+  // color: 'white',
+  // top:30,
+  // width:280,
+  // height:'auto',
+  // backgroundColor: 'transparent',
+// });
+// 
+// view.add(loginText);
 
 // Create the username textfield
 var usernameTextfield = Titanium.UI.createTextField({
@@ -147,6 +147,21 @@ loginButton.addEventListener('click', function() {
     }
   }
 });
+
+
+var forgotLabel = Titanium.UI.createLabel({
+  text:'Request new password',
+  width:'auto',
+  top:235,
+  font: {fontFamily:"Open Sans", fontWeight: 'light'},
+  color: 'white',
+})
+
+view.add(forgotLabel);
+
+forgotLabel.addEventListener('click', function(){
+  Ti.Platform.openURL(SITE_PATH + "user/password");
+})
 
 var registerButton = Titanium.UI.createButton({
   title:'Register',

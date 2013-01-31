@@ -13,14 +13,11 @@ var registerView = Titanium.UI.createScrollView({
 
 win.add(registerView);
 
-var registerText = Titanium.UI.createTextArea({
-  editable: '0',
-  text:'Welcome message',
-  value: 'Please provide your data.',
+var registerText = Titanium.UI.createLabel({
+  text: 'Register for new account',
   font:{fontSize:16, fontFamily:"Open Sans", fontWeight: "light"},
   color: 'white',
-  top:30,
-  width:280,
+  top:40,
   height:'auto',
   backgroundColor: 'transparent',
 });
