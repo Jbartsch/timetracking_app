@@ -51,7 +51,8 @@ var spacer =  Titanium.UI.createButton({
  
 var toolbar =  Titanium.UI.iOS.createToolbar({
   top:0,
-  items:[cancel,spacer,done]
+  items:[cancel,spacer,done],
+  barColor: '#383838',
 });
  
 picker_view.add(toolbar);
@@ -355,7 +356,7 @@ filterButton.addEventListener('click', function() {
 filterView.add(filterButton);
 
 var rightButton = Ti.UI.createButton({
-  backgroundImage: '../images/filter-24.png',
+  backgroundImage: '../images/filter.png',
   height: 24,
   width: 24,
 });

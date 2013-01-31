@@ -87,7 +87,8 @@ if(Titanium.App.Properties.getInt("userUid")) {
        
       var toolbar =  Titanium.UI.iOS.createToolbar({
         top:0,
-        items:[cancel,spacer,done]
+        items:[cancel,spacer,done],
+        barColor: '#383838',
       });
        
       picker_view.add(toolbar);
