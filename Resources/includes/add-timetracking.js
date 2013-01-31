@@ -56,13 +56,10 @@ if(Titanium.App.Properties.getInt("userUid")) {
     items:[cancel,spacer,done]
   });
    
-   
   picker_view.add(toolbar);
   
   var clientnid = 0;
-  
   var projectnid = 0;
-  
   
   var datetxt = '';
   var monthNames = [ "January", "February", "March", "April", "May", "June",
@@ -156,7 +153,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
     showClientPicker();
   });
   
-  view.add(clientButton)
+  view.add(clientButton);
   
   var projectButton = Titanium.UI.createButton({
     title:"Choose a project",

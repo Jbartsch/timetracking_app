@@ -58,7 +58,7 @@ function loadProjects() {
         row.add(titleLabel);
         var clientLabel = Titanium.UI.createLabel({
           text: data.organization_title,
-          font: {fontFamily:"Open Sans", fontWeight: 'light', fontSize: 16},
+          font: {fontFamily:"Open Sans", fontWeight: 'light', fontSize: 14},
           top: 35,
           left: 5,
         });

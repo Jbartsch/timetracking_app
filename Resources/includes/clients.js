@@ -72,7 +72,7 @@ function loadClients() {
         }
         var addressLabel = Titanium.UI.createLabel({
           text: address,
-          font: {fontFamily:"Open Sans", fontWeight: 'light', fontSize: 16},
+          font: {fontFamily:"Open Sans", fontWeight: 'light', fontSize: 14},
           top: 35,
           left: 5,
         });

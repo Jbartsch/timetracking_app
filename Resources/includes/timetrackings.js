@@ -10,6 +10,9 @@ Ti.include('../config.js');
 // Define the variable win to contain the current window
 var win = Ti.UI.currentWindow;
 
+var slide_in =  Titanium.UI.createAnimation({bottom:0});
+var slide_out =  Titanium.UI.createAnimation({bottom:-251});
+
 // Create the scrollview
 var view = Titanium.UI.createView({
   contentWidth:'auto',
@@ -21,12 +24,94 @@ var view = Titanium.UI.createView({
 // Add our scrollview to the window
 win.add(view);
 
+var picker_view = Titanium.UI.createView({
+  height:251,
+  bottom:-251,
+  zIndex:100
+});
+
+var clientPicker;
+var clientPickerAdded = 0;
+var projectPicker;
+var projectPickerAdded = 0;
+ 
+var cancel =  Titanium.UI.createButton({
+  title:'Cancel',
+  style:Titanium.UI.iPhone.SystemButtonStyle.BORDERED
+});
+ 
+var done =  Titanium.UI.createButton({
+  title:'Done',
+  style:Titanium.UI.iPhone.SystemButtonStyle.DONE
+});
+ 
+var spacer =  Titanium.UI.createButton({
+  systemButton:Titanium.UI.iPhone.SystemButton.FLEXIBLE_SPACE
+});
+ 
+var toolbar =  Titanium.UI.iOS.createToolbar({
+  top:0,
+  items:[cancel,spacer,done]
+});
+ 
+picker_view.add(toolbar);
+
+var clientnid = 0;
+var projectnid = 0;
+
+done.addEventListener('click',function() {
+  if (clientPickerAdded == 1) {
+    clientButton.title =  clientPicker.getSelectedRow(0).title;
+    clientnid = clientPicker.getSelectedRow(0).nid;
+    picker_view.animate(slide_out);
+    setTimeout(function(){
+      picker_view.remove(clientPicker);
+    }, 500);
+    clientPickerAdded == 0;
+  }
+  
+  if (projectPickerAdded == 1) {
+    projectButton.title =  projectPicker.getSelectedRow(0).title;
+    projectnid = projectPicker.getSelectedRow(0).nid;
+    picker_view.animate(slide_out);
+    setTimeout(function(){
+      picker_view.remove(projectPicker);
+    }, 500);
+    projectPickerAdded = 0;
+  }
+
+  // if (datePicker.visible == 1) {
+    // dateChangeButton.title = trackingdate;
+    // picker_view.animate(slide_out);
+    // setTimeout(function(){
+      // datePicker.hide();
+    // }, 500);
+  // }
+});
+
+cancel.addEventListener('click', function() {
+  picker_view.animate(slide_out);
+  setTimeout(function() {
+    if (clientPickerAdded == 1) {
+      picker_view.remove(clientPicker);
+      clientPickerAdded == 0;
+    }
+    if (projectPickerAdded == 1) {
+      picker_view.remove(projectPicker);
+      projectPickerAdded = 0;
+    }
+    // datePicker.hide();
+  }, 500);
+});
+
+win.add(picker_view);
+
 var table;
 
 function loadView() {
   Ti.App.actIn.message = 'Loading...';
   win.add(Ti.App.actInView);
-  var url = REST_PATH + 'timetrackings.json';
+  var url = REST_PATH + 'stormtimetracking.json?organization=' + clientnid + '&project=' + projectnid;
   var xhr = Titanium.Network.createHTTPClient();
   xhr.open("GET",url);
   var sessName = Titanium.App.Properties.getString("userSessionName");
@@ -98,7 +183,7 @@ function loadView() {
         });
         dateView.add(dateLabel);
         var projectLabel = Titanium.UI.createLabel({
-          text: data.project,
+          text: data.project_title,
           font: {fontSize: '14', fontFamily:"Open Sans", fontWeight: 'bold'},
           top: 8,
           left: 150,
@@ -107,7 +192,7 @@ function loadView() {
         });
         row.add(projectLabel);
         var clientLabel = Titanium.UI.createLabel({
-          text: data.organization,
+          text: data.organization_title,
           font: {fontSize: '14', fontFamily:"Open Sans", fontWeight: 'light'},
           top: 24,
           left: 150,
@@ -191,3 +276,165 @@ function deleteRow(nid) {
 win.addEventListener("focus", function() {
   loadView();
 });
+
+// FILTER
+
+var filterIn =  Titanium.UI.createAnimation({top:0});
+var filterOut =  Titanium.UI.createAnimation({top:-150});
+
+var filter = 0;
+  
+var filterView = Titanium.UI.createView({
+  height: 150,
+  top: -150,
+  zIndex:100,
+});
+win.add(filterView);
+
+var filterBG = Titanium.UI.createView({
+  backgroundColor: '#000',
+  opacity: 0.8,
+})
+filterView.add(filterBG);
+
+var clientButton = Titanium.UI.createButton({
+  title:"Select a client",
+  backgroundImage: '../images/select.png',
+  color: '#666666',
+  font: {fontFamily:"Open Sans", fontWeight: 'light'},
+  height:35,
+  width:280,
+  top:10,
+});
+clientButton.addEventListener('click', function() {
+  showClientPicker();
+});
+filterView.add(clientButton);
+
+var projectButton = Titanium.UI.createButton({
+  title:"Select a project",
+  backgroundImage: '../images/select.png',
+  color: '#666666',
+  font: {fontFamily:"Open Sans", fontWeight: 'light'},
+  height:35,
+  width:280,
+  top:55,
+});
+
+projectButton.addEventListener('click', function() {
+  // if (clientnid == 0) {
+    // alert('Please pick a client first.');
+  // }
+  // else {
+    // showProjectPicker(); 
+  // }
+  showProjectPicker();
+});
+filterView.add(projectButton);
+
+var filterButton = Titanium.UI.createButton({
+  title:'Filter',
+  backgroundImage: 'none',
+  backgroundGradient: {
+    type: 'linear',
+    startPoint: { x: '50%', y: '0%' },
+    endPoint: { x: '50%', y: '100%' },
+    colors: [ { color: '#3536363', offset: 0.0}, { color: '747674', offset: 1.0 } ],
+  },
+  font: {fontFamily:"Open Sans", fontWeight: 'light'},
+  height:35,
+  width:280,
+  top:100
+});
+
+filterButton.addEventListener('click', function() {
+  filterView.animate(filterOut);
+  filter = 0;
+  loadView();
+});
+filterView.add(filterButton);
+
+var rightButton = Ti.UI.createButton({
+  backgroundImage: '../images/filter-24.png',
+  height: 24,
+  width: 24,
+});
+
+rightButton.addEventListener("click", function() {
+  if (filter == 0) {
+    filterView.animate(filterIn);
+    filter = 1;
+  }
+  else {
+    filterView.animate(filterOut);
+    filter = 0;
+  }
+});
+
+win.setRightNavButton(rightButton);
+
+function showClientPicker() {
+  var sessid = Titanium.App.Properties.getString("userSessionId");
+  var session_name = Titanium.App.Properties.getString("userSessionName");
+  var clientUrl = REST_PATH + 'organizations.json';
+  var clientXhr = Titanium.Network.createHTTPClient();
+  clientXhr.open("GET", clientUrl);
+  clientXhr.setRequestHeader('Cookie', session_name+'='+sessid);
+  clientXhr.send();
+  clientPicker = Ti.UI.createPicker({
+    top:43,
+    selectionIndicator:true
+  });
+  clientXhr.onload = function() {
+    var statusCode = clientXhr.status;
+    if(statusCode == 200) {
+      var response = clientXhr.responseText;
+      var result = JSON.parse(response);
+      var results = new Array();
+      var i = 0;
+      results[0] = Ti.UI.createPickerRow({title: 'Select a client', nid:0});
+      for(var key in result) {
+        var data = result[key];
+        i = i + 1;
+        results[i] = Ti.UI.createPickerRow({title: data.title, nid:data.nid}); 
+      }
+      clientPicker.add(results);
+      picker_view.add(clientPicker);
+      clientPickerAdded = 1;
+      picker_view.animate(slide_in);
+    }
+  }
+}
+
+function showProjectPicker() {
+  var sessid = Titanium.App.Properties.getString("userSessionId");
+  var session_name = Titanium.App.Properties.getString("userSessionName");
+  var projectUrl = REST_PATH + 'stormproject.json?organization=' + clientnid;
+  var projectXhr = Titanium.Network.createHTTPClient();
+  projectXhr.open("GET", projectUrl);
+  projectXhr.setRequestHeader('Cookie', session_name+'='+sessid);
+  projectXhr.send();
+  projectPicker = Ti.UI.createPicker({
+    top:43,
+    selectionIndicator:true,
+  });
+  projectXhr.onload = function() {
+    var statusCode = projectXhr.status;
+    if(statusCode == 200) {
+      var response = projectXhr.responseText;
+      var result = JSON.parse(response);
+      var results = new Array();
+      var i = 0;
+      results[0] = Ti.UI.createPickerRow({title: 'Select a project', nid:0});
+      for(var key in result) {
+        var data = result[key];
+        i = i + 1;
+        results[i] = Ti.UI.createPickerRow({title: data.title, nid:data.nid});
+      }
+      projectPicker.add(results);
+      picker_view.add(projectPicker);
+      projectPickerAdded = 1;
+      picker_view.animate(slide_in);
+    }
+  }
+}
