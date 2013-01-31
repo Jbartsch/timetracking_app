@@ -152,6 +152,12 @@ function loadView() {
           touchEnabled: true,
           tabBarHidden: true,
         });
+        titleBarLabel = Titanium.UI.createLabel({
+          text: e.rowData.titleName,
+          color:'#FFF',
+          font: {fontFamily:"Open Sans", fontWeight: 'bold', fontSize: 18},
+        });
+        nodeWindow.setTitleControl(titleBarLabel);
         Titanium.UI.currentTab.open(nodeWindow,{animated:true});
       });
   

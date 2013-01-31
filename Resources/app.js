@@ -9,17 +9,6 @@ var user = {
   session_name: Titanium.App.Properties.getString("userSessionName"),
 }
 
-// Ti.App.titleBarLabel = Titanium.UI.createLabel({
-    // color:'#000',
-    // height:18,
-    // width:210,
-    // top:10,
-    // text:'A Trebuchet TItle',
-    // textAlign:'center',
-    // font:{fontFamily:'Trebuchet MS',fontSize:10,fontWeight:'bold'},
-    // shadowColor:'#eee',shadowOffset:{x:0,y:1}
-// });
-
 Ti.App.buildTabGroup = function buildTabGroup() {
   var tabGroup = Titanium.UI.createTabGroup();
 
@@ -30,6 +19,12 @@ Ti.App.buildTabGroup = function buildTabGroup() {
     barColor: '#383838',
     url: 'includes/add-timetracking.js'
   });
+  titleBarLabel = Titanium.UI.createLabel({
+    text: 'Add Timetracking',
+    color:'#FFF',
+    font: {fontFamily:"Open Sans", fontWeight: 'bold', fontSize: 18},
+  });
+  timeWin.setTitleControl(titleBarLabel);
   
   // Create the timetracking tab
   var timeTab = Ti.UI.createTab({
@@ -45,6 +40,12 @@ Ti.App.buildTabGroup = function buildTabGroup() {
     barColor: '#383838',
     url: 'includes/clients.js',
   });
+  titleBarLabel = Titanium.UI.createLabel({
+    text: 'Clients',
+    color:'#FFF',
+    font: {fontFamily:"Open Sans", fontWeight: 'bold', fontSize: 18},
+  });
+  clientsWin.setTitleControl(titleBarLabel);
   
   // Create the project tab
   var clientsTab = Ti.UI.createTab({
@@ -60,6 +61,12 @@ Ti.App.buildTabGroup = function buildTabGroup() {
     barColor: '#383838',
     url: 'includes/projects.js',
   });
+  titleBarLabel = Titanium.UI.createLabel({
+    text: 'Projects',
+    color:'#FFF',
+    font: {fontFamily:"Open Sans", fontWeight: 'bold', fontSize: 18},
+  });
+  projectsWin.setTitleControl(titleBarLabel);
   
   // Create the project tab
   var projectsTab = Ti.UI.createTab({
@@ -71,10 +78,16 @@ Ti.App.buildTabGroup = function buildTabGroup() {
   // Create a new window here to show the form
   var settingsWin = Ti.UI.createWindow({
     title: "Settings",
-    backgroundColor: '#D8D8D8',
+    backgroundImage: 'images/background_green.png',
     barColor: '#383838',
     url: 'includes/settings.js',
   });
+  titleBarLabel = Titanium.UI.createLabel({
+    text: 'Settings',
+    color:'#FFF',
+    font: {fontFamily:"Open Sans", fontWeight: 'bold', fontSize: 18},
+  });
+  settingsWin.setTitleControl(titleBarLabel);
   
   // Create the settings tab
   var settingsTab = Ti.UI.createTab({
@@ -142,16 +155,30 @@ xhr.onerror = function() {
   noNetworkWin.open();
 }
 
-// THrobber
+// Throbber
 Ti.App.throbberView = Ti.UI.createView({
-  width: 100,
-  height: 100
+  width: 120,
+  height: 120,
 });
+
+Ti.App.throbberBackground = Ti.UI.createView({
+  width: 120,
+  height: 120,
+  backgroundColor: '#fff',
+  opacity: 0.5
+});
+Ti.App.throbberView.add(Ti.App.throbberBackground);
+
+Ti.App.throbberViewImage = Ti.UI.createView({
+  width: 100,
+  height: 100,
+})
+Ti.App.throbberView.add(Ti.App.throbberViewImage);
 
 Ti.App.stopWatch = Ti.UI.createImageView({
   image: 'images/stopwatch.png',
 });
-Ti.App.throbberView.add(Ti.App.stopWatch);
+Ti.App.throbberViewImage.add(Ti.App.stopWatch);
 
 Ti.App.watchHand = Ti.UI.createImageView({
   image: 'images/watchhand.png',
@@ -166,13 +193,12 @@ Ti.App.watchHand = Ti.UI.createImageView({
   },
 });
 Ti.App.throbberTransform = Ti.UI.create2DMatrix();
-// t = t.rotate(3); // in degrees
-// matrix2d = matrix2d.scale(1.5); // scale to 1.5 times original size
+
 Ti.App.throbberAnimation = Ti.UI.createAnimation({
   transform: Ti.App.throbberTransform,
   duration: 10,
 });
-Ti.App.throbberView.add(Ti.App.watchHand);
+Ti.App.throbberViewImage.add(Ti.App.watchHand);
 
 var throbberInterval;
 

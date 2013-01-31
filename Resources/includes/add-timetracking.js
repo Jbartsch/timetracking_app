@@ -179,17 +179,6 @@ if(Titanium.App.Properties.getInt("userUid")) {
   });
   
   view.add(projectButton);
-  
-  // var beginLabel = Titanium.UI.createLabel({
-    // text:'From',
-    // font: {fontSize: 12, fontFamily:"Open Sans", fontWeight: 'light'},
-    // left:35,
-    // top:100,
-    // width:50,
-    // height:35,
-  // });
-//   
-  // view.add(beginLabel);
 
   // Create the textarea to hold the body
   var beginText = Titanium.UI.createTextField({
@@ -210,18 +199,6 @@ if(Titanium.App.Properties.getInt("userUid")) {
   // Add the textarea to the window
   view.add(beginText);
 
-  // // Create the label for the date
-  // var endLabel = Titanium.UI.createLabel({
-    // text:'To',
-    // font: {fontSize: 12, fontFamily:"Open Sans", fontWeight: 'light'},
-    // left:135,
-    // top:100,
-    // height:40,
-    // width:30,
-  // });
-// 
-  // // Add the label to the window
-  // view.add(endLabel);
   var currentDate = new Date();
   var hours = currentDate.getHours().toString();
   var minutes = currentDate.getMinutes().toString();

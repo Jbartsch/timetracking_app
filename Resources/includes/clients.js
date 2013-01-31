@@ -43,7 +43,7 @@ function loadClients() {
       var results = new Array();
       for(var key in result) {
         var data = result[key];
-        results[key] = {title: data.title, nid:data.nid};
+        results[key] = {title: data.title, nid:data.nid, font: {fontFamily:"Open Sans", fontWeight: 'bold', fontSize: 20}};
       }
   
       table = Titanium.UI.createTableView({
@@ -67,7 +67,12 @@ function loadClients() {
           touchEnabled: true,
           tabBarHidden: true,
         });
-
+        titleBarLabel = Titanium.UI.createLabel({
+          text: e.rowData.title,
+          color:'#FFF',
+          font: {fontFamily:"Open Sans", fontWeight: 'bold', fontSize: 18},
+        });
+        nodeWindow.setTitleControl(titleBarLabel);
         Titanium.UI.currentTab.open(nodeWindow,{animated:true});
       });
   
@@ -118,7 +123,12 @@ rightButton.addEventListener("click", function() {
     touchEnabled: true,
     tabBarHidden: true,
   });
-
+  titleBarLabel = Titanium.UI.createLabel({
+    text: 'Add client',
+    color:'#FFF',
+    font: {fontFamily:"Open Sans", fontWeight: 'bold', fontSize: 18},
+  });
+  nodeWindow.setTitleControl(titleBarLabel);
   Titanium.UI.currentTab.open(nodeWindow,{animated:true});
 });
 

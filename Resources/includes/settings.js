@@ -18,13 +18,30 @@ if(Titanium.App.Properties.getInt("userUid")) {
 	// Add the view to the window
 	win.add(view);
 	
+	var mailTextfield = Titanium.UI.createTextField({
+    hintText:'E-Mail',
+    height:35,
+    top:10,
+    width:280,
+    font: {fontFamily:"Open Sans", fontWeight: 'light'},
+    borderWidth:1,
+    borderColor:'#bbb',
+    borderRadius:3,
+    autocapitalization:Titanium.UI.TEXT_AUTOCAPITALIZATION_NONE,
+    paddingLeft: 5,
+    paddingRight: 5,
+    color: 'black',
+    backgroundColor: 'white',
+  });
+  
+  view.add(mailTextfield);
+	
 	var currentPasswordTextfield = Titanium.UI.createTextField({
     hintText:'Current password',
     height:35,
-    top:10,
-    left:10,
-    width:300,
-    font:{fontSize:16},
+    top:55,
+    width:280,
+    font: {fontFamily:"Open Sans", fontWeight: 'light'},
     borderWidth:1,
     borderColor:'#bbb',
     borderRadius:3,
@@ -38,33 +55,13 @@ if(Titanium.App.Properties.getInt("userUid")) {
   
   view.add(currentPasswordTextfield);
 
-  var mailTextfield = Titanium.UI.createTextField({
-    hintText:'E-Mail',
-    height:35,
-    top:55,
-    left:10,
-    width:300,
-    font:{fontSize:16},
-    borderWidth:1,
-    borderColor:'#bbb',
-    borderRadius:3,
-    autocapitalization:Titanium.UI.TEXT_AUTOCAPITALIZATION_NONE,
-    paddingLeft: 5,
-    paddingRight: 5,
-    color: 'black',
-    backgroundColor: 'white',
-  });
-  
-  view.add(mailTextfield);
-
   // Create the password textfield
   var passwordTextfield = Titanium.UI.createTextField({
     hintText:'New password',
     height:35,
     top:100,
-    left:10,
-    width:300,
-    font:{fontSize:16},
+    width:280,
+    font: {fontFamily:"Open Sans", fontWeight: 'light'},
     borderWidth:1,
     borderColor:'#bbb',
     borderRadius:3,
@@ -82,9 +79,8 @@ if(Titanium.App.Properties.getInt("userUid")) {
     hintText:'Repeat password',
     height:35,
     top:145,
-    left:10,
-    width:300,
-    font:{fontSize:16},
+    width:280,
+    font: {fontFamily:"Open Sans", fontWeight: 'light'},
     borderWidth:1,
     borderColor:'#bbb',
     borderRadius:3,
@@ -100,11 +96,19 @@ if(Titanium.App.Properties.getInt("userUid")) {
   
   // Create the login button
   var updateButton = Titanium.UI.createButton({
-    title:'Update Profile',
-    height:40,
-    width:140,
-    top:200,
+    title:'Save changes',
     enabled:false,
+    backgroundImage: 'none',
+    backgroundGradient: {
+      type: 'linear',
+      startPoint: { x: '50%', y: '0%' },
+      endPoint: { x: '50%', y: '100%' },
+      colors: [ { color: '#3536363', offset: 0.0}, { color: '747674', offset: 1.0 } ],
+    },
+    font: {fontFamily:"Open Sans", fontWeight: 'light'},
+    height:35,
+    width:280,
+    top: 200,
   });
   
   view.add(updateButton);
@@ -212,14 +216,17 @@ if(Titanium.App.Properties.getInt("userUid")) {
 	// Add the save button
 	var logoutButton = Titanium.UI.createButton({
 		title:'Logout',
-		backgroundColor: '#f00',
 		backgroundImage: 'none',
-		borderRadius: 10,
-    borderWidth: 1,
-    borderColor: '#9CC1E6',
-		height:40,
-		width:250,
-		top:300
+    backgroundGradient: {
+      type: 'linear',
+      startPoint: { x: '50%', y: '0%' },
+      endPoint: { x: '50%', y: '100%' },
+      colors: [ { color: '#c00', offset: 0.0}, { color: '#f00', offset: 1.0 } ],
+    },
+    font: {fontFamily:"Open Sans", fontWeight: 'light'},
+		height:35,
+		width:280,
+		bottom:10
 	});
 
 	// Add the button to the window

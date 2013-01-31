@@ -59,9 +59,6 @@ if(Titanium.App.Properties.getInt("userUid")) {
   		// Parse (build data structure) the JSON response into an object (data)
   		var node = JSON.parse(response);
   		
-  		// ensure that the window title is set
-  		win.title = node.title;
-  		
       var slide_in =  Titanium.UI.createAnimation({bottom:0});
       var slide_out =  Titanium.UI.createAnimation({bottom:-251});
       
@@ -129,9 +126,8 @@ if(Titanium.App.Properties.getInt("userUid")) {
         hintText:"Names",
         height:35,
         top:10,
-        left:10,
-        width:300,
-        font:{fontSize:16},
+        width:280,
+        font: {fontFamily:"Open Sans", fontWeight: 'light'},
         borderWidth:1,
         borderColor:'#bbb',
         borderRadius:3,
@@ -145,8 +141,11 @@ if(Titanium.App.Properties.getInt("userUid")) {
 
       var clientButton = Titanium.UI.createButton({
         title:node.organization_title,
-        height:40,
-        width:300,
+        backgroundImage: '../images/select.png',
+        color: '#666666',
+        font: {fontFamily:"Open Sans", fontWeight: 'light'},
+        height:35,
+        width:280,
         top:55,
       });
       

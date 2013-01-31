@@ -51,13 +51,14 @@ function loadProjects() {
         });
         var titleLabel = Titanium.UI.createLabel({
           text: data.title,
-          font: {fontWeight: 'bold', fontSize:20},
+          font: {fontFamily:"Open Sans", fontWeight: 'bold', fontSize: 20},
           top: 5,
           left: 5,
         });
         row.add(titleLabel);
         var clientLabel = Titanium.UI.createLabel({
           text: data.organization_title,
+          font: {fontFamily:"Open Sans", fontWeight: 'light', fontSize: 16},
           top: 35,
           left: 5,
         });
@@ -87,6 +88,12 @@ function loadProjects() {
           touchEnabled: true,
           tabBarHidden: true,
         });
+        titleBarLabel = Titanium.UI.createLabel({
+          text: e.rowData.titleName,
+          color:'#FFF',
+          font: {fontFamily:"Open Sans", fontWeight: 'bold', fontSize: 18},
+        });
+        nodeWindow.setTitleControl(titleBarLabel);
         Titanium.UI.currentTab.open(nodeWindow,{animated:true});
       });
       
@@ -137,7 +144,12 @@ rightButton.addEventListener("click", function() {
     touchEnabled: true,
     tabBarHidden: true,
   });
-
+  titleBarLabel = Titanium.UI.createLabel({
+    text: 'Add project',
+    color:'#FFF',
+    font: {fontFamily:"Open Sans", fontWeight: 'bold', fontSize: 18},
+  });
+  nodeWindow.setTitleControl(titleBarLabel);
   Titanium.UI.currentTab.open(nodeWindow,{animated:true});
 });
 

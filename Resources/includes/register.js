@@ -17,11 +17,10 @@ var registerText = Titanium.UI.createTextArea({
   editable: '0',
   text:'Welcome message',
   value: 'Please provide your data.',
-  font:{fontSize:16, fontWeight: "light"},
+  font:{fontSize:16, fontFamily:"Open Sans", fontWeight: "light"},
   color: 'white',
-  left:10,
   top:30,
-  width:300,
+  width:280,
   height:'auto',
   backgroundColor: 'transparent',
 });
@@ -33,16 +32,14 @@ var usernameTextfield = Titanium.UI.createTextField({
   hintText:'Username',
   height:35,
   top:100,
-  left:10,
-  width:300,
-  font:{fontSize:16},
+  width:280,
+  font: {fontFamily:"Open Sans", fontWeight: 'light'},
   borderWidth:1,
   borderColor:'#bbb',
   borderRadius:3,
   autocapitalization:Titanium.UI.TEXT_AUTOCAPITALIZATION_NONE,
   paddingLeft: 5,
   paddingRight: 5,
-  color: 'black',
   backgroundColor: 'white',
 });
 
@@ -52,17 +49,15 @@ registerView.add(usernameTextfield);
 var emailTextfield = Titanium.UI.createTextField({
   hintText:'E-Mail',
   height:35,
-  top:150,
-  left:10,
-  width:300,
-  font:{fontSize:16},
+  top:145,
+  width:280,
+  font: {fontFamily:"Open Sans", fontWeight: 'light'},
   borderWidth:1,
   borderColor:'#bbb',
   borderRadius:3,
   autocapitalization:Titanium.UI.TEXT_AUTOCAPITALIZATION_NONE,
   paddingLeft: 5,
   paddingRight: 5,
-  color: 'black',
   backgroundColor: 'white',
 });
 
@@ -72,10 +67,9 @@ registerView.add(emailTextfield);
 var passwordTextfield = Titanium.UI.createTextField({
   hintText:'Password',
   height:35,
-  top:200,
-  left:10,
-  width:300,
-  font:{fontSize:16},
+  top:190,
+  width:280,
+  font: {fontFamily:"Open Sans", fontWeight: 'light'},
   borderWidth:1,
   borderColor:'#bbb',
   borderRadius:3,
@@ -83,7 +77,6 @@ var passwordTextfield = Titanium.UI.createTextField({
   passwordMask:true,
   paddingLeft: 5,
   paddingRight: 5,
-  color: 'black',
   backgroundColor: 'white',
 });
 
@@ -93,10 +86,9 @@ registerView.add(passwordTextfield);
 var repeatPasswordTextfield = Titanium.UI.createTextField({
   hintText:'Repeat password',
   height:35,
-  top:250,
-  left:10,
-  width:300,
-  font:{fontSize:16},
+  top:235,
+  width:280,
+  font: {fontFamily:"Open Sans", fontWeight: 'light'},
   borderWidth:1,
   borderColor:'#bbb',
   borderRadius:3,
@@ -104,19 +96,38 @@ var repeatPasswordTextfield = Titanium.UI.createTextField({
   passwordMask:true,
   paddingLeft: 5,
   paddingRight: 5,
-  color: 'black',
   backgroundColor: 'white',
 });
 
 registerView.add(repeatPasswordTextfield);
 
 // Create the login button
+var registerButton = Titanium.UI.createButton({
+  title:'Register',
+  backgroundImage: '../images/register.png',
+  color: '#666666',
+  font: {fontFamily:"Open Sans", fontWeight: 'light'},
+  height:35,
+  width:280,
+  top:280
+});
+
+registerView.add(registerButton);
+
+// Create the login button
 var cancelButton = Titanium.UI.createButton({
   title:'Cancel',
-  height:40,
-  width:140,
-  top:300,
-  left:10
+  backgroundImage: 'none',
+  backgroundGradient: {
+    type: 'linear',
+    startPoint: { x: '50%', y: '0%' },
+    endPoint: { x: '50%', y: '100%' },
+    colors: [ { color: '#c00', offset: 0.0}, { color: '#f00', offset: 1.0 } ],
+  },
+  font: {fontFamily:"Open Sans", fontWeight: 'light'},
+  height:35,
+  width:280,
+  bottom:10
 });
 
 registerView.add(cancelButton);
@@ -125,17 +136,6 @@ cancelButton.addEventListener('click', function() {
   win.close();
   Ti.App.homeWin.show();
 })
-
-// Create the login button
-var registerButton = Titanium.UI.createButton({
-  title:'Register',
-  height:40,
-  width:140,
-  top:300,
-  left:160
-});
-
-registerView.add(registerButton);
 
 // Add the event listener for when the button is created
 registerButton.addEventListener('click', function() {
@@ -198,7 +198,9 @@ registerButton.addEventListener('click', function() {
           Titanium.App.Properties.setString("userSessionId", newSession[1]);
           Ti.App.buildTabGroup();
           Ti.App.tabGroup.open();
-          win.close();
+          setTimeout(function() {
+            win.close();  
+          }, 100);
         }
         else {
           alert("There was an error");

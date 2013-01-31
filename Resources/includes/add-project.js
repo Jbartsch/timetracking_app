@@ -100,9 +100,8 @@ if(Titanium.App.Properties.getInt("userUid")) {
     hintText:"Name",
     height:35,
     top:10,
-    left:10,
-    width:300,
-    font:{fontSize:16},
+    width:280,
+    font: {fontFamily:"Open Sans", fontWeight: 'light'},
     borderWidth:1,
     borderColor:'#bbb',
     borderRadius:3,
@@ -116,8 +115,11 @@ if(Titanium.App.Properties.getInt("userUid")) {
   
   var clientButton = Titanium.UI.createButton({
     title:'Choose a client',
-    height:40,
-    width:300,
+    backgroundImage: '../images/select.png',
+    color: '#666666',
+    font: {fontFamily:"Open Sans", fontWeight: 'light'},
+    height:35,
+    width:280,
     top:55,
   });
   

@@ -1,11 +1,4 @@
-/**
- * This is the home window
- *
- * It doesn't do anything fancy, the only thing it does is to create a table
- * with links to other windows that actually demonstrates the functionality
- *
- * To see how a table is created see the file controls.js in Kitchen Sink
- */
+Ti.include('config.js');
 
 // Define the variable win to contain the current window
 var win = Ti.UI.currentWindow;
@@ -21,70 +14,150 @@ var view = Titanium.UI.createView({
 // Add our scrollview to the window
 win.add(view);
 
-Ti.API.info(Ti.Network.getNetworkType());
+var loginText = Titanium.UI.createTextArea({
+  editable: '0',
+  text:'Welcome message',
+  value: 'Please provide your login credentials.',
+  font:{fontSize:16, fontFamily:"Open Sans", fontWeight: "light"},
+  color: 'white',
+  top:30,
+  width:280,
+  height:'auto',
+  backgroundColor: 'transparent',
+});
 
-// var tutorialFlow = Titanium.UI.createImageView({
-  // image:'images/background_green.png',
-  // width: "100%",
-	// height: "100%"
-// });
-// view.add(tutorialFlow);
+view.add(loginText);
 
-function imageLoop(i) {
-	if (i<=3) {
-		Ti.API.info(i);
-		setTimeout(function() {
-  		tutorialFlow.image = 'images/tut'+i+'.png'; 
-  		i=i+1;
-  		imageLoop(i);
-  		var slide_in =  Titanium.UI.createAnimation({left:115});
-  	  // tutorialFlow.animate(slide_in);
-  	}, 4000);
-  	// tutorialFlow.left = -100;
-	}
-	if (i==4) {
-  	i=1;
-  	imageLoop(i);
-	}
-}
+// Create the username textfield
+var usernameTextfield = Titanium.UI.createTextField({
+  hintText:'Username',
+  height:35,
+  top:100,
+  width:280,
+  font: {fontFamily:"Open Sans", fontWeight: 'light'},
+  borderWidth:1,
+  borderColor:'#bbb',
+  borderRadius:3,
+  autocapitalization:Titanium.UI.TEXT_AUTOCAPITALIZATION_NONE,
+  paddingLeft: 5,
+  paddingRight: 5,
+  backgroundColor: 'white',
+});
 
-i=2;
+view.add(usernameTextfield);
 
-// imageLoop(i);
+// Create the password textfield
+var passwordTextfield = Titanium.UI.createTextField({
+  hintText:'Password',
+  height:35,
+  top:145,
+  width:280,
+  font: {fontFamily:"Open Sans", fontWeight: 'light'},
+  borderWidth:1,
+  borderColor:'#bbb',
+  borderRadius:3,
+  autocapitalization:Titanium.UI.TEXT_AUTOCAPITALIZATION_NONE,
+  passwordMask:true,
+  paddingLeft: 5,
+  paddingRight: 5,
+  backgroundColor: 'white',
+});
 
-
+view.add(passwordTextfield);
 
 var loginButton = Titanium.UI.createButton({
   title:'Login',
-  height:40,
-  width:120,
-  left: 30,
-  bottom:20,
-  style: Titanium.UI.iPhone.SystemButtonStyle.BORDERED
+  backgroundImage: 'images/login.png',
+  color: '#666666',
+  font: {fontFamily:"Open Sans", fontWeight: 'light'},
+  height:35,
+  width:280,
+  top:190,
 });
 
 view.add(loginButton);
 
 loginButton.addEventListener('click', function() {
-  var loginWin = Titanium.UI.createWindow({
-    title:'Login',
-    backgroundImage: '../images/background_green.png',
-    barColor: '#009900',
-    url: 'includes/login.js',
-    navBarHidden: true,
-  });
-  loginWin.open();
-  setTimeout(function() {
-    win.hide();  
-  }, 100);
+  if (usernameTextfield.value == '' || passwordTextfield.value == '') {
+    alert('Please fill out the username and password fields.')
+  }
+  else {
+    
+    Ti.App.showThrobber(win);
+    var user = {
+      username: usernameTextfield.value,
+      password: passwordTextfield.value
+    };
+    var userString = JSON.stringify(user);
+    var url = REST_PATH + 'user/login.json';
+    var xhr = Titanium.Network.createHTTPClient();
+    xhr.open("POST", url);
+    xhr.setRequestHeader('Content-Type','application/json; charset=utf-8');
+    xhr.send(userString);
+    xhr.onload = function() {
+      var statusCode = xhr.status;
+      Ti.App.fireEvent('stopThrobberInterval');
+      win.remove(Ti.App.throbberView);
+      if(statusCode == 200) {
+        var response = xhr.responseText;
+        var data = JSON.parse(response);
+        Titanium.App.Properties.setInt("userUid", data.user.uid);
+        Titanium.App.Properties.setString("userSessionId", data.sessid);
+        Titanium.App.Properties.setString("userSessionName", data.session_name);
+        Ti.App.buildTabGroup();
+        Ti.App.tabGroup.open();
+        setTimeout(function() {
+          win.hide();  
+        }, 100);
+        usernameTextfield.value = '';
+        passwordTextfield.value = '';
+      }
+      else {
+        alert("There was an error");
+      }
+    }
+  
+    xhr.onerror = function() {
+      Ti.App.fireEvent('stopThrobberInterval');
+      win.remove(Ti.App.throbberView);
+      Ti.API.info('onerror');
+      var statusCode = xhr.status;
+      Ti.API.info(statusCode);
+      var response = JSON.parse(xhr.responseText);
+      Ti.API.info(response);
+      if (statusCode == 401) {
+        var error = response[0];
+        alert(error);
+      }
+      else if (statusCode == 406) {
+        var error = response[0];
+        var loggedIn = error.search(/Already logged in as.+/);
+        if (loggedIn != -1) {
+          var logoutUrl = REST_PATH + 'user/logout.json';
+          var xhr3 = Titanium.Network.createHTTPClient();
+          xhr3.open("POST", logoutUrl);
+          xhr3.setRequestHeader('Content-Type','application/json; charset=utf-8');
+          xhr3.send();
+          xhr3.onload = function() {
+            alert('Error. Please try again.');
+          }
+          xhr3.onerror = function() {
+            alert('Error. Please try again.');
+          }
+        }
+      }
+    }
+  }
 });
 
 var registerButton = Titanium.UI.createButton({
   title:'Register',
-  height:40,
-  width:120,
-  right:30,
-  bottom:20
+  backgroundImage: 'images/register.png',
+  color: '#666666',
+  font: {fontFamily:"Open Sans", fontWeight: 'light'},
+  height:35,
+  width:280,
+  bottom:10
 });
 
 view.add(registerButton);

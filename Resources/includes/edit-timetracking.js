@@ -61,9 +61,6 @@ if(Titanium.App.Properties.getInt("userUid")) {
   		// Parse (build data structure) the JSON response into an object (data)
   		var node = JSON.parse(response);
   		
-  		// ensure that the window title is set
-  		win.title = node.title;
-  		
       var slide_in =  Titanium.UI.createAnimation({bottom:0});
       var slide_out =  Titanium.UI.createAnimation({bottom:-251});
       
@@ -183,16 +180,50 @@ if(Titanium.App.Properties.getInt("userUid")) {
       })
       
       win.add(picker_view);
-    
-      // Create the textfield to hold the node title
-      var nodeTitleTextfield = Titanium.UI.createTextField({
-        value:node.title,
-        hintText:"Description",
+      
+      var clientButton = Titanium.UI.createButton({
+        title:node.organization_title,
+        backgroundImage: '../images/select.png',
+        color: '#666666',
+        font: {fontFamily:"Open Sans", fontWeight: 'light'},
         height:35,
+        width:280,
         top:10,
-        left:10,
-        width:300,
-        font:{fontSize:16},
+      });
+      
+      clientButton.addEventListener('click', function() {
+        hideKeyboard();
+        showClientPicker();
+      });
+      
+      view.add(clientButton);
+      
+      var projectButton = Titanium.UI.createButton({
+        title:node.project_title,
+        backgroundImage: '../images/select.png',
+        color: '#666666',
+        font: {fontFamily:"Open Sans", fontWeight: 'light'},
+        height:35,
+        width:280,
+        top:55,
+      });
+      
+      projectButton.addEventListener('click', function() {
+        hideKeyboard();
+        showProjectPicker();
+      });
+      
+      view.add(projectButton);
+      
+      // Create the textarea to hold the body
+      var beginText = Titanium.UI.createTextField({
+        value:node.timebegin,
+        hintText: 'From',
+        top:145,
+        height:35,
+        left:20,
+        width:135,
+        font: {fontFamily:"Open Sans", fontWeight: 'light'},
         borderWidth:1,
         borderColor:'#bbb',
         borderRadius:3,
@@ -201,9 +232,9 @@ if(Titanium.App.Properties.getInt("userUid")) {
         backgroundColor: 'white',
       });
     
-      // Add the textfield to the window
-      view.add(nodeTitleTextfield);
-    
+      // Add the textarea to the window
+      view.add(beginText);
+      
       var day = oldDate.getDate().toString();
       var month = (oldDate.getMonth() + 1).toString();
       var monthString = monthNames[oldDate.getMonth()];
@@ -218,73 +249,15 @@ if(Titanium.App.Properties.getInt("userUid")) {
       var currentDateText = monthString + ' ' + day + ', ' + year;
       datetxt = year+'-'+month+'-'+day;
       
-      var dateChangeButton = Titanium.UI.createButton({
-        title:currentDateText,
-        height:35,
-        top:55,
-        left:10,
-        width:300
-      });
-      
-      dateChangeButton.addEventListener('click', function() {
-        hideKeyboard();
-        datePicker.show();
-        picker_view.animate(slide_in);
-      });
-    
-      // Add the label & button to the view
-      view.add(dateChangeButton);
-    
-      var beginLabel = Titanium.UI.createLabel({
-        text:'From',
-        left:10,
-        top:100,
-        width:50,
-        height:40,
-      });
-      
-      view.add(beginLabel);
-    
-      // Create the textarea to hold the body
-      var beginText = Titanium.UI.createTextField({
-        value:node.timebegin,
-        right:10,
-        top:100,
-        height:35,
-        left:65,
-        width:60,
-        font:{fontSize:16},
-        borderWidth:1,
-        borderColor:'#bbb',
-        borderRadius:3,
-        paddingLeft: 5,
-        paddingRight: 5,
-        backgroundColor: 'white',
-      });
-    
-      // Add the textarea to the window
-      view.add(beginText);
-    
-      // Create the label for the date
-      var endLabel = Titanium.UI.createLabel({
-        text:'To',
-        left:135,
-        top:100,
-        height:40,
-        width:30,
-      });
-    
-      // Add the label to the window
-      view.add(endLabel);
-    
       // Create the textarea to hold the body
       var endText = Titanium.UI.createTextField({
         value:node.timeend,
-        top:100,
+        hintText: 'To',
+        top:145,
         height:35,
-        left:165,
-        width:60,
-        font:{fontSize:16},
+        right:20,
+        width:135,
+        font: {fontFamily:"Open Sans", fontWeight: 'light'},
         borderWidth:1,
         borderColor:'#bbb',
         borderRadius:3,
@@ -296,34 +269,44 @@ if(Titanium.App.Properties.getInt("userUid")) {
       // Add the textarea to the window
       view.add(endText);
       
-      var clientButton = Titanium.UI.createButton({
-        title:node.organization_title,
-        height:40,
-        width:300,
-        top:150,
+      var dateChangeButton = Titanium.UI.createButton({
+        title:currentDateText,
+        backgroundImage: '../images/cal_picker.png',
+        color: '#666666',
+        font: {fontFamily:"Open Sans", fontWeight: 'light'},
+        height:35,
+        top:190,
+        width:280,
       });
       
-      clientButton.addEventListener('click', function() {
+      dateChangeButton.addEventListener('click', function() {
         hideKeyboard();
-        showClientPicker();
+        datePicker.show();
+        picker_view.animate(slide_in);
       });
-      
-      view.add(clientButton);
-      
-      var projectButton = Titanium.UI.createButton({
-        title:node.project_title,
-        height:40,
-        width:300,
-        top:200,
-      });
-      
-      projectButton.addEventListener('click', function() {
-        hideKeyboard();
-        showProjectPicker();
-      });
-      
-      view.add(projectButton);
     
+      // Add the label & button to the view
+      view.add(dateChangeButton);
+    
+      // Create the textfield to hold the node title
+      var nodeTitleTextfield = Titanium.UI.createTextArea({
+        value:node.title,
+        hintText:"Description",
+        height:80,
+        top:235,
+        width:280,
+        font: {fontFamily:"Open Sans", fontWeight: 'light'},
+        borderWidth:1,
+        borderColor:'#bbb',
+        borderRadius:3,
+        paddingLeft: 5,
+        paddingRight: 5,
+        backgroundColor: 'white',
+      });
+    
+      // Add the textfield to the window
+      view.add(nodeTitleTextfield);
+      
       // Add the event listener for when the button is created
       rightButton.addEventListener("click", function() {
         
