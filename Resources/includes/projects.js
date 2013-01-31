@@ -64,7 +64,6 @@ function loadProjects() {
         });
         row.add(clientLabel);
         results.push(row);
-        // results[key] = {title: data.title, nid:data.nid};
       }
   
       table = Titanium.UI.createTableView({

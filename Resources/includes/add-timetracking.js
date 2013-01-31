@@ -266,7 +266,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
 
   // Create the textfield to hold the node title
   var nodeTitleTextfield = Titanium.UI.createTextArea({
-    hintText:"Description",
+    hintText: 'Description',
     height:80,
     top:235,
     width:280,

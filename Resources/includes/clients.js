@@ -43,7 +43,42 @@ function loadClients() {
       var results = new Array();
       for(var key in result) {
         var data = result[key];
-        results[key] = {title: data.title, nid:data.nid, font: {fontFamily:"Open Sans", fontWeight: 'bold', fontSize: 20}};
+        var row = Titanium.UI.createTableViewRow({
+          nid: data.nid,
+          titleName: data.title,
+          className: 'clientRow',
+          height: 60,
+        });
+        var titleLabel = Titanium.UI.createLabel({
+          text: data.title,
+          font: {fontFamily:"Open Sans", fontWeight: 'bold', fontSize: 20},
+          top: 5,
+          left: 5,
+        });
+        row.add(titleLabel);
+        var address = '';
+        var zip = data.zip;
+        if (zip != '' ) {
+          zip = zip + ' ';
+        }
+        if (data.address != '' && data.city != '') {
+          address = data.address + ', ' + zip + data.city;
+        }
+        else if (data.address == '') {
+          address = zip + data.city;
+        }
+        else if (data.city == '') {
+          address = data.address;
+        }
+        var addressLabel = Titanium.UI.createLabel({
+          text: address,
+          font: {fontFamily:"Open Sans", fontWeight: 'light', fontSize: 16},
+          top: 35,
+          left: 5,
+        });
+        row.add(addressLabel);
+        results.push(row);
+        // results[key] = {title: data.title, nid:data.nid, font: {fontFamily:"Open Sans", fontWeight: 'bold', fontSize: 20}};
       }
   
       table = Titanium.UI.createTableView({

@@ -126,7 +126,6 @@ function loadView() {
         });
         row.add(titleLabel);        
         results.push(row);
-        // results[key] = {title: title, nid:data.nid};
       }
   
       table = Titanium.UI.createTableView({
