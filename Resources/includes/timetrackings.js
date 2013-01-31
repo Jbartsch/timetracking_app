@@ -62,7 +62,7 @@ var projectnid = 0;
 var total = 0;
 
 var duration1 = Titanium.UI.createLabel({
-  text: 'Duration:',
+  text: 'All Clients All Projects',
   font: {fontSize: '13', fontFamily:"Open Sans", fontWeight: 'bold'},
   top: 0,
   height: 20,
@@ -123,11 +123,13 @@ datePicker.addEventListener('change',function(e){
   }
 });
 
+var durationText = 'All clients All projects';
 done.addEventListener('click',function() {
-  var durationText = 'Duration';
+  
   if (clientPickerAdded == 1) {
+    Ti.API.info('bla');
     clientButton.title =  clientPicker.getSelectedRow(0).title;
-    durationText = durationText + ' Client: ' + clientPicker.getSelectedRow(0).title;
+    durationText = clientPicker.getSelectedRow(0).title;
     duration2.text = clientPicker.getSelectedRow(0).title;
     clientnid = clientPicker.getSelectedRow(0).nid;
     picker_view.animate(slide_out);
@@ -136,10 +138,13 @@ done.addEventListener('click',function() {
     }, 500);
     clientPickerAdded == 0;
   }
+  else {
+    durationText = 'All clients';
+  }
   
   if (projectPickerAdded == 1) {
     projectButton.title =  projectPicker.getSelectedRow(0).title;
-    durationText = durationText + ' Project: ' + projectPicker.getSelectedRow(0).title;
+    durationText = durationText + ' ' + projectPicker.getSelectedRow(0).title;
     projectnid = projectPicker.getSelectedRow(0).nid;
     picker_view.animate(slide_out);
     setTimeout(function(){
@@ -147,8 +152,9 @@ done.addEventListener('click',function() {
     }, 500);
     projectPickerAdded = 0;
   }
-  
-  duration1.text = durationText + ':';
+  else {
+    durationText = durationText + ' All projects';
+  }
 
   if (startClicked == 1) {
     startClicked = 0;
@@ -314,7 +320,8 @@ function loadView() {
         mins = '0' + mins;
       }
       
-      duration2.text = hours + ':' + mins;
+      duration1.text = durationText;
+      duration2.text = 'Duration: ' + hours + ':' + mins;
       
       table.addEventListener('delete', function(e) {
         deleteRow(e.rowData.nid);
