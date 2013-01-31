@@ -196,7 +196,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
       rightButton.addEventListener("click", function() {
         
         if (nodeTitleTextfield.value == '') {
-          alert('Please set a name.');
+          Ti.App.message('error', 'Please set a name.', win);
         }
         else {
           
@@ -241,7 +241,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
               win.close();
             }
             else {
-              alert("There was an error");
+              Ti.App.message('error', 'There was an error.', win);
             }
           }
           nodeXhr.onerror = function() {

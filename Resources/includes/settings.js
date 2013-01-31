@@ -142,13 +142,13 @@ if(Titanium.App.Properties.getInt("userUid")) {
   
   updateButton.addEventListener("click", function() {
     if (currentPasswordTextfield.value == '') {
-      alert("Please type in your current password.");
+      Ti.App.message('error', 'Please type in your current password.', win);
     }
     else if (passwordTextfield.value != passwordRepeatTextfield.value) {
-      alert("The passwords do not match.");
+      Ti.App.message('error', 'The passwords do not match.', win);
     }
     else if (passwordTextfield.value == currentPasswordTextfield.value) {
-      alert("The current and the new password are the same.");
+      Ti.App.message('error', 'The current and the new password are the same.', win);
     }
     else {
       Ti.App.actIn.message = 'Saving...';
@@ -174,6 +174,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
       userXhr.onload = function() {
         if (userXhr.status == 200) {
           win.remove(Ti.App.actInView);
+          Ti.App.message('info', 'Profile settings saved.', win);
           if (passwordTextfield.value != '') {
             var cookie = userXhr.getResponseHeader('Set-Cookie');
             var newSession = cookie.split(';', 1);
@@ -198,13 +199,13 @@ if(Titanium.App.Properties.getInt("userUid")) {
           var mailInvalid = error.search(/The e-mail address <em class=\"placeholder\">.*<\/em> is not valid.+/);
           var mailTaken = error.search(/The e-mail address <em class=\"placeholder\">.*<\/em> is already taken.+/);
           if (passInvalid != -1) {
-            alert('Wrong password.');
+            Ti.App.message('error', 'Wrong password.', win);
           }
           else if (mailInvalid != -1) {
-            alert('Invalid e-mail address.');
+            Ti.App.message('error', 'Invalid e-mail address.', win);
           }
           else if (mailTaken != -1) {
-            alert('The e-mail address is already registered.');
+            Ti.App.message('error', 'The e-mail address is already registered.', win);
           }
         }
       }

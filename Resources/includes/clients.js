@@ -133,7 +133,10 @@ function deleteRow(nid) {
   xhr.onload = function() {
     if(xhr.status != 200) {
       Ti.API.info(xhr.status);
-      alert("There was an error");
+      Ti.App.message('error', 'There was an error.', win);
+    }
+    else {
+      Ti.App.message('info', 'Client deleted.', win);
     }
   }
   xhr.onerror = function() {

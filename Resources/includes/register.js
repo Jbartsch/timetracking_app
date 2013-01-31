@@ -141,7 +141,7 @@ cancelButton.addEventListener('click', function() {
 registerButton.addEventListener('click', function() {
   
   if (usernameTextfield.value == '' || emailTextfield.value == '' || passwordTextfield.value == '') {
-    alert('Please fill out all fields.')
+    Ti.App.message('error', 'Please fill out all fields.', win);
   }
   else {
     
@@ -186,7 +186,7 @@ registerButton.addEventListener('click', function() {
           }, 100);
         }
         else {
-          alert("There was an error");
+          Ti.App.message('error', 'There was an error.', win);
         }
       }
     
@@ -212,16 +212,16 @@ registerButton.addEventListener('click', function() {
           // If E-Mail is taken
           var mailTaken = error.search(/The e-mail address <em class=\"placeholder\">.*<\/em> is already registered.+/);
           if (userInvalid != -1) {
-            alert('The username contains an illegal character.');
+            Ti.App.message('error', 'The username contains an illegal character.', win);
           }
           else if (userTaken != -1) {
-            alert('The username is already taken.');
+            Ti.App.message('error', 'The username is already taken.', win);
           }
           else if (mailInvalid != -1) {
-            alert('Invalid e-mail address.');
+            Ti.App.message('error', 'Invalid e-mail address.', win);
           }
           else if (mailTaken != -1) {
-            alert('The e-mail address is already registered.');
+            Ti.App.message('error', 'The e-mail address is already registered.', win);
           }
         }
       }

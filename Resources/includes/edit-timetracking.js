@@ -311,16 +311,16 @@ if(Titanium.App.Properties.getInt("userUid")) {
         
         // var validEnd;
         if (nodeTitleTextfield.value == '' || beginText.value == '' || endText.value == '') {
-          alert('Please fill out all fields.');
+          Ti.App.message('error', 'Please fill out all fields.', win);
         }
         else if (beginTimes.length != 2 || beginTimes[0] > 23 || beginTimes[1] > 59) {
-          alert('Begin time has to be in the format 12:34.');
+          Ti.App.message('error', 'Begin time has to be in the format 12:34.', win);
         }
         else if (endTimes.length != 2 || endTimes[0] > 23 || endTimes[1] > 59) {
-          alert('End time has to be in the format 12:34.');
+          Ti.App.message('error', 'End time has to be in the format 12:34.', win);
         }
         else if (clientnid == 0 || projectnid == 0) {
-          alert('Please pick a client and a project.');
+          Ti.App.message('error', 'Please pick a client and a project.', win);
         }
         else {
         
@@ -362,7 +362,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
               win.close();
             }
             else {
-              alert("There was an error");
+              Ti.App.message('error', 'There was an error.', win);
             }
           }
           nodeXhr.onerror = function() {

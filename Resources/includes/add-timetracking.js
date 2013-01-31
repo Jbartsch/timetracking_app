@@ -169,7 +169,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
   projectButton.addEventListener('click', function() {
     hideKeyboard();
     if (clientnid == 0) {
-      alert('Please pick a client first.');
+      Ti.App.message('error', 'Please pick a client first.', win);
     }
     else {
       showProjectPicker(); 
@@ -321,16 +321,16 @@ if(Titanium.App.Properties.getInt("userUid")) {
     
     // var validEnd;
     if (nodeTitleTextfield.value == '' || beginText.value == '' || endText.value == '') {
-      alert('Please fill out all fields.');
+      Ti.App.message('error', 'Please fill out all fields.', win);
     }
     else if (beginTimes.length != 2 || beginTimes[0] > 23 || beginTimes[1] > 59) {
-      alert('Begin time has to be in the format 12:34.');
+      Ti.App.message('error', 'Begin time has to be in the format 12:34.', win);
     }
     else if (endTimes.length != 2 || endTimes[0] > 23 || endTimes[1] > 59) {
-      alert('End time has to be in the format 12:34.');
+      Ti.App.message('error', 'End time has to be in the format 12:34.', win);
     }
     else if (clientnid == 0 || projectnid == 0) {
-      alert('Please pick a client and a project.');
+      Ti.App.message('error', 'Please pick a client and a project.', win);
     }
     else {
       
@@ -375,7 +375,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
         win.remove(Ti.App.actInView);
         if(statusCode == 200) {
   
-          alert('Timetracking "' + node.node.title + '" created.');
+          Ti.App.message('info', 'Time successfully tracked.', win);
           nodeTitleTextfield.value = '';
           dateChangeButton.title = currentDateText;
           beginText.value = '';
@@ -386,7 +386,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
           projectButton.title = 'Choose a project';
         }
         else {
-          alert("There was an error");
+          Ti.App.message('error', 'There was an error', win);
         }
       }
       

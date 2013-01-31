@@ -79,7 +79,7 @@ view.add(loginButton);
 
 loginButton.addEventListener('click', function() {
   if (usernameTextfield.value == '' || passwordTextfield.value == '') {
-    alert('Please fill out the username and password fields.')
+    Ti.App.message('error', 'Please fill out the username and password fields.', win);
   }
   else {
     Ti.App.actIn.message = 'Logging in...';
@@ -112,7 +112,7 @@ loginButton.addEventListener('click', function() {
         passwordTextfield.value = '';
       }
       else {
-        alert("There was an error");
+        Ti.App.message('error', 'There was an error.', win);
       }
     }
   
@@ -125,7 +125,7 @@ loginButton.addEventListener('click', function() {
       Ti.API.info(response);
       if (statusCode == 401) {
         var error = response[0];
-        alert(error);
+        Ti.App.message('error', error, win);
       }
       else if (statusCode == 406) {
         var error = response[0];
@@ -137,10 +137,10 @@ loginButton.addEventListener('click', function() {
           xhr3.setRequestHeader('Content-Type','application/json; charset=utf-8');
           xhr3.send();
           xhr3.onload = function() {
-            alert('Error. Please try again.');
+            Ti.App.message('error', 'Error. Please try again.', win);
           }
           xhr3.onerror = function() {
-            alert('Error. Please try again.');
+            Ti.App.message('error', 'Error. Please try again.', win);
           }
         }
       }

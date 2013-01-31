@@ -163,7 +163,7 @@ Ti.App.actInBG = Ti.UI.createView({
   height: 40,
   width: 180,
   borderRadius: 8,
-})
+});
 Ti.App.actInView.add(Ti.App.actInBG);
 Ti.App.actIn = Ti.UI.createActivityIndicator({
   color: 'white',
@@ -175,3 +175,44 @@ Ti.App.actIn = Ti.UI.createActivityIndicator({
 });
 Ti.App.actInView.add(Ti.App.actIn);
 Ti.App.actIn.show();
+
+Ti.App.message = function(type, text, win) {
+  var color;
+  if (type == 'info') {
+    backgroundColor = '#FFF';
+    color = '#000'; 
+  }
+  else if (type == 'error') {
+    backgroundColor = '#000';
+    color = '#FFF';
+  }
+  var slide_in =  Titanium.UI.createAnimation({top:0, duration: 300});
+  var slide_out =  Titanium.UI.createAnimation({top:-40, duration: 800});
+  
+  messageView = Ti.UI.createView({
+    top: -40,
+    height: 40,
+  });
+  win.add(messageView);
+  messageBG = Ti.UI.createView({
+    backgroundColor: backgroundColor,
+    opacity: 0.9,
+    height: 40,
+    width: 320,
+  });
+  messageView.add(messageBG);
+  var messageLabel = Titanium.UI.createLabel({
+    text: text,
+    color: color,
+    font: {fontFamily:'Open Sans', fontSize:13, fontWeight: 'bold'},
+  })
+  
+  messageView.add(messageLabel);
+  messageView.animate(slide_in);
+  setTimeout(function() {
+    messageView.animate(slide_out);
+    setTimeout(function() {
+      win.remove(messageView);
+    }, 1000);
+  }, 2000);
+}
