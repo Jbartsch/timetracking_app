@@ -492,13 +492,19 @@ if(Titanium.App.Properties.getInt("userUid")) {
   // Create a new event listener for the rightButton
   rightButton.addEventListener("click", function() {
     var timetrackingsWindow = Titanium.UI.createWindow({
+      title: 'Timetrackings',
       url:'timetrackings.js',
       backgroundColor: '#D8D8D8',
       barColor: '#383838',
       touchEnabled: true,
       tabBarHidden: true,
     });
-    
+    titleBarLabel = Titanium.UI.createLabel({
+      text: 'Timetrackings',
+      color:'#FFF',
+      font: {fontFamily:"Open Sans", fontWeight: 'bold', fontSize: 18},
+    });
+    timetrackingsWindow.setTitleControl(titleBarLabel);
     Titanium.UI.currentTab.open(timetrackingsWindow,{animated:true});
   });
   

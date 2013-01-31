@@ -157,28 +157,14 @@ xhr.onerror = function() {
 
 // Throbber
 Ti.App.throbberView = Ti.UI.createView({
-  width: 120,
-  height: 120,
-});
-
-Ti.App.throbberBackground = Ti.UI.createView({
-  width: 120,
-  height: 120,
-  backgroundColor: '#fff',
-  opacity: 0.5
-});
-Ti.App.throbberView.add(Ti.App.throbberBackground);
-
-Ti.App.throbberViewImage = Ti.UI.createView({
   width: 100,
   height: 100,
-})
-Ti.App.throbberView.add(Ti.App.throbberViewImage);
+});
 
 Ti.App.stopWatch = Ti.UI.createImageView({
   image: 'images/stopwatch.png',
 });
-Ti.App.throbberViewImage.add(Ti.App.stopWatch);
+Ti.App.throbberView.add(Ti.App.stopWatch);
 
 Ti.App.watchHand = Ti.UI.createImageView({
   image: 'images/watchhand.png',
@@ -198,7 +184,7 @@ Ti.App.throbberAnimation = Ti.UI.createAnimation({
   transform: Ti.App.throbberTransform,
   duration: 10,
 });
-Ti.App.throbberViewImage.add(Ti.App.watchHand);
+Ti.App.throbberView.add(Ti.App.watchHand);
 
 var throbberInterval;
 

@@ -14,8 +14,6 @@ var win = Ti.UI.currentWindow;
 var view = Titanium.UI.createView({
   contentWidth:'auto',
   contentHeight:'auto',
-  // showVerticalScrollIndicator:true,
-  // showHorizontalScrollIndicator:true,
   top: 0,
   backgroundColor: '#D8D8D8',
 });
@@ -151,6 +149,7 @@ function loadView() {
           nid:e.rowData.nid,
           touchEnabled: true,
           tabBarHidden: true,
+          backButtonTitle: 'Cancel',
         });
         titleBarLabel = Titanium.UI.createLabel({
           text: e.rowData.titleName,

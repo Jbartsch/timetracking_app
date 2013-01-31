@@ -87,6 +87,7 @@ function loadProjects() {
           nid:e.rowData.nid,
           touchEnabled: true,
           tabBarHidden: true,
+          backButtonTitle: 'Cancel',
         });
         titleBarLabel = Titanium.UI.createLabel({
           text: e.rowData.titleName,
@@ -143,6 +144,7 @@ rightButton.addEventListener("click", function() {
     barColor: '#383838',
     touchEnabled: true,
     tabBarHidden: true,
+    backButtonTitle: 'Cancel',
   });
   titleBarLabel = Titanium.UI.createLabel({
     text: 'Add project',

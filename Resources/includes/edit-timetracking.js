@@ -1,11 +1,3 @@
-/**
- * this file is almost the same as the get-node with
- * one big difference, the nid is taken as an argument 
- * and is passed by other files and this file
- * recognize the nid and use it in the url to load the
- * given node nid
- */
-
 // Include our config file
 Ti.include('../config.js');
 
@@ -445,22 +437,6 @@ if(Titanium.App.Properties.getInt("userUid")) {
         }
       }
 
-  	} // End the statusCode 200 
-  	else {
-  		// Create a label for the node title
-  		var errorMessage = Ti.UI.createLabel({
-  			// The text of the label will be the node title (data.title)
-  			text: "Please check your internet connection.",
-  			color:'#000',
-  			textAlign:'left',
-  			font:{fontSize:24, fontWeight:'bold'},
-  			top:25,
-  			left:15,
-  			height:18
-  		});
-  		
-  		// Add the error message to the window
-  		win.add(errorMessage);
   	}
   }
 }
