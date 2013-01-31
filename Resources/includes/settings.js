@@ -114,7 +114,8 @@ if(Titanium.App.Properties.getInt("userUid")) {
   view.add(updateButton);
 	
   function loadSettings() {
-    Ti.App.showThrobber(win);
+    Ti.App.actIn.message = 'Loading...';
+    win.add(Ti.App.actInView);
     var uid = Titanium.App.Properties.getString("userUid");
     var sessid = Titanium.App.Properties.getString("userSessionId");
     var session_name = Titanium.App.Properties.getString("userSessionName");
@@ -125,16 +126,14 @@ if(Titanium.App.Properties.getInt("userUid")) {
     xhr.setRequestHeader('Cookie', session_name+'='+sessid);
     xhr.send();
     xhr.onload = function() {
-      Ti.App.fireEvent('stopThrobberInterval');
-      win.remove(Ti.App.throbberView);
+      win.remove(Ti.App.actInView);
       if(xhr.status == 200) {
         var data = JSON.parse(xhr.responseText);
         mailTextfield.value = data.mail;
         updateButton.enabled = true;
       }
       xhr.onerror = function() {
-        Ti.App.fireEvent('stopThrobberInterval');
-        win.remove(Ti.App.throbberView);
+        win.remove(Ti.App.actInView);
         Ti.API.info(xhr.status);
         Ti.API.info(xhr.responseText);
       }
@@ -152,7 +151,8 @@ if(Titanium.App.Properties.getInt("userUid")) {
       alert("The current and the new password are the same.");
     }
     else {
-      Ti.App.showThrobber(win);
+      Ti.App.actIn.message = 'Saving...';
+      win.add(Ti.App.actInView);
       var updateUser = {
         data:{
           mail: mailTextfield.value,
@@ -173,8 +173,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
       userXhr.send(JSON.stringify(updateUser));
       userXhr.onload = function() {
         if (userXhr.status == 200) {
-          Ti.App.fireEvent('stopThrobberInterval');
-          win.remove(Ti.App.throbberView);
+          win.remove(Ti.App.actInView);
           if (passwordTextfield.value != '') {
             var cookie = userXhr.getResponseHeader('Set-Cookie');
             var newSession = cookie.split(';', 1);
@@ -187,8 +186,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
         }
       }
       userXhr.onerror = function() {
-        Ti.App.fireEvent('stopThrobberInterval');
-        win.remove(Ti.App.throbberView);
+        win.remove(Ti.App.actInView);
         Ti.API.info(userXhr.responseText);
         Ti.API.info('onerror');
         var statusCode = userXhr.status;
@@ -233,8 +231,33 @@ if(Titanium.App.Properties.getInt("userUid")) {
 	view.add(logoutButton);
 	
 	logoutButton.addEventListener('click', function() {
-    Ti.App.logoutWin.open();
-    Ti.App.tabGroup.close();
+	  Ti.App.actIn.message = 'Logging out...';
+	  win.add(Ti.App.actInView);
+    var logoutUrl = REST_PATH + 'user/logout.json';
+    var xhr3 = Titanium.Network.createHTTPClient();
+    xhr3.open("POST", logoutUrl);
+    xhr3.setRequestHeader('Content-Type','application/json; charset=utf-8');
+    xhr3.send();
+    xhr3.onerror = function() {
+      win.remove(Ti.App.actInView);
+      Titanium.App.Properties.removeProperty("userUid");
+      Titanium.App.Properties.removeProperty("userSessionId");
+      Titanium.App.Properties.removeProperty("userSessionName");
+      Ti.App.homeWin.show();
+      setTimeout(function() {
+        Ti.App.tabGroup.close();  
+      }, 100);
+    }
+    xhr3.onload = function() {
+      win.remove(Ti.App.actInView);
+      Titanium.App.Properties.removeProperty("userUid");
+      Titanium.App.Properties.removeProperty("userSessionId");
+      Titanium.App.Properties.removeProperty("userSessionName");
+      Ti.App.homeWin.show();
+      setTimeout(function() {
+        Ti.App.tabGroup.close();  
+      }, 100);
+    }
   });
   
   win.addEventListener("focus", function() {

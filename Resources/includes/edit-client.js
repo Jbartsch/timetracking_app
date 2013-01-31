@@ -14,7 +14,8 @@ var win = Ti.UI.currentWindow;
 
 if(Titanium.App.Properties.getInt("userUid")) {
   
-  Ti.App.showThrobber(win);
+  Ti.App.actIn.message = 'Loading...';
+  win.add(Ti.App.actInView);
   
   // Create a user variable to hold some information about the user
   var user = {
@@ -56,8 +57,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
   	// Save the status of the xhr in a variable
   	// this will be used to see if we have a xhr (200) or not
   	var statusCode = xhr.status;
-  	Ti.App.fireEvent('stopThrobberInterval');
-    win.remove(Ti.App.throbberView);
+  	win.remove(Ti.App.actInView);
   	// Check if we have a xhr
   	if(statusCode == 200) {
   		
@@ -200,7 +200,8 @@ if(Titanium.App.Properties.getInt("userUid")) {
         }
         else {
           
-          Ti.App.showThrobber(win);
+          Ti.App.actIn.message = 'Saving...';
+          win.add(Ti.App.actInView);
         
           // Create a new node object
           var newnode = {
@@ -234,8 +235,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
             // Save the status of the connection in a variable
             // this will be used to see if we have a connection (200) or not
             var statusCode = nodeXhr.status;
-            Ti.App.fireEvent('stopThrobberInterval');
-            win.remove(Ti.App.throbberView);
+            win.remove(Ti.App.actInView);
   
             if(statusCode == 200) {
               win.close();
@@ -246,16 +246,14 @@ if(Titanium.App.Properties.getInt("userUid")) {
           }
           nodeXhr.onerror = function() {
             Ti.API.info(nodeXhr.status);
-            Ti.App.fireEvent('stopThrobberInterval');
-            win.remove(Ti.App.throbberView);
+            win.remove(Ti.App.actInView);
           }
         }
       });
   	}
   }
   xhr.onerror = function() {
-    Ti.App.fireEvent('stopThrobberInterval');
-    win.remove(Ti.App.throbberView);
+    win.remove(Ti.App.actInView);
   }
 }
 else {

@@ -147,24 +147,8 @@ registerButton.addEventListener('click', function() {
     
     if (passwordTextfield.value == repeatPasswordTextfield.value) {
       
-      Ti.App.showThrobber(win);
-      
-      // var actInd = Titanium.UI.createActivityIndicator({
-        // bottom: 10,
-        // width: Ti.UI.SIZE,
-        // height: Ti.UI.SIZE,
-        // style: Ti.UI.iPhone.ActivityIndicatorStyle.BIG,
-        // font: {
-            // fontFamily: 'Helvetica Neue',
-            // fontSize: 15,
-            // fontWeight: 'bold'
-        // },
-        // color: 'white',
-        // message: 'Loading...',
-        // width: 210,
-      // });
-      // win.add(actInd);
-      // actInd.show();
+      Ti.App.actIn.message = 'Registering...';
+      win.add(Ti.App.actInView);
       
       var newUser = {
         name: usernameTextfield.value,
@@ -185,8 +169,7 @@ registerButton.addEventListener('click', function() {
         // Save the status of the connection in a variable
         // this will be used to see if we have a connection (200) or not
         var statusCode = xhr.status;
-        Ti.App.fireEvent('stopThrobberInterval');
-        win.remove(Ti.App.throbberView);
+        win.remove(Ti.App.actInView);
         
         if(statusCode == 200) {
           var data = JSON.parse(xhr.responseText);
@@ -208,8 +191,7 @@ registerButton.addEventListener('click', function() {
       }
     
       xhr.onerror = function() {
-        Ti.App.fireEvent('stopThrobberInterval');
-        win.remove(Ti.App.throbberView);
+        win.remove(Ti.App.actInView);
         Ti.API.info('onerror');
         var statusCode = xhr.status;
         Ti.API.info(statusCode);

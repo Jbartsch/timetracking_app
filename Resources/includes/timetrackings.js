@@ -24,7 +24,8 @@ win.add(view);
 var table;
 
 function loadView() {
-  Ti.App.showThrobber(win);
+  Ti.App.actIn.message = 'Loading...';
+  win.add(Ti.App.actInView);
   var url = REST_PATH + 'timetrackings.json';
   var xhr = Titanium.Network.createHTTPClient();
   xhr.open("GET",url);
@@ -35,8 +36,7 @@ function loadView() {
   xhr.onload = function() {
     var statusCode = xhr.status;
     if(statusCode == 200) {
-      Ti.App.fireEvent('stopThrobberInterval');
-      win.remove(Ti.App.throbberView);
+      win.remove(Ti.App.actInView);
       var response = xhr.responseText;
       var result = JSON.parse(response);
       var results = new Array();
@@ -163,8 +163,7 @@ function loadView() {
     }
   }
   xhr.onerror = function() {
-    Ti.App.fireEvent('stopThrobberInterval');
-    win.remove(Ti.App.throbberView);
+    win.remove(Ti.App.actInView);
   }
 }
 

@@ -1,11 +1,3 @@
-/**
- * this file is almost the same as the get-node with
- * one big difference, the nid is taken as an argument 
- * and is passed by other files and this file
- * recognize the nid and use it in the url to load the
- * given node nid
- */
-
 // Include our config file
 Ti.include('../config.js');
 
@@ -144,7 +136,8 @@ if(Titanium.App.Properties.getInt("userUid")) {
     }
     else {
       
-      Ti.App.showThrobber(win);
+      Ti.App.actIn.message = 'Saving...';
+      win.add(Ti.App.actInView);
       // Create a new node object
       var newnode = {
         node:{
@@ -173,8 +166,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
         // Save the status of the connection in a variable
         // this will be used to see if we have a connection (200) or not
         var statusCode = nodeXhr.status;
-        Ti.App.fireEvent('stopThrobberInterval');
-        win.remove(Ti.App.throbberView);
+        win.remove(Ti.App.actInView);
   
         if(statusCode == 200) {
           win.close();
@@ -185,8 +177,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
       }
       nodeXhr.onerror = function() {
         Ti.API.info(nodeXhr.status);
-        Ti.App.fireEvent('stopThrobberInterval');
-        win.remove(Ti.App.throbberView);
+        win.remove(Ti.App.actInView);
       }
     }
   });

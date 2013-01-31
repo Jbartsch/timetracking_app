@@ -82,8 +82,8 @@ loginButton.addEventListener('click', function() {
     alert('Please fill out the username and password fields.')
   }
   else {
-    
-    Ti.App.showThrobber(win);
+    Ti.App.actIn.message = 'Logging in...';
+    win.add(Ti.App.actInView);
     var user = {
       username: usernameTextfield.value,
       password: passwordTextfield.value
@@ -96,8 +96,7 @@ loginButton.addEventListener('click', function() {
     xhr.send(userString);
     xhr.onload = function() {
       var statusCode = xhr.status;
-      Ti.App.fireEvent('stopThrobberInterval');
-      win.remove(Ti.App.throbberView);
+      win.remove(Ti.App.actInView);
       if(statusCode == 200) {
         var response = xhr.responseText;
         var data = JSON.parse(response);
@@ -118,8 +117,7 @@ loginButton.addEventListener('click', function() {
     }
   
     xhr.onerror = function() {
-      Ti.App.fireEvent('stopThrobberInterval');
-      win.remove(Ti.App.throbberView);
+      win.remove(Ti.App.actInView);
       Ti.API.info('onerror');
       var statusCode = xhr.status;
       Ti.API.info(statusCode);

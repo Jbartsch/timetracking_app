@@ -25,7 +25,8 @@ win.add(view);
 var table;
 
 function loadProjects() {
-  Ti.App.showThrobber(win);
+  Ti.App.actIn.message = 'Loading...';
+  win.add(Ti.App.actInView);
   var url = REST_PATH + 'stormproject.json';
   var xhr = Titanium.Network.createHTTPClient();
   xhr.open("GET",url);
@@ -36,8 +37,7 @@ function loadProjects() {
   xhr.onload = function() {
     var statusCode = xhr.status;
     if(statusCode == 200) {
-      Ti.App.fireEvent('stopThrobberInterval');
-      win.remove(Ti.App.throbberView);
+      win.remove(Ti.App.actInView);
       var response = xhr.responseText;
       var result = JSON.parse(response);
       var results = new Array();
@@ -101,8 +101,7 @@ function loadProjects() {
     }
   }
   xhr.onerror = function() {
-    Ti.App.fireEvent('stopThrobberInterval');
-    win.remove(Ti.App.throbberView);
+    win.remove(Ti.App.actInView);
   }
 }
 

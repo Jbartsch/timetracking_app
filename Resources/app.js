@@ -155,48 +155,23 @@ xhr.onerror = function() {
   noNetworkWin.open();
 }
 
-// Throbber
-Ti.App.throbberView = Ti.UI.createView({
-  width: 100,
-  height: 100,
+// Activity Indicator
+Ti.App.actInView = Ti.UI.createView();
+Ti.App.actInBG = Ti.UI.createView({
+  backgroundColor: '#000',
+  opacity: 0.5,
+  height: 40,
+  width: 180,
+  borderRadius: 8,
+})
+Ti.App.actInView.add(Ti.App.actInBG);
+Ti.App.actIn = Ti.UI.createActivityIndicator({
+  color: 'white',
+  font: {fontFamily:'Open Sans', fontSize:18},
+  message: 'Loading...',
+  style: Ti.UI.iPhone.ActivityIndicatorStyle.PLAIN,
+  height:Ti.UI.SIZE,
+  width:Ti.UI.SIZE
 });
-
-Ti.App.stopWatch = Ti.UI.createImageView({
-  image: 'images/stopwatch.png',
-});
-Ti.App.throbberView.add(Ti.App.stopWatch);
-
-Ti.App.watchHand = Ti.UI.createImageView({
-  image: 'images/watchhand.png',
-  height: 73,
-  width: 73,
-  bottom: 6,
-  left: 12,
-  backgroundColor: 'transparent',
-  anchorPoint : {
-    x : 0.5,
-    y : 0.5
-  },
-});
-Ti.App.throbberTransform = Ti.UI.create2DMatrix();
-
-Ti.App.throbberAnimation = Ti.UI.createAnimation({
-  transform: Ti.App.throbberTransform,
-  duration: 10,
-});
-Ti.App.throbberView.add(Ti.App.watchHand);
-
-var throbberInterval;
-
-Ti.App.addEventListener('stopThrobberInterval', function() {
-  clearInterval(throbberInterval);
-});
-
-Ti.App.showThrobber = function(win) {
-  win.add(Ti.App.throbberView);
-  throbberInterval = setInterval(function() {
-    Ti.App.throbberTransform = Ti.App.throbberTransform.rotate(3);
-    Ti.App.throbberAnimation.transform = Ti.App.throbberTransform;
-    Ti.App.watchHand.animate(Ti.App.throbberAnimation);
-  }, 20);
-}
+Ti.App.actInView.add(Ti.App.actIn);
+Ti.App.actIn.show();

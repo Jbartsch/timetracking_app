@@ -336,7 +336,8 @@ if(Titanium.App.Properties.getInt("userUid")) {
     }
     else {
       
-      Ti.App.showThrobber(win);
+      Ti.App.actIn.message = 'Saving...';
+      win.add(Ti.App.actInView);
       var date = datetxt.split('-');
       // Create a new node object
       var node = {
@@ -373,7 +374,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
         // Save the status of the connection in a variable
         // this will be used to see if we have a connection (200) or not
         var statusCode = xhr.status;
-        // Check if we have a valid status
+        win.remove(Ti.App.actInView);
         if(statusCode == 200) {
   
           alert('Timetracking "' + node.node.title + '" created.');
@@ -385,8 +386,6 @@ if(Titanium.App.Properties.getInt("userUid")) {
           projectnid = 0;
           clientButton.title = 'Choose a client';
           projectButton.title = 'Choose a project';
-          Ti.App.fireEvent('stopThrobberInterval');
-          win.remove(Ti.App.throbberView);
         }
         else {
           alert("There was an error");
@@ -394,13 +393,12 @@ if(Titanium.App.Properties.getInt("userUid")) {
       }
       
       xhr.onerror = function() {
+        win.remove(Ti.App.actInView);
         Ti.API.info('onerror');
         var statusCode = xhr.status;
         Ti.API.info(statusCode);
         var response = JSON.parse(xhr.responseText);
         Ti.API.info(response);
-        Ti.App.fireEvent('stopThrobberInterval');
-        win.remove(Ti.App.throbberView);
       }
     }
   });
@@ -474,14 +472,6 @@ if(Titanium.App.Properties.getInt("userUid")) {
       }
     }
   }
-  
-  // Ti.App.showThrobber(win);
-//   
-  // setTimeout(function() {
-    // Ti.API.info('stop interval');
-    // Ti.App.fireEvent('stopThrobberInterval');
-    // win.remove(Ti.App.throbberView);
-  // }, 5000);
   
   // Create a new button
   var rightButton = Ti.UI.createButton({

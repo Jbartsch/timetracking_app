@@ -5,6 +5,9 @@ Ti.include('../config.js');
 var win = Ti.UI.currentWindow;
 
 if(Titanium.App.Properties.getInt("userUid")) {
+  
+  Ti.App.actIn.message = 'Loading...';
+  win.add(Ti.App.actInView);
 
   // Create the scrollview
   var view = Titanium.UI.createScrollView({
@@ -43,7 +46,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
     }
     
   	var statusCode = xhr.status;
-  	
+  	win.remove(Ti.App.actInView);
   	// Check if we have a xhr
   	if(statusCode == 200) {
   		
@@ -320,6 +323,9 @@ if(Titanium.App.Properties.getInt("userUid")) {
         }
         else {
         
+          Ti.App.actIn.message = 'Saving...';
+          win.add(Ti.App.actInView);
+          
           var date = datetxt.split('-');
           // Create a new node object
           var newnode = {
@@ -350,7 +356,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
             // this will be used to see if we have a connection (200) or not
             var statusCode = nodeXhr.status;
             // Check if we have a valid status
-  
+            win.remove(Ti.App.actInView);
             if(statusCode == 200) {
               win.close();
             }
@@ -359,6 +365,7 @@ if(Titanium.App.Properties.getInt("userUid")) {
             }
           }
           nodeXhr.onerror = function() {
+            win.remove(Ti.App.actInView);
             Ti.API.info(nodeXhr.status);
           }
         }
@@ -438,6 +445,9 @@ if(Titanium.App.Properties.getInt("userUid")) {
       }
 
   	}
+  }
+  xhr.onerror = function() {
+    win.remove(Ti.App.actInView);
   }
 }
 else {
