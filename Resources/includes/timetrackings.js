@@ -59,10 +59,76 @@ picker_view.add(toolbar);
 
 var clientnid = 0;
 var projectnid = 0;
+var total = 0;
+
+var duration1 = Titanium.UI.createLabel({
+  text: 'Duration:',
+  font: {fontSize: '13', fontFamily:"Open Sans", fontWeight: 'bold'},
+  top: 0,
+  height: 20,
+  backgroundColor: '#000',
+  opacity: 0.8,
+  color: '#FFF',
+  width: 320,
+});
+view.add(duration1);
+var duration2 = Titanium.UI.createLabel({
+  font: {fontSize: '13', fontFamily:"Open Sans", fontWeight: 'bold'},
+  top: 20,
+  height: 20,
+  backgroundColor: '#000',
+  opacity: 0.8,
+  color: '#FFF',
+  width: 320,
+});
+view.add(duration2);
+
+var datetxt = '';
+var monthNames = [ "January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December" ];
+var datePicker = Ti.UI.createPicker({
+  type:Ti.UI.PICKER_TYPE_DATE,
+  minDate:new Date(2000,0,1),
+  maxDate:new Date(2020,11,31),
+  value:new Date(),
+  top:43,
+  visible:false
+});
+picker_view.add(datePicker);
+
+var startTime = 0;
+var startClicked = 0;
+var endTime = 0;
+var endClicked = 0;
+
+var trackingdate = 0;
+datePicker.addEventListener('change',function(e){
+  var pickerdate = e.value;
+  var day = pickerdate.getDate();
+  if (day < 10) {
+    day = '0' + day;
+  }
+  var month = pickerdate.getMonth() + 1;
+  if (month < 10) {
+    month = '0' + month;
+  }
+  var monthString = monthNames[pickerdate.getMonth()];
+  var year = pickerdate.getFullYear();
+  trackingdate = monthString + ' ' + day + ', ' + year;
+  if (startClicked == 1) {
+    startTime = (Date.parse(trackingdate) / 1000);
+  }
+  if (endClicked == 1) {
+    endTime = (Date.parse(trackingdate) / 1000);
+  }
+});
 
 done.addEventListener('click',function() {
+  var durationText = 'Duration';
   if (clientPickerAdded == 1) {
     clientButton.title =  clientPicker.getSelectedRow(0).title;
+    durationText = durationText + ' Client: ' + clientPicker.getSelectedRow(0).title;
+    duration2.text = clientPicker.getSelectedRow(0).title;
     clientnid = clientPicker.getSelectedRow(0).nid;
     picker_view.animate(slide_out);
     setTimeout(function(){
@@ -73,6 +139,7 @@ done.addEventListener('click',function() {
   
   if (projectPickerAdded == 1) {
     projectButton.title =  projectPicker.getSelectedRow(0).title;
+    durationText = durationText + ' Project: ' + projectPicker.getSelectedRow(0).title;
     projectnid = projectPicker.getSelectedRow(0).nid;
     picker_view.animate(slide_out);
     setTimeout(function(){
@@ -80,14 +147,26 @@ done.addEventListener('click',function() {
     }, 500);
     projectPickerAdded = 0;
   }
+  
+  duration1.text = durationText + ':';
 
-  // if (datePicker.visible == 1) {
+  if (startClicked == 1) {
+    startClicked = 0;
     // dateChangeButton.title = trackingdate;
-    // picker_view.animate(slide_out);
-    // setTimeout(function(){
-      // datePicker.hide();
-    // }, 500);
-  // }
+    picker_view.animate(slide_out);
+    setTimeout(function(){
+      datePicker.hide();
+    }, 500);
+    loadView();
+  }
+  if (endClicked == 1) {
+    endClicked = 0;
+    picker_view.animate(slide_out);
+    setTimeout(function(){
+      datePicker.hide();
+    }, 500);
+    loadView();
+  }
 });
 
 cancel.addEventListener('click', function() {
@@ -101,7 +180,7 @@ cancel.addEventListener('click', function() {
       picker_view.remove(projectPicker);
       projectPickerAdded = 0;
     }
-    // datePicker.hide();
+    datePicker.hide();
   }, 500);
 });
 
@@ -112,13 +191,14 @@ var table;
 function loadView() {
   Ti.App.actIn.message = 'Loading...';
   win.add(Ti.App.actInView);
-  var url = REST_PATH + 'stormtimetracking.json?organization=' + clientnid + '&project=' + projectnid;
+  var url = REST_PATH + 'stormtimetracking.json?organization=' + clientnid + '&project=' + projectnid + '&start=' + startTime + '&end=' + endTime;
   var xhr = Titanium.Network.createHTTPClient();
   xhr.open("GET",url);
   var sessName = Titanium.App.Properties.getString("userSessionName");
   var sessId = Titanium.App.Properties.getString("userSessionId");
   xhr.setRequestHeader('Cookie', sessName+'='+sessId);
   xhr.send();
+  total = 0;
   xhr.onload = function() {
     var statusCode = xhr.status;
     if(statusCode == 200) {
@@ -212,6 +292,7 @@ function loadView() {
         });
         row.add(titleLabel);        
         results.push(row);
+        total = total + Number(data.duration);
       }
   
       table = Titanium.UI.createTableView({
@@ -219,7 +300,21 @@ function loadView() {
         backgroundColor: '#D8D8D8',
         separatorColor: '#BBBBBB',
         editable: true,
+        top: 40,
+        height: view.toImage().height - 75,
       });
+      
+      var hours = Math.floor(total);
+      if (hours < 10) {
+        hours = '0' + hours;
+      }
+      var minDec = total - hours;
+      var mins = Math.round(60 * minDec);
+      if (mins < 10) {
+        mins = '0' + mins;
+      }
+      
+      duration2.text = hours + ':' + mins;
       
       table.addEventListener('delete', function(e) {
         deleteRow(e.rowData.nid);
@@ -340,7 +435,7 @@ var filterButton = Titanium.UI.createButton({
     type: 'linear',
     startPoint: { x: '50%', y: '0%' },
     endPoint: { x: '50%', y: '100%' },
-    colors: [ { color: '#3536363', offset: 0.0}, { color: '747674', offset: 1.0 } ],
+    colors: [ { color: '#3536363', offset: 0.0}, { color: '#747674', offset: 1.0 } ],
   },
   font: {fontFamily:"Open Sans", fontWeight: 'light'},
   height:35,
@@ -354,6 +449,50 @@ filterButton.addEventListener('click', function() {
   loadView();
 });
 filterView.add(filterButton);
+
+var startButton = Titanium.UI.createButton({
+  title:'From',
+  backgroundImage: 'none',
+  backgroundGradient: {
+    type: 'linear',
+    startPoint: { x: '50%', y: '0%' },
+    endPoint: { x: '50%', y: '100%' },
+    colors: [ { color: '#3536363', offset: 0.0}, { color: '#747674', offset: 1.0 } ],
+  },
+  font: {fontFamily:"Open Sans", fontWeight: 'light'},
+  height:35,
+  width:160,
+  left: 0,
+  bottom: 0,
+})
+startButton.addEventListener('click', function() {
+  startClicked = 1;
+  datePicker.show();
+  picker_view.animate(slide_in);
+});
+view.add(startButton);
+
+var endButton = Titanium.UI.createButton({
+  title:'To',
+  backgroundImage: 'none',
+  backgroundGradient: {
+    type: 'linear',
+    startPoint: { x: '50%', y: '0%' },
+    endPoint: { x: '50%', y: '100%' },
+    colors: [ { color: '#3536363', offset: 0.0}, { color: '#747674', offset: 1.0 } ],
+  },
+  font: {fontFamily:"Open Sans", fontWeight: 'light'},
+  height:35,
+  width:160,
+  right: 0,
+  bottom: 0,
+})
+endButton.addEventListener('click', function() {
+  datePicker.show();
+  picker_view.animate(slide_in);
+  endClicked = 1;
+});
+view.add(endButton);
 
 var rightButton = Ti.UI.createButton({
   backgroundImage: '../images/filter.png',
